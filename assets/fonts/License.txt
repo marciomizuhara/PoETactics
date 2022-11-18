@@ -1,0 +1,76 @@
+
+Type Inovations v1.00
+
+This license can also be found at this permalink: https://www.fontsquirrel.com/license/contax-sans
+
+Type InnovationsTM Software License Agreement and Limited Warranty
+
+Notice to User
+
+Removing the enclosed fonts from the TYPE InnovationsTM font package or download constitutes an agreement between TYPE InnovationsTM and the original purchaser of the enclosed typefaces that the terms and conditions of this agreement will be followed. If you don’t agree with this, tough.
+
+Grant of License
+
+The purchase of this software grants you the non-exclusive right to use and display a copy of the software on two computers with attached monitors and printers at any one time. One copy may be made for back-up. That’s it.
+
+Copyright
+
+This software is copyrighted and contains intellectual property information protected by law. Don’t make copies of the type faces and give them away or we’ll kill you. You may give a copy of this software to any service bureau which you hire to output your film, paper or colour proofs, provided that they do not use the typefaces for any purpose other than outputing your work. They may keep the fonts on file for use with future jobs on your behalf. You agree that if these fonts are opened in Fontographer or any other type modification software, you may alter fonts for your own specific design purposes, but agree not to save the adapted versions for the purpose of reselling them as new fonts.
+
+Electronic Publishing.
+
+These fonts may be used within portable electronic documents with the following limitations:
+
+a. TYPE InnovationsTM fonts may be embedded into electronic documents such as the the PDF (Portable Document Format) files created by Adobe Acrobat. If different software is used to create these electronic documents, it is necessary to ensure that when the documents are made available to other users, the actual font files will not be accessible to the recipients of your files. Font embedding, or conversion into a GIF or JPEG format is required before any distribution can take place. Using Adobe Illustrator or any similar applications which convert the font characters into editable outlines (which are easily accessible to document recipients), is NOT an acceptable means of producing an electronic document for distribution.
+
+b. With the exception of documents produced for internal company use and for font cataloging at your site, it is prohibited for an electronic document OR a printed document to be distributed externally if it resembles a font sample (showing numerous characters from the font in sequential order: A-Z, a-z, 0-9, etc.) or has all or a large percentage of the characters from the font without any apparent reason for their inclusion in the text.
+
+Transfer of ownership.
+
+This software may be sold to a third party so long as no backup copies are kept by the original purchaser, either on diskette, on a hard drive or any other storage medium or device. To rent, lease or lend this software is prohibited.
+
+Multiple-User Licensing. If you have purchased TYPE InnovationsTM fonts you are licensed to use them on up to two different computers. If you plan to install the font software on more than two computers, or if you plan to install the software onto a local area network so that it will be accessible to more than two computers, the purchase of a Multiple-User Licensing Fee is necessary. The following schedule can be used to determine the extra licensing costs.
+
+In this schedule, a “CPU” is considered to be each separate computer from which the fonts are going to be used. A “CPU unit” includes a connected printing device, provided that the number of printers used with these fonts does not exceed the number of CPUs being licensed for.
+
+How To Calculate the Licensing Fee:
+
+Find the heading below which corresponds to the number of CPUs you wish to license the fonts for. To determine the cost, add $15 and multiply this (per font/per CPU) amount by the total number of fonts you wish to license and then by the total number of CPUs you wish to license them on
+
+(minus the 2 CPUs which are already covered with your initial purchase of the fonts).
+
+An example: If you wish to license a $39 font (all weights or style versions in a family are treated as separate fonts) to be used on 12 workstations, the price would be = $39 + (10* x $15) = $189
+
+* 12 workstations minus the 2 already covered with the font purchase = 10
+
+If you have paid this additional licensing fee, you may install this software onto the number of computers you have paid licensing for, so long as these computers all belong to the company which has paid this licensing fee. You are prohibited from providing this software to any other company or outside users, except where the other company will be using these fonts exclusively for the preparation of a project on your behalf. While this is an exception to the rule for your convenience, it assumes that this will not be a frequent circumstance; regular outside contracts involving more than three external designers is NOT covered by this exception. Where this exception does apply, you agree to provide any such outside users with a copy of this “TYPE InnovationsTM Font Agreement”, and agree to inform them that they will be obliged to delete all copies of the fonts once the given project has been completed.
+
+TYPE InnovationsTM warrants that the font is free of errors and will be replaced within 90 days of purchase in the event of a defective font. If you demage the font file on your own, it’s not our fault. The software and accompanying written materials are provided “as is” without warranty of any kind, express or implied, and TYPE InnovationsTM does not make any representations regarding the results from the use of the software or the written materials in terms of correctness, accuracy, reliability, currentness or otherwise.
+
+Disclaimer and Limited Warranty
+
+TYPE Innovations - A Friendly Type Foundry
+
+c/o Alex Kaczun 113 Middleville Road Northport, NY 11768 USA
+
+E-mail: akaczun@verizon.net URL: http://www.typeinnovations.com
+
+
+The Fontspring @Font-Face License Addendum
+Version 1.0 - January 2, 2010
+
+This Addendum is valid only in conjunction with the supplied End User License Agreement you received from Fontspring.
+
+This Addendum allows for using the Fontspring Web Fonts with the @font-face selector in CSS files for styling HTML web pages.
+
+1. @Font-Face Usage Restrictions
+You may link the licensed Web Fonts to your HTML web pages using the @font-face selector in CSS with the following restrictions:
+1. You must use the provided web-only version of the licensed font (Web Font). Linking to the full, licensed CFF OpenType font designed for desktop installation is prohibited.
+2. The Web Font must be subset to include only the glyphs necessary for displaying the web site.
+3. All OpenType features must be removed from the licensed font.
+4. You must include the commented header showing license and copyright information in the provided CSS file.
+5. The licensed Web Font may be simultaneously installed on no more than the number of web site domains specified in the receipt you received for the licensed font.
+6. The Web Font may only be installed on web site domains that are under the direct control of the licensee.
+
+2 Other Web Site Linking
+You may not convert or embed the licensed font with any other technology. This includes Javascript methods such as Cufón and Typeface.js.
