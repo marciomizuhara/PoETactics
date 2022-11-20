@@ -83,6 +83,7 @@ drop_quantity = 1
 counter = 0
 card_counter = 0
 last_time_ms = int(round(time.time() * 4000))
+click_blocking = True
 
 
 def counter_helper(counter):
@@ -3800,7 +3801,7 @@ def cards():
 
 
 def roulette():
-    global counter, last_time_ms
+    global counter, last_time_ms, click_blocking
 
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
@@ -3862,55 +3863,57 @@ def roulette():
                     counter = 0
                     main_menu()
                 if SPIN.checkForInput(HELP_MOUSE_POSITION):
-                    if roulette_wheel_ticket.quantity > 0:
-                        roulette_wheel_ticket.quantity = roulette_wheel_ticket.quantity + - 1
-                        roll = True
-                        while roll:
-                            SCREEN.blit(BG, (0, 0))
-                            SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
-                            SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
+                    while click_blocking:
+                        if roulette_wheel_ticket.quantity > 0:
+                            roulette_wheel_ticket.quantity = roulette_wheel_ticket.quantity + - 1
+                            roll = True
+                            click_blocking = False
+                            while roll:
+                                SCREEN.blit(BG, (0, 0))
+                                SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
+                                SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
 
-                            text1 = get_bold_font(40).render('Roulette Wheel', True, WHITE)
-                            text2 = get_regular_font(30).render('Feeling lucky?', True, WHITE)
-                            text3 = get_regular_font(25).render('Sping the wheel of good fortune', True, WHITE)
-                            text4 = get_regular_font(25).render('and receive powerful items!', True, WHITE)
-                            text5 = get_bold_font(30).render(f'x {roulette_wheel_ticket.quantity}', True, WHITE)
-                            WIDTH = SCREEN_WIDTH / 5
-                            text1_rect = text1.get_rect(center=(WIDTH, 100))
-                            text2_rect = text2.get_rect(center=(WIDTH, 140))
-                            text3_rect = text3.get_rect(center=(WIDTH, 200))
-                            text4_rect = text4.get_rect(center=(WIDTH, 230))
-                            text5_rect = text5.get_rect(center=(WIDTH + 30, 300))
+                                text1 = get_bold_font(40).render('Roulette Wheel', True, WHITE)
+                                text2 = get_regular_font(30).render('Feeling lucky?', True, WHITE)
+                                text3 = get_regular_font(25).render('Sping the wheel of good fortune', True, WHITE)
+                                text4 = get_regular_font(25).render('and receive powerful items!', True, WHITE)
+                                text5 = get_bold_font(30).render(f'x {roulette_wheel_ticket.quantity}', True, WHITE)
+                                WIDTH = SCREEN_WIDTH / 5
+                                text1_rect = text1.get_rect(center=(WIDTH, 100))
+                                text2_rect = text2.get_rect(center=(WIDTH, 140))
+                                text3_rect = text3.get_rect(center=(WIDTH, 200))
+                                text4_rect = text4.get_rect(center=(WIDTH, 230))
+                                text5_rect = text5.get_rect(center=(WIDTH + 30, 300))
 
-                            SCREEN.blit(text1, text1_rect)
-                            SCREEN.blit(text2, text2_rect)
-                            SCREEN.blit(text3, text3_rect)
-                            SCREEN.blit(text4, text4_rect)
-                            SCREEN.blit(text5, text5_rect)
-                            SCREEN.blit(ROULETTE_WHEEL2_TICKET, (WIDTH - 60, 270))
+                                SCREEN.blit(text1, text1_rect)
+                                SCREEN.blit(text2, text2_rect)
+                                SCREEN.blit(text3, text3_rect)
+                                SCREEN.blit(text4, text4_rect)
+                                SCREEN.blit(text5, text5_rect)
+                                SCREEN.blit(ROULETTE_WHEEL2_TICKET, (WIDTH - 60, 270))
 
-                            rotate_image = pygame.transform.rotate(ROULETTE_WHEEL2, angle)
-                            rect = rotate_image.get_rect()
-                            pos = (((SCREEN_WIDTH - rect.width) / 2 + 130), ((SCREEN_HEIGHT - rect.height) / 2))
-                            SCREEN.blit(rotate_image, pos)
-                            SCREEN.blit(ROULETTE_WHEEL2_ARROW, (SCREEN_WIDTH / 2 + 110, 55))
-                            pygame.display.flip()
-                            angle -= 10
-                            # setter = 720
-                            if setter == 720:
-                                setter = 710
-                            elif setter == 360:
-                                setter = 350
-                            if abs(angle) == setter:
-                                roulette_index = math.floor((setter - 360) / slice)
-                                print(f'slice = {slice}')
-                                print(f'setter = {setter}')
-                                print(f'setter - 360 = {setter - 360}')
-                                print(f'index = {roulette_index}')
-                                print(ROULETTE_WHEEL_LIST2[roulette_index])
-                                counter = 0
-                                save_state()
-                                roll = False
+                                rotate_image = pygame.transform.rotate(ROULETTE_WHEEL2, angle)
+                                rect = rotate_image.get_rect()
+                                pos = (((SCREEN_WIDTH - rect.width) / 2 + 130), ((SCREEN_HEIGHT - rect.height) / 2))
+                                SCREEN.blit(rotate_image, pos)
+                                SCREEN.blit(ROULETTE_WHEEL2_ARROW, (SCREEN_WIDTH / 2 + 110, 55))
+                                pygame.display.flip()
+                                angle -= 10
+                                # setter = 720
+                                if setter == 720:
+                                    setter = 710
+                                elif setter == 360:
+                                    setter = 350
+                                if abs(angle) == setter:
+                                    roulette_index = math.floor((setter - 360) / slice)
+                                    print(f'slice = {slice}')
+                                    print(f'setter = {setter}')
+                                    print(f'setter - 360 = {setter - 360}')
+                                    print(f'index = {roulette_index}')
+                                    print(ROULETTE_WHEEL_LIST2[roulette_index])
+                                    counter = 0
+                                    save_state()
+                                    roll = False
 
         if counter >= 1 and not roll:
             roulette_outcome(ROULETTE_WHEEL_LIST2[roulette_index])
@@ -3923,7 +3926,7 @@ def roulette():
 
 
 def roulette_outcome(index):
-    global counter, last_time_ms
+    global counter, last_time_ms, click_blocking
 
     reward = ''
     setter = True
@@ -4048,10 +4051,12 @@ def roulette_outcome(index):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if CONTINUE.checkForInput(ROULETTE_OUTCOME_MOUSE_POSITION):
                     counter = 0
+                    click_blocking = True
                     roulette()
 
         if counter >= 0:
             if setter:
+                consumable_drop_sound()
                 SCREEN.blit(outcome, outcome_rect)
                 setter = False
         if counter >= 2:
