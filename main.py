@@ -1119,7 +1119,7 @@ def game_over():
 
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoETactics")
         GAME_OVER_MOUSE_POSITION = pygame.mouse.get_pos()
 
         text1 = get_bold_font(100).render(f"GAME OVER!", True, RED)
@@ -5168,7 +5168,7 @@ def load_username():
 
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoETactics")
         LOAD_STATE_MOUSE_POSITION = pygame.mouse.get_pos()
 
         text1 = get_bold_font(50).render('Please enter your username', True, WHITE)
@@ -5243,7 +5243,7 @@ def load_state_success():
     load_state()
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoETactics")
         LOAD_STATE_SUCCESS_MOUSE_POSITION = pygame.mouse.get_pos()
 
         text1 = get_bold_font(50).render(f"Welcome back, {player.name}", True, WHITE)
@@ -5383,7 +5383,7 @@ def register():
 
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoeTactics")
         REGISTER_MOUSE_POSITION = pygame.mouse.get_pos()
 
         text1 = get_bold_font(50).render('Please choose and type a username', True, WHITE)
@@ -5453,7 +5453,7 @@ def register_username_registered():
 
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoeTactics")
         REGISTER_USERNAME_REGISTERED_MOUSE_POSITION = pygame.mouse.get_pos()
 
         text1 = get_bold_font(50).render(f"You've been registered!, {player.name}", True, WHITE)
@@ -5505,7 +5505,7 @@ def register_username_already_exists():
 
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoeTactics")
 
         text_1 = get_bold_font(50).render('Username already exists', True, WHITE)
         menu_rect_1 = text_1.get_rect(center=(SCREEN_WIDTH / 2, 300))
@@ -5543,7 +5543,7 @@ def register_username_already_exists():
 def login_menu():
     while True:
         SCREEN.fill(BLACK)
-        pygame.display.set_caption("Final Fantasy Tactics Meets POE")
+        pygame.display.set_caption("PoeTactics")
         LOGIN_MOUSE_POSITION = pygame.mouse.get_pos()
 
         # text1 = get_bold_font(50).render('LOGIN MENU', True, WHITE)
@@ -5738,7 +5738,7 @@ def main_menu():
 
             MENU_MOUSE_POSITION = pygame.mouse.get_pos()
 
-            menu_text1 = get_bold_font(80).render("FINAL FANTASY TACTICS", True, "White")
+            menu_text1 = get_bold_font(80).render("POETACTICS", True, "White")
             menu_text2 = get_bold_font(35).render("THE IDLE RPG ADVENTURE", True, "White")
 
             menu_rect1 = menu_text1.get_rect(center=(640, 100))
@@ -5808,7 +5808,7 @@ def main_menu():
 
             MENU_MOUSE_POSITION = pygame.mouse.get_pos()
 
-            menu_text1 = get_bold_font(80).render("FINAL FANTASY TACTICS", True, "White")
+            menu_text1 = get_bold_font(80).render("POETACTICS", True, "White")
             menu_text2 = get_bold_font(35).render("THE IDLE RPG ADVENTURE", True, "White")
 
             menu_rect1 = menu_text1.get_rect(center=(640, 100))
