@@ -17,6 +17,7 @@ ORANGE = pygame.Color('#FF6600')
 YELLOW = pygame.Color('#FFE800')
 CYAN = pygame.Color('#4ADEDE')
 
+
 # Images
 BG = pygame.image.load('assets/images/main_menu.png')
 BATTLE_BOX = pygame.image.load('assets/images/battle_box.png')
@@ -83,9 +84,12 @@ G_DEFT_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_deft_f
 G_FRACTURED_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_fractured_fossil.png'), (60, 60))
 
 # Cards
-SQUIRE_CARD = pygame.image.load('assets/images/characters/cards/squire.png')
+SQUIRE_CARD = pygame.image.load('assets/images/characters/cards/squire_card.png')
 SQUIRE_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire_frame.png'), (100, 133))
+CHEMIST_CARD = pygame.image.load('assets/images/characters/cards/chemist_card.png')
+# CHEMIST_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire_frame.png'), (100, 133))
 
+CARD_LIST = [SQUIRE_CARD, CHEMIST_CARD]
 DASH = 160
 BACKGROUND_SONG = 'assets/music/opening_song.mp3'
 BOSS_FIGHT_SONG = 'assets/music/boss_fight.wav'
@@ -98,6 +102,4 @@ PLAYER_ATTACK = 'assets/music/slash2.wav'
 ENEMY_ATTACK = 'assets/music/slash1.wav'
 CRITICAL_ATTACK = 'assets/music/criticalhit.wav'
 DELVE = 'assets/music/delve.mp3'
-
-
 

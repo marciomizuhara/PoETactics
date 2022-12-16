@@ -4,6 +4,7 @@ import time
 import threading
 import pygame, sys
 import numpy as np
+import globals_variables
 from button import *
 from objects.card import *
 from objects.character import *
@@ -62,13 +63,16 @@ DROP_HEIGHT = 210
 # Setting database
 db = SQL("sqlite:///database.db")
 
+# Importing globals
+globals_variables.cards_init()
+
 # Temp variables
 temp_gear_drop = []
 
 temp_unique_drop = []
 temp_consumable_drop = []
 temp_ticket_drop = []
-
+# temp_card_drop = []
 temp_gear_change = []
 temp_gear_change_inventory = []
 temp_level_up = False
@@ -77,7 +81,7 @@ main_menu_setter = True
 # Main containers
 uniques_list = []
 inventory = []
-
+# cards_list = []
 
 # Setup variables
 drop_quantity = 1
@@ -3775,7 +3779,7 @@ def cards():
         height += 200
         width = 100
         setter += 1
-    SCREEN.blit(SQUIRE_CARD, (940, 100))
+    SCREEN.blit(CARD_LIST[1], (940, 100))
 
 
 
@@ -4703,7 +4707,7 @@ def delve_battle_condition_2d(biome, e_damage, p_damage, hoard, i):
 
 
 def delve_battle_finish(biome, hoard):
-    global counter, last_time_ms, drop_quantity
+    global counter, last_time_ms, drop_quantity, cards_list, temp_card_drop
     counter = 0
     player.life = player.total_life
     Delve.depth = Delve.depth + 1
@@ -4781,14 +4785,14 @@ def delve_battle_finish(biome, hoard):
 
 
         if counter == 3:
-            if len(temp_card_drop) != 0:
+            if len(globals_variables.temp_card_drop) != 0:
                 if card_setter is not True:
-                    drop_text2 = get_bold_font(35).render(f"{temp_card_drop[0].__dict__['name']} card dropped!", True, PINK)
+                    drop_text2 = get_bold_font(35).render(f"{globals_variables.temp_card_drop[0].__dict__['name']} card dropped!", True, PINK)
                     drop_text2_rect = drop_text2.get_rect(center=(SCREEN_WIDTH / 2, drop_height))
                     SCREEN.blit(drop_text2, drop_text2_rect)
                     playsound(DROP_CONSUMABLE, False)
                     drop_quantity = 1
-                    temp_card_drop.clear()
+                    globals_variables.temp_card_drop.clear()
                     card_setter = True
 
         if counter >= 4:
@@ -5656,8 +5660,8 @@ def main_menu():
                 new_card = Card(rows3[i]['type'], rows3[i]['name'],
                                 rows3[i]['status'], rows3[i]['image'],
                                 rows3[i]['sound'])
-                cards_list.append(new_card)
-
+                globals_variables.cards_list.append(new_card)
+        print('inicialização de cards', globals_variables.cards_list)
 
         # PlayerSlot
         row_amulet = db.execute("SELECT * FROM amulet WHERE username = :username", username=username)
