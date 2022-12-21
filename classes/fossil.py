@@ -1,4 +1,4 @@
-from objects.consumable_item import ConsumableItem
+from classes.consumable_item import ConsumableItem
 
 
 class Fossil(ConsumableItem):

@@ -1,4 +1,4 @@
-from objects.item import Item
+from classes.item import Item
 
 
 class Unique(Item):

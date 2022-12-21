@@ -6,18 +6,18 @@ import pygame, sys
 import numpy as np
 import globals_variables
 from button import *
-from objects.card import *
-from objects.character import *
-from objects.consumable_item import *
-from objects.delve import *
-from objects.enemy import *
-from objects.fossil import *
-from objects.human import *
-from objects.item import *
-from objects.monster import *
-from objects.player import *
-from objects.player_slot import *
-from objects.unique import *
+from classes.card import *
+from classes.character import *
+from classes.consumable_item import *
+from classes.delve import *
+from classes.enemy import *
+from classes.fossil import *
+from classes.human import *
+from classes.item import *
+from classes.monster import *
+from classes.player import *
+from classes.player_slot import *
+from classes.unique import *
 from cs50 import SQL
 from itertools import groupby
 from operator import itemgetter
@@ -3788,7 +3788,8 @@ def cards():
     while True:
         CARDS_MOUSE_POSITION = pygame.mouse.get_pos()
         # BUTTONS = main_menu_structure(PLAYER_STATUS_MOUSE_POSITION)
-
+        EQUIP = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1070, 480),
+                            text_input="EQUIP", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1110, 610),
                       text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
 
@@ -3810,7 +3811,7 @@ def cards():
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
                     extras()
-            for button in [BACK]:
+            for button in [BACK, EQUIP]:
                 button.changeColor(CARDS_MOUSE_POSITION)
                 button.update(SCREEN)
         pygame.display.update()
@@ -5657,8 +5658,9 @@ def main_menu():
             pass
         else:
             for i in range(0, len(rows3)):
-                new_card = Card(rows3[i]['type'], rows3[i]['name'],
-                                rows3[i]['status'], rows3[i]['image'],
+                new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['life'], rows3[i]['attack'],
+                                rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
+                                rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
                                 rows3[i]['sound'])
                 globals_variables.cards_list.append(new_card)
         print('inicialização de cards', globals_variables.cards_list)
