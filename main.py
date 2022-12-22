@@ -3771,17 +3771,44 @@ def cards():
     setter = 0
     width = 100
     height = 100
-
+    counter = 0
+    CARD_LIST = [SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, KNIGHT_CARD_FRAME, ARCHER_CARD_FRAME,
+                 PRIEST_CARD_FRAME, WIZARD_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
+                 SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
+                 SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
+                 SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME]
     while setter < 3:
         for card in range(0, 6):
-            SCREEN.blit(SQUIRE_CARD_FRAME, (width, height))
+            SCREEN.blit(CARD_LIST[counter], (width, height))
             width += 130
+            counter += 1
         height += 200
         width = 100
         setter += 1
-    SCREEN.blit(CARD_LIST[1], (940, 100))
+    SCREEN.blit(CHEMIST_CARD, (940, 100))
+
+    card_names = [x.__dict__['name'] for x in globals_variables.cards_list]
+
+    if 'Squire' in card_names:
+        SCREEN.blit(SQUIRE, (100, 100))
+    if 'Chemist' in card_names:
+        SCREEN.blit(CHEMIST, (230, 100))
+    if 'Knight' in card_names:
+        SCREEN.blit(KNIGHT, (360, 100))
+    if 'Archer' in card_names:
+        SCREEN.blit(ARCHER, (490,100))
+    if 'Priest' in card_names:
+        SCREEN.blit(PRIEST, (620,100))
+    if 'Wizard' in card_names:
+        SCREEN.blit(WIZARD, (750,100))
 
 
+    squire_rect = SQUIRE_CARD_FRAME.get_rect(center=(140, 160))
+    chemist_rect = CHEMIST_CARD_FRAME.get_rect(center=(280, 160))
+    knight_rect = KNIGHT_CARD_FRAME.get_rect(center=(420, 160))
+    archer_rect = ARCHER_CARD_FRAME.get_rect(center=(560, 160))
+    priest_rect = PRIEST_CARD_FRAME.get_rect(center=(700, 160))
+    wizard_rect = WIZARD_CARD_FRAME.get_rect(center=(840, 160))
 
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
@@ -3811,6 +3838,25 @@ def cards():
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
                     extras()
+            if squire_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Squire' in card_names:
+                print('squire')
+                SCREEN.blit(SQUIRE_CARD, (940, 100))
+            if chemist_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Chemist' in card_names:
+                print('chemist')
+                SCREEN.blit(CHEMIST_CARD, (940, 100))
+            if knight_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Knight' in card_names:
+                print('knight')
+                SCREEN.blit(KNIGHT_CARD, (940, 100))
+            if archer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Archer' in card_names:
+                print('archer')
+                SCREEN.blit(ARCHER_CARD, (940, 100))
+            if priest_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Priest' in card_names:
+                print('priest')
+                SCREEN.blit(PRIEST_CARD, (940, 100))
+            if knight_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Wizard' in card_names:
+                print('wizard')
+                SCREEN.blit(WIZARD_CARD, (940, 100))
+
             for button in [BACK, EQUIP]:
                 button.changeColor(CARDS_MOUSE_POSITION)
                 button.update(SCREEN)
@@ -5658,7 +5704,7 @@ def main_menu():
             pass
         else:
             for i in range(0, len(rows3)):
-                new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['life'], rows3[i]['attack'],
+                new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['status'], rows3[i]['life'], rows3[i]['attack'],
                                 rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
                                 rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
                                 rows3[i]['sound'])
@@ -5719,6 +5765,9 @@ def main_menu():
 
         # boss instance
         row_boss_instance = db.execute("SELECT * FROM boss_instance WHERE username = :username", username=username)
+
+        # card instance
+        # row_card_instance = db.execute("SELECT * FROM card_instance WHERE username = :username", username=username)
 
         # Uniques_list
         row_uniques_list = db.execute("SELECT * FROM uniques_list WHERE username = :username", username=username)

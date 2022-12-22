@@ -4,9 +4,10 @@ import globals_variables
 
 class Card:
 
-    def __init__(self, type, name, life, attack, defense, crit_chance, crit_damage, magic_find, level, rarity, image, sound):
+    def __init__(self, type, name, status, life, attack, defense, crit_chance, crit_damage, magic_find, level, rarity, image, sound):
         self.type = type
         self.name = name
+        self.status = status
         self.life = life
         self.attack = attack
         self.defense = defense
@@ -42,6 +43,7 @@ def card_drop_rate(player):
 def add_card(username, drop):
     new_card = Card(type=drop['type'],
                     name=drop['name'],
+                    status=1,
                     life=drop['life'],
                     attack=drop['attack'],
                     defense=drop['defense'],
@@ -79,10 +81,10 @@ def unequip_card_update_status(Card):
 
 def card_update(username, card):
     db.execute(
-        "INSERT INTO cards_list (username, type, name, life, attack, defense, crit_chance, crit_damage,"
+        "INSERT INTO cards_list (username, type, name, status, life, attack, defense, crit_chance, crit_damage,"
         "magic_find, level, rarity, image, sound)"
-        "VALUES (:username, :type, :name, :life, :attack, :defense, :crit_chance, :crit_damage,"
+        "VALUES (:username, :type, :name, :status, :life, :attack, :defense, :crit_chance, :crit_damage,"
         ":magic_find, :level, :rarity, :image, :sound)",
-        username=username, type=card.type, name=card.name, life=card.life, attack=card.attack, defense=card.defense,
+        username=username, type=card.type, name=card.name, status=card.status, life=card.life, attack=card.attack, defense=card.defense,
         crit_chance=card.crit_chance, crit_damage=card.crit_damage, magic_find=card.magic_find, level=card.level,
         rarity=card.rarity, image=card.image, sound=card.sound)

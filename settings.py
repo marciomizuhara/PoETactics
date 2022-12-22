@@ -84,10 +84,25 @@ G_DEFT_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_deft_f
 G_FRACTURED_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_fractured_fossil.png'), (60, 60))
 
 # Cards
+SQUIRE = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire.png'), (100, 133))
 SQUIRE_CARD = pygame.image.load('assets/images/characters/cards/squire_card.png')
 SQUIRE_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire_frame.png'), (100, 133))
+CHEMIST = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/chemist.png'), (100, 133))
 CHEMIST_CARD = pygame.image.load('assets/images/characters/cards/chemist_card.png')
-# CHEMIST_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire_frame.png'), (100, 133))
+CHEMIST_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/chemist_frame.png'), (100, 133))
+KNIGHT = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/knight.png'), (100, 133))
+KNIGHT_CARD = pygame.image.load('assets/images/characters/cards/knight_card.png')
+KNIGHT_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/knight_frame.png'), (100, 133))
+ARCHER = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/archer.png'), (100, 133))
+ARCHER_CARD = pygame.image.load('assets/images/characters/cards/archer_card.png')
+ARCHER_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/archer_frame.png'), (100, 133))
+PRIEST = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/priest.png'), (100, 133))
+PRIEST_CARD = pygame.image.load('assets/images/characters/cards/priest_card.png')
+PRIEST_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/priest_frame.png'), (100, 133))
+WIZARD = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/wizard.png'), (100, 133))
+WIZARD_CARD = pygame.image.load('assets/images/characters/cards/wizard_card.png')
+WIZARD_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/wizard_frame.png'), (100, 133))
+
 
 CARD_LIST = [SQUIRE_CARD, CHEMIST_CARD]
 DASH = 160
