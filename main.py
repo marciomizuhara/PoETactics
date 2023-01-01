@@ -3773,8 +3773,8 @@ def cards():
     height = 100
     counter = 0
     CARD_LIST = [SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, KNIGHT_CARD_FRAME, ARCHER_CARD_FRAME,
-                 PRIEST_CARD_FRAME, WIZARD_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
-                 SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
+                 PRIEST_CARD_FRAME, WIZARD_CARD_FRAME, MONK_CARD_FRAME, THIEF_CARD_FRAME,
+                 ORACLE_CARD_FRAME, TIME_MAGE_CARD_FRAME, GEOMANCER_CARD_FRAME, LANCER_CARD_FRAME,
                  SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME, SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME,
                  SQUIRE_CARD_FRAME, CHEMIST_CARD_FRAME]
     while setter < 3:
@@ -3785,7 +3785,7 @@ def cards():
         height += 200
         width = 100
         setter += 1
-    SCREEN.blit(CHEMIST_CARD, (940, 100))
+    # SCREEN.blit(CHEMIST_CARD, (940, 100))
 
     card_names = [x.__dict__['name'] for x in globals_variables.cards_list]
 
@@ -3801,14 +3801,31 @@ def cards():
         SCREEN.blit(PRIEST, (620,100))
     if 'Wizard' in card_names:
         SCREEN.blit(WIZARD, (750,100))
-
+    if 'Monk' in card_names:
+        SCREEN.blit(MONK, (100,300))
+    if 'Thief' in card_names:
+        SCREEN.blit(THIEF, (230,300))
+    if 'Oracle' in card_names:
+        SCREEN.blit(ORACLE, (360,300))
+    if 'Time Mage' in card_names:
+        SCREEN.blit(TIME_MAGE, (490,300))
+    if 'Geomancer' in card_names:
+        SCREEN.blit(GEOMANCER, (620, 300))
+    if 'Lancer' in card_names:
+        SCREEN.blit(LANCER, (750,300))
 
     squire_rect = SQUIRE_CARD_FRAME.get_rect(center=(140, 160))
-    chemist_rect = CHEMIST_CARD_FRAME.get_rect(center=(280, 160))
-    knight_rect = KNIGHT_CARD_FRAME.get_rect(center=(420, 160))
-    archer_rect = ARCHER_CARD_FRAME.get_rect(center=(560, 160))
-    priest_rect = PRIEST_CARD_FRAME.get_rect(center=(700, 160))
-    wizard_rect = WIZARD_CARD_FRAME.get_rect(center=(840, 160))
+    chemist_rect = CHEMIST_CARD_FRAME.get_rect(center=(270, 160))
+    knight_rect = KNIGHT_CARD_FRAME.get_rect(center=(400, 160))
+    archer_rect = ARCHER_CARD_FRAME.get_rect(center=(530, 160))
+    priest_rect = PRIEST_CARD_FRAME.get_rect(center=(660, 160))
+    wizard_rect = WIZARD_CARD_FRAME.get_rect(center=(790, 160))
+    monk_rect = MONK_CARD_FRAME.get_rect(center=(140, 360))
+    thief_rect = THIEF_CARD_FRAME.get_rect(center=(270, 360))
+    oracle_rect = ORACLE_CARD_FRAME.get_rect(center=(400, 360))
+    time_mage_rect = TIME_MAGE_CARD_FRAME.get_rect(center=(530, 360))
+    geomancer_rect = GEOMANCER_CARD_FRAME.get_rect(center=(660, 360))
+    lancer_rect = LANCER_CARD_FRAME.get_rect(center=(790, 360))
 
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
@@ -3853,9 +3870,27 @@ def cards():
             if priest_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Priest' in card_names:
                 print('priest')
                 SCREEN.blit(PRIEST_CARD, (940, 100))
-            if knight_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Wizard' in card_names:
+            if wizard_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Wizard' in card_names:
                 print('wizard')
                 SCREEN.blit(WIZARD_CARD, (940, 100))
+            if monk_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Monk' in card_names:
+                print('monk')
+                SCREEN.blit(MONK_CARD, (940, 100))
+            if thief_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Thief' in card_names:
+                print('thief')
+                SCREEN.blit(THIEF_CARD, (940, 100))
+            if oracle_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Oracle' in card_names:
+                print('oracle')
+                SCREEN.blit(ORACLE_CARD, (940, 100))
+            if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Time Mage' in card_names:
+                print('time mage')
+                SCREEN.blit(TIME_MAGE_CARD, (940, 100))
+            if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Geomancer' in card_names:
+                print('time mage')
+                SCREEN.blit(GEOMANCER_CARD, (940, 100))
+            if lancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Time Mage' in card_names:
+                print('time mage')
+                SCREEN.blit(LANCER_CARD, (940, 100))
 
             for button in [BACK, EQUIP]:
                 button.changeColor(CARDS_MOUSE_POSITION)
@@ -3924,7 +3959,7 @@ def roulette():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if BACK.checkForInput(HELP_MOUSE_POSITION):
                     counter = 0
-                    main_menu()
+                    extras()
                 if SPIN.checkForInput(HELP_MOUSE_POSITION):
                     while click_blocking:
                         if roulette_wheel_ticket.quantity > 0:
