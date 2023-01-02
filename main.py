@@ -3813,6 +3813,18 @@ def cards():
         SCREEN.blit(GEOMANCER, (620, 300))
     if 'Lancer' in card_names:
         SCREEN.blit(LANCER, (750,300))
+    if 'Mediator' in card_names:
+        SCREEN.blit(MEDIATOR, (100,500))
+    if 'Summoner' in card_names:
+        SCREEN.blit(SUMMONER, (230,500))
+    if 'Samurai' in card_names:
+        SCREEN.blit(SAMURAI, (360,500))
+    if 'Ninja' in card_names:
+        SCREEN.blit(NINJA, (490,500))
+    if 'Calculator' in card_names:
+        SCREEN.blit(CALCULATOR, (620,500))
+    if 'Bard/Dancer' in card_names:
+        SCREEN.blit(BARD_DANCER, (750,500))
 
     squire_rect = SQUIRE_CARD_FRAME.get_rect(center=(140, 160))
     chemist_rect = CHEMIST_CARD_FRAME.get_rect(center=(270, 160))
@@ -3826,6 +3838,14 @@ def cards():
     time_mage_rect = TIME_MAGE_CARD_FRAME.get_rect(center=(530, 360))
     geomancer_rect = GEOMANCER_CARD_FRAME.get_rect(center=(660, 360))
     lancer_rect = LANCER_CARD_FRAME.get_rect(center=(790, 360))
+    mediator_rect = MEDIATOR_CARD_FRAME.get_rect(center=(140, 560))
+    summoner_rect = SUMMONER_CARD_FRAME.get_rect(center=(270, 560))
+    samurai_rect = SAMURAI_CARD_FRAME.get_rect(center=(400, 560))
+    ninja_rect = NINJA_CARD_FRAME.get_rect(center=(530, 560))
+    calculator_rect = CALCULATOR_CARD_FRAME.get_rect(center=(660, 560))
+    bard_dancer_rect = BARD_DANCER_CARD_FRAME.get_rect(center=(790, 560))
+
+
 
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
@@ -3886,11 +3906,29 @@ def cards():
                 print('time mage')
                 SCREEN.blit(TIME_MAGE_CARD, (940, 100))
             if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Geomancer' in card_names:
-                print('time mage')
+                print('geomancer')
                 SCREEN.blit(GEOMANCER_CARD, (940, 100))
-            if lancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Time Mage' in card_names:
-                print('time mage')
+            if lancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Lancer' in card_names:
+                print('lancer')
                 SCREEN.blit(LANCER_CARD, (940, 100))
+            if mediator_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Mediator' in card_names:
+                print('mediator')
+                SCREEN.blit(MEDIATOR_CARD, (940, 100))
+            if summoner_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Summoner' in card_names:
+                print('summoner')
+                SCREEN.blit(SUMMONER_CARD, (940, 100))
+            if samurai_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Samurai' in card_names:
+                print('samurai')
+                SCREEN.blit(SAMURAI_CARD, (940, 100))
+            if ninja_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Ninja' in card_names:
+                print('ninja')
+                SCREEN.blit(NINJA_CARD, (940, 100))
+            if calculator_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Calculator' in card_names:
+                print('calculator')
+                SCREEN.blit(CALCULATOR_CARD, (940, 100))
+            if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Bard/Dancer' in card_names:
+                print('bard/dancer')
+                SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
             for button in [BACK, EQUIP]:
                 button.changeColor(CARDS_MOUSE_POSITION)

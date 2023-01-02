@@ -25,7 +25,7 @@ def card_drop_rate(player):
     # inventory_cards = [value for elem in globals_variables.cards_list for value in elem.__dict__.values()]
     inventory_cards = [card.__dict__['name'] for card in globals_variables.cards_list]
     if card_drop_value <= CARD_DROP_RATE + (CARD_DROP_RATE * player.magic_find):
-        if len(list(set(globals_variables.cards_list))) >= 12:
+        if len(list(set(globals_variables.cards_list))) >= 18:
             print('card aqui 1')
             pass
         else:
