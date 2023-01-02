@@ -1,5 +1,6 @@
 from main import *
 import globals_variables
+import random
 
 
 class Card:
@@ -55,28 +56,32 @@ def add_card(username, drop):
                     image=drop['image'],
                     sound=drop['sound'],
                     )
-    print('new card', new_card)
     globals_variables.temp_card_drop.append(new_card)
     globals_variables.cards_list.append(new_card)
     card_update(username, new_card)
 
 
-def equip_card_update_status(Card):
-    player.total_life = player.total_life + int(Card.life)
-    player.attack = player.attack + int(Card.attack)
-    player.defense = player.defense + int(Card.defense)
-    player.crit_chance = player.crit_chance + int(Card.crit_chance)
-    player.crit_damage = player.crit_damage + int(Card.crit_damage)
-    player.magic_find = player.magic_find + Card.magic_find
+def player_slot_card_update(username, card):
+    row = db.execute("SELECT * FROM card WHERE username = :username",
+                     username=username)
+    name = (row[0]['name'])
+
+    db.execute("DELETE FROM card WHERE name = :name",
+               name=name)
+    db.execute(
+        "INSERT INTO card (username, type, name, status, life, attack, defense, crit_chance, crit_damage,"
+        "magic_find, level, rarity, image, sound)"
+        "VALUES (:username, :type, :name, :status, :life, :attack, :defense, :crit_chance, :crit_damage,"
+        ":magic_find, :level, :rarity, :image, :sound)",
+        username=username, type=card['type'], name=card['name'], status=card['status'], life=card['life'], attack=card['attack'],
+        defense=card['defense'],
+        crit_chance=card['crit_chance'], crit_damage=card['crit_damage'], magic_find=card['magic_find'], level=card['level'],
+        rarity=card['rarity'], image=card['image'], sound=card['sound'])
+    card_instance_load(username)
 
 
-def unequip_card_update_status(Card):
-    player.total_life = player.total_life - int(Card.life)
-    player.attack = player.attack - int(Card.attack)
-    player.defense = player.defense - int(Card.defense)
-    player.crit_chance = player.crit_chance - int(Card.crit_chance)
-    player.crit_damage = player.crit_damage - int(Card.crit_damage)
-    player.magic_find = player.magic_find - Card.magic_find
+def unequip_card_update_status(card_name):
+    pass
 
 
 def card_update(username, card):
@@ -88,3 +93,20 @@ def card_update(username, card):
         username=username, type=card.type, name=card.name, status=card.status, life=card.life, attack=card.attack, defense=card.defense,
         crit_chance=card.crit_chance, crit_damage=card.crit_damage, magic_find=card.magic_find, level=card.level,
         rarity=card.rarity, image=card.image, sound=card.sound)
+
+
+def card_instance_load(username):
+    rows3 = db.execute("SELECT * FROM cards_list WHERE username = :username",
+                       username=username)
+    if len(rows3) < 1:
+        pass
+    else:
+        for i in range(0, len(rows3)):
+            new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['status'], rows3[i]['life'],
+                            rows3[i]['attack'],
+                            rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
+                            rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
+                            rows3[i]['sound'])
+            globals_variables.cards_list.append(new_card)
+    print('inicialização de cards', globals_variables.cards_list)
+    print('card equipado', )

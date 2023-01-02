@@ -22,7 +22,6 @@ from cs50 import SQL
 from itertools import groupby
 from operator import itemgetter
 from playsound import playsound
-from items.cards import *
 from enemies.characters import *
 from enemies.enemy_type import *
 from enemies.monsters import *
@@ -31,6 +30,7 @@ from levels_xp import *
 from items.amulets import *
 from items.armors import *
 from items.boots import *
+from items.cards import *
 from items.consumables import *
 from items.gear_type import *
 from items.gloves import *
@@ -184,7 +184,7 @@ def main_menu_structure(mouse):
         HELP = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 435),
                       text_input="HELP", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         MAIN_MENU = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 490),
-                             text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+                           text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 545),
                              text_input="QUIT", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BUTTONS_LIST = [START_BATTLE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, DELVE, ENDGAME_BOSSES, EXTRAS, HELP,
@@ -1095,7 +1095,8 @@ def draw_player_level_up():
 
             DRAW_PLAYER_LEVEL_UP_MOUSE_POSITION = pygame.mouse.get_pos()
 
-            CONTINUE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 550),
+            CONTINUE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                              pos=(SCREEN_WIDTH / 2 - 180, 550),
                               text_input="CONTINUE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
 
             diff_time_ms = int(round(time.time() * 4000)) - last_time_ms
@@ -2291,6 +2292,31 @@ def unequip_update_status(item):
     player.crit_chance = player.crit_chance - int(item.crit_chance)
     player.crit_damage = player.crit_damage - int(item.crit_damage)
     player.magic_find = player.magic_find - item.magic_find
+
+
+def equip_card_update_status(card_name):
+    # Removing current card status
+    # current_card = player_slot.card
+    print('Old Life', player.total_life)
+    player.total_life = player.total_life - int(player_slot.card['life'])
+    player.attack = player.attack - int(player_slot.card['attack'])
+    player.defense = player.defense - int(player_slot.card['defense'])
+    player.crit_chance = player.crit_chance - int(player_slot.card['crit_chance'])
+    player.crit_damage = player.crit_damage - int(player_slot.card['crit_damage'])
+    player.magic_find = player.magic_find - int(player_slot.card['magic_find'])
+
+    # Adding new card status
+    new_card = [x for x in globals_variables.cards_list if x.__dict__['name'] == card_name][0].__dict__
+
+    player.total_life = player.total_life + new_card['life']
+    print('New Life', player.total_life)
+    player.attack = player.attack + new_card['attack']
+    player.defense = player.defense + new_card['defense']
+    player.crit_chance = player.crit_chance + new_card['crit_chance']
+    player.crit_damage = player.crit_damage + new_card['crit_damage']
+    player.magic_find = player.magic_find + new_card['magic_find']
+    player_slot.card = new_card
+    player_slot_card_update(player.name, new_card)
 
 
 def crit_chance(character_crit_chance, character_attack, character_critdamage):
@@ -3729,8 +3755,8 @@ def extras():
         EXTRAS_MOUSE_POSITION = pygame.mouse.get_pos()
         BUTTONS = main_menu_structure(EXTRAS_MOUSE_POSITION)
 
-        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(770, 600),
-                      text_input="NEXT", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(160, 600),
+                      text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BUTTONS.append(BACK)
 
         for event in pygame.event.get():
@@ -3761,8 +3787,12 @@ def extras():
 def cards():
     global counter, last_time_ms
 
+    equipped_setter = False
+    equipped_text = get_bold_font(30).render('Equipped', True, WHITE)
+    equipped_text_rect = equipped_text.get_rect(center=(1063, 465))
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
+    SCREEN.blit(CARD_EQUIPPED, (940, 440))
     # SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
 
     # Card Images
@@ -3782,7 +3812,7 @@ def cards():
             SCREEN.blit(CARD_LIST[counter], (width, height))
             width += 130
             counter += 1
-        height += 200
+        height += 150
         width = 100
         setter += 1
     # SCREEN.blit(CHEMIST_CARD, (940, 100))
@@ -3796,35 +3826,35 @@ def cards():
     if 'Knight' in card_names:
         SCREEN.blit(KNIGHT, (360, 100))
     if 'Archer' in card_names:
-        SCREEN.blit(ARCHER, (490,100))
+        SCREEN.blit(ARCHER, (490, 100))
     if 'Priest' in card_names:
-        SCREEN.blit(PRIEST, (620,100))
+        SCREEN.blit(PRIEST, (620, 100))
     if 'Wizard' in card_names:
-        SCREEN.blit(WIZARD, (750,100))
+        SCREEN.blit(WIZARD, (750, 100))
     if 'Monk' in card_names:
-        SCREEN.blit(MONK, (100,300))
+        SCREEN.blit(MONK, (100, 250))
     if 'Thief' in card_names:
-        SCREEN.blit(THIEF, (230,300))
+        SCREEN.blit(THIEF, (230, 250))
     if 'Oracle' in card_names:
-        SCREEN.blit(ORACLE, (360,300))
+        SCREEN.blit(ORACLE, (360, 250))
     if 'Time Mage' in card_names:
-        SCREEN.blit(TIME_MAGE, (490,300))
+        SCREEN.blit(TIME_MAGE, (490, 250))
     if 'Geomancer' in card_names:
-        SCREEN.blit(GEOMANCER, (620, 300))
+        SCREEN.blit(GEOMANCER, (620, 250))
     if 'Lancer' in card_names:
-        SCREEN.blit(LANCER, (750,300))
+        SCREEN.blit(LANCER, (750, 250))
     if 'Mediator' in card_names:
-        SCREEN.blit(MEDIATOR, (100,500))
+        SCREEN.blit(MEDIATOR, (100, 400))
     if 'Summoner' in card_names:
-        SCREEN.blit(SUMMONER, (230,500))
+        SCREEN.blit(SUMMONER, (230, 400))
     if 'Samurai' in card_names:
-        SCREEN.blit(SAMURAI, (360,500))
+        SCREEN.blit(SAMURAI, (360, 400))
     if 'Ninja' in card_names:
-        SCREEN.blit(NINJA, (490,500))
+        SCREEN.blit(NINJA, (490, 400))
     if 'Calculator' in card_names:
-        SCREEN.blit(CALCULATOR, (620,500))
+        SCREEN.blit(CALCULATOR, (620, 400))
     if 'Bard/Dancer' in card_names:
-        SCREEN.blit(BARD_DANCER, (750,500))
+        SCREEN.blit(BARD_DANCER, (750, 400))
 
     squire_rect = SQUIRE_CARD_FRAME.get_rect(center=(140, 160))
     chemist_rect = CHEMIST_CARD_FRAME.get_rect(center=(270, 160))
@@ -3832,29 +3862,27 @@ def cards():
     archer_rect = ARCHER_CARD_FRAME.get_rect(center=(530, 160))
     priest_rect = PRIEST_CARD_FRAME.get_rect(center=(660, 160))
     wizard_rect = WIZARD_CARD_FRAME.get_rect(center=(790, 160))
-    monk_rect = MONK_CARD_FRAME.get_rect(center=(140, 360))
-    thief_rect = THIEF_CARD_FRAME.get_rect(center=(270, 360))
-    oracle_rect = ORACLE_CARD_FRAME.get_rect(center=(400, 360))
-    time_mage_rect = TIME_MAGE_CARD_FRAME.get_rect(center=(530, 360))
-    geomancer_rect = GEOMANCER_CARD_FRAME.get_rect(center=(660, 360))
-    lancer_rect = LANCER_CARD_FRAME.get_rect(center=(790, 360))
-    mediator_rect = MEDIATOR_CARD_FRAME.get_rect(center=(140, 560))
-    summoner_rect = SUMMONER_CARD_FRAME.get_rect(center=(270, 560))
-    samurai_rect = SAMURAI_CARD_FRAME.get_rect(center=(400, 560))
-    ninja_rect = NINJA_CARD_FRAME.get_rect(center=(530, 560))
-    calculator_rect = CALCULATOR_CARD_FRAME.get_rect(center=(660, 560))
-    bard_dancer_rect = BARD_DANCER_CARD_FRAME.get_rect(center=(790, 560))
-
-
+    monk_rect = MONK_CARD_FRAME.get_rect(center=(140, 310))
+    thief_rect = THIEF_CARD_FRAME.get_rect(center=(270, 310))
+    oracle_rect = ORACLE_CARD_FRAME.get_rect(center=(400, 310))
+    time_mage_rect = TIME_MAGE_CARD_FRAME.get_rect(center=(530, 310))
+    geomancer_rect = GEOMANCER_CARD_FRAME.get_rect(center=(660, 310))
+    lancer_rect = LANCER_CARD_FRAME.get_rect(center=(790, 310))
+    mediator_rect = MEDIATOR_CARD_FRAME.get_rect(center=(140, 460))
+    summoner_rect = SUMMONER_CARD_FRAME.get_rect(center=(270, 460))
+    samurai_rect = SAMURAI_CARD_FRAME.get_rect(center=(400, 460))
+    ninja_rect = NINJA_CARD_FRAME.get_rect(center=(530, 460))
+    calculator_rect = CALCULATOR_CARD_FRAME.get_rect(center=(660, 460))
+    bard_dancer_rect = BARD_DANCER_CARD_FRAME.get_rect(center=(790, 460))
 
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
     while True:
         CARDS_MOUSE_POSITION = pygame.mouse.get_pos()
         # BUTTONS = main_menu_structure(PLAYER_STATUS_MOUSE_POSITION)
-        EQUIP = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1070, 480),
-                            text_input="EQUIP", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1110, 610),
+        # EQUIP = Button(image=pygame.image.load("assets/images/ONE_LINE_CARD_BOX.png"), pos=(1063, 460),
+        #                    text_input="EQUIP", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(160, 610),
                       text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
 
         # NO_BUTTON = Button(image=pygame.image.load("images/Smallest Rect.png"), pos=(380, 600),
@@ -3875,62 +3903,177 @@ def cards():
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
                     extras()
+                if squire_rect.collidepoint(CARDS_MOUSE_POSITION):
+                    equip_card_update_status('Squire')
+                if chemist_rect.collidepoint(CARDS_MOUSE_POSITION):
+                    equip_card_update_status('Chemist')
+
+            if not squire_rect.collidepoint(CARDS_MOUSE_POSITION) and not chemist_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not knight_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not archer_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not priest_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not wizard_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not monk_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not thief_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not oracle_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not time_mage_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not geomancer_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not lancer_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not mediator_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not summoner_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not samurai_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not ninja_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not calculator_rect.collidepoint(
+                    CARDS_MOUSE_POSITION) and not bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION):
+                if player_slot.card['name'] == 'Squire' and player_slot.card['name'] == 'Squire':
+                    print('esse Squire')
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(SQUIRE_CARD, (940, 100))
+                if player_slot.card['name'] == 'Chemist' and player_slot.card['name'] == 'Chemist':
+                    print('esse Chemist')
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(CHEMIST_CARD, (940, 100))
+                if player_slot.card['name'] == 'Knight' and player_slot.card['name'] == 'Knight':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(KNIGHT_CARD, (940, 100))
+                if player_slot.card['name'] == 'Archer' and player_slot.card['name'] == 'Archer':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(ARCHER_CARD, (940, 100))
+                if player_slot.card['name'] == 'Priest' and player_slot.card['name'] == 'Priest':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(PRIEST_CARD, (940, 100))
+                if player_slot.card['name'] == 'Wizard' and player_slot.card['name'] == 'Wizard':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(WIZARD_CARD, (940, 100))
+                if player_slot.card['name'] == 'Monk' and player_slot.card['name'] == 'Monk':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(MONK_CARD, (940, 100))
+                if player_slot.card['name'] == 'Thief' and player_slot.card['name'] == 'Thief':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(THIEF_CARD, (940, 100))
+                if player_slot.card['name'] == 'Oracle' and player_slot.card['name'] == 'Oracle':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(ORACLE_CARD, (940, 100))
+                if player_slot.card['name'] == 'Time Mage' and player_slot.card['name'] == 'Time Mage':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(TIME_MAGE_CARD, (940, 100))
+                if player_slot.card['name'] == 'Geomancer' and player_slot.card['name'] == 'Geomancer':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(GEOMANCER_CARD, (940, 100))
+                if player_slot.card['name'] == 'Lancer' and player_slot.card['name'] == 'Lancer':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(LANCER_CARD, (940, 100))
+                if player_slot.card['name'] == 'Mediator' and player_slot.card['name'] == 'Mediator':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(MEDIATOR_CARD, (940, 100))
+                if player_slot.card['name'] == 'Summoner' and player_slot.card['name'] == 'Summoner':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(SUMMONER_CARD, (940, 100))
+                if player_slot.card['name'] == 'Samurai' and player_slot.card['name'] == 'Samurai':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(SAMURAI_CARD, (940, 100))
+                if player_slot.card['name'] == 'Ninja' and player_slot.card['name'] == 'Ninja':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(NINJA_CARD, (940, 100))
+                if player_slot.card['name'] == 'Calculator' and player_slot.card['name'] == 'Calculator':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(CALCULATOR_CARD, (940, 100))
+                if player_slot.card['name'] == 'Bard/Dancer' and player_slot.card['name'] == 'Bard/Dance':
+                    SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                    SCREEN.blit(BARD_DANCER_CARD, (940, 100))
+
             if squire_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Squire' in card_names:
-                print('squire')
-                SCREEN.blit(SQUIRE_CARD, (940, 100))
-            if chemist_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Chemist' in card_names:
                 print('chemist')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
+                SCREEN.blit(SQUIRE_CARD, (940, 100))
+            if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in card_names:
+                print('chemist')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(CHEMIST_CARD, (940, 100))
-            if knight_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Knight' in card_names:
+            if knight_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Knight' in card_names:
                 print('knight')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(KNIGHT_CARD, (940, 100))
-            if archer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Archer' in card_names:
+            if archer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Archer' in card_names:
                 print('archer')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(ARCHER_CARD, (940, 100))
-            if priest_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Priest' in card_names:
+            if priest_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Priest' in card_names:
                 print('priest')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(PRIEST_CARD, (940, 100))
-            if wizard_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Wizard' in card_names:
+            if wizard_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Wizard' in card_names:
                 print('wizard')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(WIZARD_CARD, (940, 100))
-            if monk_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Monk' in card_names:
+            if monk_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Monk' in card_names:
                 print('monk')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(MONK_CARD, (940, 100))
-            if thief_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Thief' in card_names:
+            if thief_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Thief' in card_names:
                 print('thief')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(THIEF_CARD, (940, 100))
-            if oracle_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Oracle' in card_names:
+            if oracle_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Oracle' in card_names:
                 print('oracle')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(ORACLE_CARD, (940, 100))
-            if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Time Mage' in card_names:
+            if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Time Mage' in card_names:
                 print('time mage')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(TIME_MAGE_CARD, (940, 100))
-            if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Geomancer' in card_names:
+            if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Geomancer' in card_names:
                 print('geomancer')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(GEOMANCER_CARD, (940, 100))
-            if lancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Lancer' in card_names:
+            if lancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Lancer' in card_names:
                 print('lancer')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(LANCER_CARD, (940, 100))
-            if mediator_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Mediator' in card_names:
+            if mediator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Mediator' in card_names:
                 print('mediator')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(MEDIATOR_CARD, (940, 100))
-            if summoner_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Summoner' in card_names:
+            if summoner_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Summoner' in card_names:
                 print('summoner')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SUMMONER_CARD, (940, 100))
-            if samurai_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Samurai' in card_names:
+            if samurai_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Samurai' in card_names:
                 print('samurai')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SAMURAI_CARD, (940, 100))
-            if ninja_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Ninja' in card_names:
+            if ninja_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Ninja' in card_names:
                 print('ninja')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(NINJA_CARD, (940, 100))
-            if calculator_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Calculator' in card_names:
+            if calculator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Calculator' in card_names:
                 print('calculator')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(CALCULATOR_CARD, (940, 100))
-            if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Bard/Dancer' in card_names:
+            if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Bard/Dancer' in card_names:
                 print('bard/dancer')
+                SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
-            for button in [BACK, EQUIP]:
+            for button in [BACK]:
                 button.changeColor(CARDS_MOUSE_POSITION)
                 button.update(SCREEN)
         pygame.display.update()
@@ -4396,14 +4539,11 @@ def save_state():
 #                 Card.add_card(player.name, drop)
 
 
-
-
 def delve_drop_rate(hoard):
     global drop_quantity
 
     choice = random.randint(0, 100)
     quantity = random.randint(0, 100)
-
 
     if quantity >= 95:
         drop_quantity += 2
@@ -4842,7 +4982,6 @@ def delve_battle_finish(biome, hoard):
     fossil_setter = False
     card_setter = False
 
-
     text1 = get_bold_font(40).render(f'You have defeated all enemies of Depth {Delve.depth}!', True, WHITE)
     text1_rect = text1.get_rect(center=(SCREEN_WIDTH / 2, 150))
 
@@ -4857,9 +4996,11 @@ def delve_battle_finish(biome, hoard):
     while True:
 
         DELVE_ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()
-        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 500),
+        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                           pos=(SCREEN_WIDTH / 2 - 180, 500),
                            text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 + 180, 500),
+        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                               pos=(SCREEN_WIDTH / 2 + 180, 500),
                                text_input="CONTINUE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
 
         diff_time_ms = int(round(time.time() * 4000)) - last_time_ms
@@ -4903,11 +5044,11 @@ def delve_battle_finish(biome, hoard):
                     fossil_setter = True
                     drop_height += 40
 
-
         if counter == 3:
             if len(globals_variables.temp_card_drop) != 0:
                 if card_setter is not True:
-                    drop_text2 = get_bold_font(35).render(f"{globals_variables.temp_card_drop[0].__dict__['name']} card dropped!", True, PINK)
+                    drop_text2 = get_bold_font(35).render(
+                        f"{globals_variables.temp_card_drop[0].__dict__['name']} card dropped!", True, PINK)
                     drop_text2_rect = drop_text2.get_rect(center=(SCREEN_WIDTH / 2, drop_height))
                     SCREEN.blit(drop_text2, drop_text2_rect)
                     playsound(DROP_CONSUMABLE, False)
@@ -4974,9 +5115,11 @@ def delve_encounter():
     while True:
 
         DELVE_ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()
-        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 500),
+        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                           pos=(SCREEN_WIDTH / 2 - 180, 500),
                            text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 + 180, 500),
+        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                               pos=(SCREEN_WIDTH / 2 + 180, 500),
                                text_input="ENTER DELVE", font=get_bold_font(30), base_color="White",
                                hovering_color=BLUE)
 
@@ -5131,9 +5274,11 @@ def delve_menu():
 
         DELVE_MENU_MOUSE_POSITION = pygame.mouse.get_pos()
         # BUTTONS = main_menu_structure(DELVE_MENU_MOUSE_POSITION)
-        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 500),
+        MAIN_MENU = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                           pos=(SCREEN_WIDTH / 2 - 180, 500),
                            text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 + 180, 500),
+        START_DELVING = Button(image=pygame.image.load("assets/images/Smallest Rect.png"),
+                               pos=(SCREEN_WIDTH / 2 + 180, 500),
                                text_input="ENTER DELVE", font=get_bold_font(30), base_color="White",
                                hovering_color=BLUE)
 
@@ -5687,7 +5832,8 @@ def login_menu():
 
         NEW_GAME_BUTTON = Button(image=pygame.image.load("assets/images/Options Rect.png"), pos=(SCREEN_WIDTH / 2, 200),
                                  text_input="New game", font=get_bold_font(40), base_color="White", hovering_color=PINK)
-        LOAD_GAME_BUTTON = Button(image=pygame.image.load("assets/images/Options Rect.png"), pos=(SCREEN_WIDTH / 2, 350),
+        LOAD_GAME_BUTTON = Button(image=pygame.image.load("assets/images/Options Rect.png"),
+                                  pos=(SCREEN_WIDTH / 2, 350),
                                   text_input="Load game", font=get_bold_font(40), base_color="White",
                                   hovering_color=PINK)
         SMALL_QUIT_BUTTON = Button(image=pygame.image.load("assets/images/Small Quit Rect.png"), pos=(1870, 40),
@@ -5769,20 +5915,23 @@ def main_menu():
                                 rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'])
                 inventory.append(new_item)
 
-        # Cards List
 
-        rows3 = db.execute("SELECT * FROM cards_list WHERE username = :username",
-                           username=username)
-        if len(rows3) < 1:
-            pass
-        else:
-            for i in range(0, len(rows3)):
-                new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['status'], rows3[i]['life'], rows3[i]['attack'],
-                                rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
-                                rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
-                                rows3[i]['sound'])
-                globals_variables.cards_list.append(new_card)
-        print('inicialização de cards', globals_variables.cards_list)
+        # Cards List
+        card_instance_load(player.name)
+
+        # rows3 = db.execute("SELECT * FROM cards_list WHERE username = :username",
+        #                    username=username)
+        # if len(rows3) < 1:
+        #     pass
+        # else:
+        #     for i in range(0, len(rows3)):
+        #         new_card = Card(rows3[i]['type'], rows3[i]['name'], rows3[i]['status'], rows3[i]['life'],
+        #                         rows3[i]['attack'],
+        #                         rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
+        #                         rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
+        #                         rows3[i]['sound'])
+        #         globals_variables.cards_list.append(new_card)
+        # print('inicialização de cards', globals_variables.cards_list)
 
         # PlayerSlot
         row_amulet = db.execute("SELECT * FROM amulet WHERE username = :username", username=username)
@@ -5805,7 +5954,8 @@ def main_menu():
         player_slot.weapon = row_weapon[0]
         row_boots = db.execute("SELECT * FROM boots WHERE username = :username", username=username)
         player_slot.boots = row_boots[0]
-
+        row_card = db.execute("SELECT * FROM card WHERE username = :username", username=username)
+        player_slot.card = row_card[0]
         # Consumables
         row_potion = db.execute("SELECT * FROM potion WHERE username = :username", username=username)
         potion.quantity = row_potion[0]['quantity']
@@ -5833,7 +5983,8 @@ def main_menu():
         pristine_fossil.quantity = row_pristine_fossil[0]['quantity']
         row_deft_fossil = db.execute("SELECT * FROM deft_fossil WHERE username = :username", username=username)
         deft_fossil.quantity = row_deft_fossil[0]['quantity']
-        row_fractured_fossil = db.execute("SELECT * FROM fractured_fossil WHERE username = :username", username=username)
+        row_fractured_fossil = db.execute("SELECT * FROM fractured_fossil WHERE username = :username",
+                                          username=username)
         fractured_fossil.quantity = row_fractured_fossil[0]['quantity']
 
         # boss instance
@@ -6030,6 +6181,7 @@ def main_menu():
 
             pygame.display.update()
 
+
 # if player.level != 20 and dycedarg2.status is True:
 #     print('1   Start Battle\n'
 #           '2   Inventory\n'
@@ -6110,6 +6262,7 @@ def main_menu():
 if __name__ == '__main__':
     # Level 1 player instance
     player: Player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
+    # player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
     player_slot = PlayerSlot(amulet=amulet_type[0],
                              armor=armor_type[0],
                              gloves=gloves_type[0],
@@ -6119,7 +6272,8 @@ if __name__ == '__main__':
                              ring2=ring_type[0],
                              second_hand=second_hand_type[0],
                              weapon=weapon_type[0],
-                             boots=boots_type[0])
+                             boots=boots_type[0],
+                             card=card_collection[0])
     # Boss instances:
     wiegraf1 = Character(
         name=characters['Wiegraf 1']['name'],

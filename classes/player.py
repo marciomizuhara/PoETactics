@@ -1,5 +1,4 @@
 class Player:
-
     def __init__(self, name, total_life, life, attack, defense, level, xp, shaman, crit_chance, crit_damage,
                  magic_find, image):
         self.name = name
