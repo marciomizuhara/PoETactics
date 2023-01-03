@@ -3874,7 +3874,7 @@ def cards():
     ninja_rect = NINJA_CARD_FRAME.get_rect(center=(530, 460))
     calculator_rect = CALCULATOR_CARD_FRAME.get_rect(center=(660, 460))
     bard_dancer_rect = BARD_DANCER_CARD_FRAME.get_rect(center=(790, 460))
-
+    cards_obtained = [x.__dict__['name'] for x in globals_variables.cards_list]
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
     while True:
@@ -3903,10 +3903,60 @@ def cards():
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
                     extras()
-                if squire_rect.collidepoint(CARDS_MOUSE_POSITION):
+                if squire_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Squire' in cards_obtained:
                     equip_card_update_status('Squire')
-                if chemist_rect.collidepoint(CARDS_MOUSE_POSITION):
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in cards_obtained:
                     equip_card_update_status('Chemist')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if knight_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Knight' in cards_obtained:
+                    equip_card_update_status('Knight')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if archer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Archer' in cards_obtained:
+                    equip_card_update_status('Archer')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if priest_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Priest' in cards_obtained:
+                    equip_card_update_status('Priest')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if wizard_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Wizard' in cards_obtained:
+                    equip_card_update_status('Wizard')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if monk_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Monk' in cards_obtained:
+                    equip_card_update_status('Monk')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if thief_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Thief' in cards_obtained:
+                    equip_card_update_status('Thief')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if oracle_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Oracle' in cards_obtained:
+                    equip_card_update_status('Oracle')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Time Mage' in cards_obtained:
+                    equip_card_update_status('Time Mage')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Geomancer' in cards_obtained:
+                    equip_card_update_status('Geomancer')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if lancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Lancer' in cards_obtained:
+                    equip_card_update_status('Lancer')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if mediator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Mediator' in cards_obtained:
+                    equip_card_update_status('Mediator')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if summoner_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Summoner' in cards_obtained:
+                    equip_card_update_status('Summoner')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if samurai_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Samurai' in cards_obtained:
+                    equip_card_update_status('Samurai')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if ninja_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Ninja' in cards_obtained:
+                    equip_card_update_status('Ninja')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if calculator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Calculator' in cards_obtained:
+                    equip_card_update_status('Calculator')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
+                if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Bard/Dancer' in cards_obtained:
+                    equip_card_update_status('Bard/Dancer')
+                    SCREEN.blit(equipped_text, equipped_text_rect)
 
             if not squire_rect.collidepoint(CARDS_MOUSE_POSITION) and not chemist_rect.collidepoint(
                     CARDS_MOUSE_POSITION) and not knight_rect.collidepoint(
@@ -3926,12 +3976,10 @@ def cards():
                     CARDS_MOUSE_POSITION) and not calculator_rect.collidepoint(
                     CARDS_MOUSE_POSITION) and not bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION):
                 if player_slot.card['name'] == 'Squire' and player_slot.card['name'] == 'Squire':
-                    print('esse Squire')
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(SQUIRE_CARD, (940, 100))
                 if player_slot.card['name'] == 'Chemist' and player_slot.card['name'] == 'Chemist':
-                    print('esse Chemist')
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(CHEMIST_CARD, (940, 100))
@@ -3995,13 +4043,14 @@ def cards():
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(CALCULATOR_CARD, (940, 100))
-                if player_slot.card['name'] == 'Bard/Dancer' and player_slot.card['name'] == 'Bard/Dance':
+                if player_slot.card['name'] == 'Bard/Dancer':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
             if squire_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Squire' in card_names:
-                print('chemist')
+                print('squire')
+                print(globals_variables.cards_list[0])
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SQUIRE_CARD, (940, 100))
             if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in card_names:
@@ -5918,6 +5967,11 @@ def main_menu():
 
         # Cards List
         card_instance_load(player.name)
+
+        # duplicate = duplicate_prevention(player.name, 'Squire')
+        # if duplicate == 0:
+        #     print('não tem card, tem q addar')
+        #     add_card(player.name, card_collection[0])
 
         # rows3 = db.execute("SELECT * FROM cards_list WHERE username = :username",
         #                    username=username)
