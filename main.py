@@ -506,7 +506,10 @@ def show_inventory_page_1(consumable_type):
                         if consumable_type == 1:
                             show_item(i, sorted_inventory[i])
                         else:
-                            use_fossil(consumable_type, i, sorted_inventory[i])
+                            if sorted_inventory[i].__dict__['rarity'] == 'unique':
+                                fossil_reforge_cannot_reforge(sorted_inventory[i].__dict__, 1, consumable_type)
+                            else:
+                                use_fossil(consumable_type, i, sorted_inventory[i])
 
         for button in BUTTONS:
             button.changeColor(INVENTORY_MOUSE_POSITION)
@@ -588,7 +591,10 @@ def show_inventory_page_2(consumable_type):
                         if consumable_type == 1:
                             show_item(i, sorted_inventory[i])
                         else:
-                            use_fossil(consumable_type, i, sorted_inventory[i])
+                            if sorted_inventory[i].__dict__['rarity'] == 'unique':
+                                fossil_reforge_cannot_reforge(sorted_inventory[i].__dict__, 2, consumable_type)
+                            else:
+                                use_fossil(consumable_type, i, sorted_inventory[i])
 
         for button in BUTTONS:
             button.changeColor(INVENTORY_MOUSE_POSITION)
@@ -668,7 +674,10 @@ def show_inventory_page_3(consumable_type):
                         if consumable_type == 1:
                             show_item(i, sorted_inventory[i])
                         else:
-                            use_fossil(consumable_type, i, sorted_inventory[i])
+                            if sorted_inventory[i].__dict__['rarity'] == 'unique':
+                                fossil_reforge_cannot_reforge(sorted_inventory[i].__dict__, 3, consumable_type)
+                            else:
+                                use_fossil(consumable_type, i, sorted_inventory[i])
 
         for button in BUTTONS:
             button.changeColor(INVENTORY_MOUSE_POSITION)
@@ -742,7 +751,10 @@ def show_inventory_page_4(consumable_type):
                         if consumable_type == 1:
                             show_item(i, sorted_inventory[i])
                         else:
-                            use_fossil(consumable_type, i, sorted_inventory[i])
+                            if sorted_inventory[i].__dict__['rarity'] == 'unique':
+                                fossil_reforge_cannot_reforge(sorted_inventory[i].__dict__, 4, consumable_type)
+                            else:
+                                use_fossil(consumable_type, i, sorted_inventory[i])
 
         for button in BUTTONS:
             button.changeColor(INVENTORY_MOUSE_POSITION)
@@ -2208,6 +2220,55 @@ def fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, ne
             button.changeColor(USE_FOSSIL_MOUSE_POSITION)
             button.update(SCREEN)
         pygame.display.update()
+
+
+def fossil_reforge_cannot_reforge(item, inventory_page, consumable_type):
+    SCREEN.blit(BG, (0, 0))
+    SCREEN.blit(BATTLE_BOX, (60, 40))
+    display_level_xp()
+    confirm_text1 = get_bold_font(35).render(
+        f"Unique items cannot be reforged!", True, YELLOW)
+    confirm_text1_rect = confirm_text1.get_rect(center=(SCREEN_WIDTH / 2 - 180, 320))
+    # text2 = get_bold_font(25).render(f'(10% chance for the item to get destroyed)', True, WHITE)
+    # text2_rect = text2.get_rect(center=(SCREEN_WIDTH / 2 - 180, 520))
+    SCREEN.blit(confirm_text1, confirm_text1_rect)
+
+
+    while True:
+        USE_FOSSIL_MOUSE_POSITION = pygame.mouse.get_pos()
+        BUTTONS = main_menu_structure(USE_FOSSIL_MOUSE_POSITION)
+        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 390),
+                          text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BUTTONS.append(BACK)
+
+        # NO_BUTTON = Button(image=pygame.image.load("images/Smallest Rect.png"), pos=(380, 600),
+        #                      text_input="NO", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        # YES_BUTTON = Button(image=pygame.image.load("images/Smallest Rect.png"), pos=(540, 600),
+        #                     text_input="YES", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                main_menu_structure_events(USE_FOSSIL_MOUSE_POSITION, BUTTONS)
+                if BACK.checkForInput(USE_FOSSIL_MOUSE_POSITION):
+                    if inventory_page == 1:
+                        show_inventory_page_1(consumable_type)
+                    elif inventory_page == 2:
+                        show_inventory_page_2(consumable_type)
+                    elif inventory_page == 3:
+                        show_inventory_page_3(consumable_type)
+                    elif inventory_page == 4:
+                        show_inventory_page_4(consumable_type)
+
+        for button in BUTTONS:
+            button.changeColor(USE_FOSSIL_MOUSE_POSITION)
+            button.update(SCREEN)
+        pygame.display.update()
+
+
+
 
 
 def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
