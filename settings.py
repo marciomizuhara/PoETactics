@@ -68,6 +68,7 @@ GLOVES = pygame.transform.scale(pygame.image.load('assets/images/gloves.png'), (
 BOOTS = pygame.transform.scale(pygame.image.load('assets/images/boots.png'), (60, 60))
 RING = pygame.transform.scale(pygame.image.load('assets/images/ring.png'), (60, 60))
 AMULET = pygame.transform.scale(pygame.image.load('assets/images/amulet.png'), (40, 60))
+CARD = pygame.transform.scale(pygame.image.load('assets/images/card_icon.png'), (60, 60))
 
 G_ROULETTE_WHEEL2_TICKET = pygame.transform.scale(pygame.image.load('assets/images/g_roulette_wheel_ticket.png'), (60, 60))
 G_POTION = pygame.transform.scale(pygame.image.load('assets/images/g_potion.png'), (40, 60))
@@ -154,4 +155,7 @@ PLAYER_ATTACK = 'assets/music/slash2.wav'
 ENEMY_ATTACK = 'assets/music/slash1.wav'
 CRITICAL_ATTACK = 'assets/music/criticalhit.wav'
 DELVE = 'assets/music/delve.mp3'
+
+
+
 

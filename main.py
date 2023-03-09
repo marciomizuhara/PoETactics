@@ -239,8 +239,12 @@ def main_menu_structure_events(mouse, buttons):
 
 
 def show_item(item_index, item):
+    ITEM_IMAGE = pygame.transform.scale(pygame.image.load(item.image), (200, 200))
+    print(item.name, item.image)
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
+    SCREEN.blit(ITEM_IMAGE, (500, 200))
+
     sorted_inventory = sorted(inventory, key=lambda x: (x.level, x.type), reverse=True)
 
     color = ORANGE if item.rarity == 'unique' else WHITE
@@ -1305,6 +1309,7 @@ def enemy_gear_drop():
                     item_type[0]['crit_damage'],
                     item_type[0]['magic_find'],
                     item_type[0]['rarity'],
+                    item_type[0]['image'],
                     )
 
     inventory.append(new_item)
@@ -1426,6 +1431,7 @@ def unique_drop_rate():
                                   drop['crit_damage'],
                                   drop['magic_find'],
                                   drop['rarity'],
+                                  drop['image'],
                                   )
                 if drop['name'] in uniques_list:
                     pass
@@ -1725,7 +1731,8 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_chance'],
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
-                        to_inventory['rarity']
+                        to_inventory['rarity'],
+                        to_inventory['image']
                         )
         inventory.append(new_item)
         unequip_update_status(new_item)
@@ -1746,7 +1753,8 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_chance'],
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
-                        to_inventory['rarity']
+                        to_inventory['rarity'],
+                        to_inventory['image']
                         )
         inventory.append(new_item)
         unequip_update_status(new_item)
@@ -1767,7 +1775,8 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_chance'],
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
-                        to_inventory['rarity']
+                        to_inventory['rarity'],
+                        to_inventory['image']
                         )
         # inventory list
         inventory.append(new_item)
@@ -2279,8 +2288,8 @@ def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
     db.execute("DELETE FROM inventory WHERE id = :id",
                id=id)
     db.execute(
-        "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity)"
-        "VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image)"
+        "VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name,
         name=new_item.__dict__['name'],
         type=new_item.__dict__['type'],
@@ -2291,7 +2300,8 @@ def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
         crit_chance=new_item.__dict__['crit_chance'],
         crit_damage=new_item.__dict__['crit_damage'],
         magic_find=new_item.__dict__['magic_find'],
-        rarity=new_item.__dict__['rarity'])
+        rarity=new_item.__dict__['rarity'],
+        image = new_item.__dict__['image'])
 
 
 def fossil_reforge_failure(item_index, item_to_reforge):
@@ -2358,8 +2368,10 @@ def unequip_update_status(item):
 def equip_card_update_status(card_name):
     # Removing current card status
     # current_card = player_slot.card
-    print('Old Life', player.total_life)
+    print('slot card', int(player_slot.card['life']))
+    print('Total Life com card antigo', player.total_life)
     player.total_life = player.total_life - int(player_slot.card['life'])
+    print('Total Life sem card antigo', player.total_life)
     player.attack = player.attack - int(player_slot.card['attack'])
     player.defense = player.defense - int(player_slot.card['defense'])
     player.crit_chance = player.crit_chance - int(player_slot.card['crit_chance'])
@@ -2370,7 +2382,7 @@ def equip_card_update_status(card_name):
     new_card = [x for x in globals_variables.cards_list if x.__dict__['name'] == card_name][0].__dict__
 
     player.total_life = player.total_life + new_card['life']
-    print('New Life', player.total_life)
+    print('Total Life com card novo', player.total_life)
     player.attack = player.attack + new_card['attack']
     player.defense = player.defense + new_card['defense']
     player.crit_chance = player.crit_chance + new_card['crit_chance']
@@ -3365,6 +3377,22 @@ def show_player_slot(gear_type):
                                                    True, WHITE)
         show_player_slot_helper(text1, level_text, type_text, life_text, attack_text, defense_text,
                                 crit_chance_text, crit_damage_text, magic_find_text)
+    elif gear_type == 'card':
+        text1 = get_bold_font(35).render(f"{player_slot.card['name']}", True, WHITE)
+        level_text = get_regular_font(25).render(f"Level {player_slot.card['level']}", True, WHITE)
+        type_text = get_bold_font(25).render(f"Type: {player_slot.card['type']}", True, WHITE)
+        life_text = get_bold_font(25).render(f"Life: {player_slot.card['life']}", True, WHITE)
+        attack_text = get_bold_font(25).render(f"Attack: {player_slot.card['attack']}", True, WHITE)
+        defense_text = get_bold_font(25).render(f"Defense: {player_slot.card['defense']}", True, WHITE)
+        crit_chance_text = get_bold_font(25).render(f"Critical Chance: {player_slot.card['crit_chance']} %", True,
+                                                    WHITE)
+        crit_damage_text = get_bold_font(25).render(f"Critical Damage: {player_slot.card['crit_damage']} %", True,
+                                                    WHITE)
+        magic_find_text = get_bold_font(25).render(f"Magic Find: {round(player_slot.card['magic_find'] * 100, 2)} %",
+                                                   True, WHITE)
+        show_player_slot_helper(text1, level_text, type_text, life_text, attack_text, defense_text,
+                                crit_chance_text, crit_damage_text, magic_find_text)
+
     elif gear_type == 'second_hand':
         text1 = get_bold_font(35).render(f"{player_slot.second_hand['name']}", True, WHITE)
         level_text = get_regular_font(25).render(f"Level {player_slot.second_hand['level']}", True, WHITE)
@@ -3568,6 +3596,7 @@ def player_status():
     SCREEN.blit(RING, (SCREEN_WIDTH / 2 - 170, 520))
     SCREEN.blit(RING, (SCREEN_WIDTH / 2 + 90, 520))
     SCREEN.blit(AMULET, (SCREEN_WIDTH / 2 - 20, 520))
+    SCREEN.blit(CARD, (SCREEN_WIDTH / 2 - 30, 600))
 
     weapon_rect = WEAPON.get_rect(center=(SCREEN_WIDTH / 2 - 140, 110))
     helmet_rect = HELMET.get_rect(center=(SCREEN_WIDTH / 2 - 10, 110))
@@ -3579,6 +3608,7 @@ def player_status():
     ring1_rect = RING.get_rect(center=(SCREEN_WIDTH / 2 - 140, 550))
     ring2_rect = RING.get_rect(center=(SCREEN_WIDTH / 2 + 120, 550))
     amulet_rect = AMULET.get_rect(center=(SCREEN_WIDTH / 2, 550))
+    card_rect = AMULET.get_rect(center=(SCREEN_WIDTH / 2, 620))
 
     while True:
         PLAYER_STATUS_MOUSE_POSITION = pygame.mouse.get_pos()
@@ -3675,6 +3705,13 @@ def player_status():
                 temp_gear_change.clear()
                 temp_gear_change.append(player_slot.second_hand)
                 show_player_slot('second_hand')
+
+            if card_rect.collidepoint(PLAYER_STATUS_MOUSE_POSITION):
+                SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
+                SCREEN.blit(gear_slot, gear_slot_rect)
+                temp_gear_change.clear()
+                temp_gear_change.append(player_slot.amulet)
+                show_player_slot('card')
 
             for button in [BACK, CHANGE]:
                 button.changeColor(PLAYER_STATUS_MOUSE_POSITION)
@@ -4110,76 +4147,76 @@ def cards():
                     SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
             if squire_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Squire' in card_names:
-                print('squire')
-                print(globals_variables.cards_list[0])
+                # print('squire')
+                # print(globals_variables.cards_list[0])
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SQUIRE_CARD, (940, 100))
             if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in card_names:
-                print('chemist')
+                # print('chemist')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(CHEMIST_CARD, (940, 100))
             if knight_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Knight' in card_names:
-                print('knight')
+                # print('knight')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(KNIGHT_CARD, (940, 100))
             if archer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Archer' in card_names:
-                print('archer')
+                # print('archer')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(ARCHER_CARD, (940, 100))
             if priest_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Priest' in card_names:
-                print('priest')
+                # print('priest')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(PRIEST_CARD, (940, 100))
             if wizard_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Wizard' in card_names:
-                print('wizard')
+                # print('wizard')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(WIZARD_CARD, (940, 100))
             if monk_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Monk' in card_names:
-                print('monk')
+                # print('monk')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(MONK_CARD, (940, 100))
             if thief_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Thief' in card_names:
-                print('thief')
+                # print('thief')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(THIEF_CARD, (940, 100))
             if oracle_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Oracle' in card_names:
-                print('oracle')
+                # print('oracle')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(ORACLE_CARD, (940, 100))
             if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Time Mage' in card_names:
-                print('time mage')
+                # print('time mage')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(TIME_MAGE_CARD, (940, 100))
             if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Geomancer' in card_names:
-                print('geomancer')
+                # print('geomancer')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(GEOMANCER_CARD, (940, 100))
             if lancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Lancer' in card_names:
-                print('lancer')
+                # print('lancer')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(LANCER_CARD, (940, 100))
             if mediator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Mediator' in card_names:
-                print('mediator')
+                # print('mediator')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(MEDIATOR_CARD, (940, 100))
             if summoner_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Summoner' in card_names:
-                print('summoner')
+                # print('summoner')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SUMMONER_CARD, (940, 100))
             if samurai_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Samurai' in card_names:
-                print('samurai')
+                # print('samurai')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(SAMURAI_CARD, (940, 100))
             if ninja_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Ninja' in card_names:
-                print('ninja')
+                # print('ninja')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(NINJA_CARD, (940, 100))
             if calculator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Calculator' in card_names:
-                print('calculator')
+                # print('calculator')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(CALCULATOR_CARD, (940, 100))
             if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Bard/Dancer' in card_names:
-                print('bard/dancer')
+                # print('bard/dancer')
                 SCREEN.blit(CARD_EQUIPPED, (940, 440))
                 SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
@@ -4404,6 +4441,7 @@ def roulette_outcome(index):
                               drop['crit_damage'],
                               drop['magic_find'],
                               drop['rarity'],
+                              drop['image'],
                               )
             inventory.append(new_item)
             db.execute("INSERT INTO uniques_list (username, name) VALUES (:username, :name)",
@@ -4462,12 +4500,13 @@ def inventory_update(username, item):
 
         db.execute(
             "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance,"
-            "crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense,"
-            ":crit_chance, :crit_damage, :magic_find, :rarity)",
+            "crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense,"
+            ":crit_chance, :crit_damage, :magic_find, :rarity, :image)",
             username=username, name=item.name, type=item.type,
             level=item.level, life=item.life,
             attack=item.attack, defense=item.defense,
-            crit_chance=item.crit_chance, crit_damage=item.crit_damage, magic_find=item.magic_find, rarity=item.rarity)
+            crit_chance=item.crit_chance, crit_damage=item.crit_damage,
+            magic_find=item.magic_find, rarity=item.rarity, image=item.image)
 
 
 # def card_update(username, card):
@@ -4506,93 +4545,94 @@ def save_state():
     db.execute("DELETE FROM amulet WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO amulet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO amulet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.amulet['name'], type=player_slot.amulet['type'],
         level=player_slot.amulet['level'], life=player_slot.amulet['life'],
         attack=player_slot.amulet['attack'], defense=player_slot.amulet['defense'],
         crit_chance=player_slot.amulet['crit_chance'], crit_damage=player_slot.amulet['crit_damage'],
-        magic_find=player_slot.amulet['magic_find'], rarity=player_slot.amulet['rarity'])
+        magic_find=player_slot.amulet['magic_find'], rarity=player_slot.amulet['rarity'], image=player_slot.amulet['image'])
     db.execute("DELETE FROM armor WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO armor (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO armor (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.armor['name'], type=player_slot.armor['type'],
         level=player_slot.armor['level'], life=player_slot.armor['life'],
         attack=player_slot.armor['attack'], defense=player_slot.armor['defense'],
         crit_chance=player_slot.armor['crit_chance'], crit_damage=player_slot.armor['crit_damage'],
-        magic_find=player_slot.armor['magic_find'], rarity=player_slot.armor['rarity'])
-    db.execute("DELETE FROM gloves WHERE username = :username",
+        magic_find=player_slot.armor['magic_find'], rarity=player_slot.armor['rarity'], image=player_slot.armor['image'])
+    db.execute("DELETE FROM gloves WHERE username = :user"
+               "name",
                username=username)
     db.execute(
-        "INSERT INTO gloves (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO gloves (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.gloves['name'], type=player_slot.gloves['type'],
         level=player_slot.gloves['level'], life=player_slot.gloves['life'],
         attack=player_slot.gloves['attack'], defense=player_slot.gloves['defense'],
         crit_chance=player_slot.gloves['crit_chance'], crit_damage=player_slot.gloves['crit_damage'],
-        magic_find=player_slot.gloves['magic_find'], rarity=player_slot.gloves['rarity'])
+        magic_find=player_slot.gloves['magic_find'], rarity=player_slot.gloves['rarity'], image=player_slot.gloves['image'])
     db.execute("DELETE FROM helmet WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO helmet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO helmet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.helmet['name'], type=player_slot.helmet['type'],
         level=player_slot.helmet['level'], life=player_slot.helmet['life'],
         attack=player_slot.helmet['attack'], defense=player_slot.helmet['defense'],
         crit_chance=player_slot.helmet['crit_chance'], crit_damage=player_slot.helmet['crit_damage'],
-        magic_find=player_slot.helmet['magic_find'], rarity=player_slot.helmet['rarity'])
+        magic_find=player_slot.helmet['magic_find'], rarity=player_slot.helmet['rarity'], image=player_slot.helmet['image'])
     db.execute("DELETE FROM legs WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO legs (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO legs (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.legs['name'], type=player_slot.legs['type'],
         level=player_slot.legs['level'], life=player_slot.legs['life'],
         attack=player_slot.legs['attack'], defense=player_slot.legs['defense'],
         crit_chance=player_slot.legs['crit_chance'], crit_damage=player_slot.legs['crit_damage'],
-        magic_find=player_slot.legs['magic_find'], rarity=player_slot.legs['rarity'])
+        magic_find=player_slot.legs['magic_find'], rarity=player_slot.legs['rarity'], image=player_slot.legs['image'])
     db.execute("DELETE FROM ring1 WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO ring1 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO ring1 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.ring1['name'], type=player_slot.ring1['type'],
         level=player_slot.ring1['level'], life=player_slot.ring1['life'],
         attack=player_slot.ring1['attack'], defense=player_slot.ring1['defense'],
         crit_chance=player_slot.ring1['crit_chance'], crit_damage=player_slot.ring1['crit_damage'],
-        magic_find=player_slot.ring1['magic_find'], rarity=player_slot.ring1['rarity'])
+        magic_find=player_slot.ring1['magic_find'], rarity=player_slot.ring1['rarity'], image=player_slot.ring1['image'])
     db.execute("DELETE FROM ring2 WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO ring2 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO ring2 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.ring2['name'], type=player_slot.ring2['type'],
         level=player_slot.ring2['level'], life=player_slot.ring2['life'],
         attack=player_slot.ring2['attack'], defense=player_slot.ring2['defense'],
         crit_chance=player_slot.ring2['crit_chance'], crit_damage=player_slot.ring2['crit_damage'],
-        magic_find=player_slot.ring2['magic_find'], rarity=player_slot.ring2['rarity'])
+        magic_find=player_slot.ring2['magic_find'], rarity=player_slot.ring2['rarity'], image=player_slot.ring2['image'])
     db.execute("DELETE FROM second_hand WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO second_hand (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO second_hand (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.second_hand['name'], type=player_slot.second_hand['type'],
         level=player_slot.second_hand['level'], life=player_slot.second_hand['life'],
         attack=player_slot.second_hand['attack'], defense=player_slot.second_hand['defense'],
         crit_chance=player_slot.second_hand['crit_chance'], crit_damage=player_slot.second_hand['crit_damage'],
-        magic_find=player_slot.second_hand['magic_find'], rarity=player_slot.second_hand['rarity'])
+        magic_find=player_slot.second_hand['magic_find'], rarity=player_slot.second_hand['rarity'], image=player_slot.second_hand['image'])
     db.execute("DELETE FROM weapon WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO weapon (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO weapon (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.weapon['name'], type=player_slot.weapon['type'],
         level=player_slot.weapon['level'], life=player_slot.weapon['life'],
         attack=player_slot.weapon['attack'], defense=player_slot.weapon['defense'],
         crit_chance=player_slot.weapon['crit_chance'], crit_damage=player_slot.weapon['crit_damage'],
-        magic_find=player_slot.weapon['magic_find'], rarity=player_slot.weapon['rarity'])
+        magic_find=player_slot.weapon['magic_find'], rarity=player_slot.weapon['rarity'], image=player_slot.weapon['image'])
     db.execute("DELETE FROM boots WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO boots (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity)",
+        "INSERT INTO boots (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
         username=player.name, name=player_slot.boots['name'], type=player_slot.boots['type'],
         level=player_slot.boots['level'], life=player_slot.boots['life'],
         attack=player_slot.boots['attack'], defense=player_slot.boots['defense'],
         crit_chance=player_slot.boots['crit_chance'], crit_damage=player_slot.boots['crit_damage'],
-        magic_find=player_slot.boots['magic_find'], rarity=player_slot.boots['rarity'])
+        magic_find=player_slot.boots['magic_find'], rarity=player_slot.boots['rarity'], image=player_slot.boots['image'])
 
     # Consumables
     db.execute("UPDATE potion SET quantity = :quantity WHERE username = :username", quantity=potion.quantity,
@@ -5466,7 +5506,7 @@ def load_state():
             new_item = Item(rows2[i]['type'], rows2[i]['name'], rows2[i]['level'],
                             rows2[i]['life'], rows2[i]['attack'],
                             rows2[i]['defense'], rows2[i]['crit_chance'],
-                            rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'])
+                            rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'], rows[i]['image'])
             inventory.append(new_item)
 
     # PlayerSlot
@@ -5984,12 +6024,13 @@ def main_menu():
     global counter, last_time_ms, main_menu_setter
 
     if main_menu_setter:
-        print('aqui')
+        print('main menu setter ')
+
         '''
         REMOVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         '''
 
-        username = 'Mizuhara6'
+        username = 'Mizuhara1'
         # username = player.name
         rows = db.execute("SELECT * FROM user_data WHERE username = :username",
                           username=username)
@@ -6018,11 +6059,12 @@ def main_menu():
 
 
         else:
+            print('rows 2 aqui', rows2)
             for i in range(0, len(rows2)):
                 new_item = Item(rows2[i]['type'], rows2[i]['name'], rows2[i]['level'],
                                 rows2[i]['life'], rows2[i]['attack'],
                                 rows2[i]['defense'], rows2[i]['crit_chance'],
-                                rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'])
+                                rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'], rows2[i]['image'])
                 inventory.append(new_item)
 
 

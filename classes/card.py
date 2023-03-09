@@ -65,6 +65,7 @@ def card_drop_rate(player):
 def card_instance_load(username):
     rows3 = db.execute("SELECT * FROM cards_list WHERE username = :username",
                        username=username)
+    print(rows3)
     if len(rows3) < 1:
         print('entra aqui se não houver nada no CARD LIST')
         new_card = Card(card_collection[0]['type'], card_collection[0]['name'], 1, card_collection[0]['life'],

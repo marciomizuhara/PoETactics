@@ -1,0 +1,19 @@
+CREATE TABLE "amulet" (
+	"username"	REAL NOT NULL,
+	"type"	REAL NOT NULL,
+	"name"	BLOB NOT NULL,
+	"level"	INTEGER NOT NULL,
+	"life"	INTEGER NOT NULL,
+	"attack"	INTEGER NOT NULL,
+	"defense"	INTEGER NOT NULL,
+	"crit_chance"	REAL NOT NULL,
+	"crit_damage"	REAL NOT NULL,
+	"magic_find"	REAL NOT NULL,
+	"rarity"	TEXT NOT NULL,
+	"image"	TEXT NOT NULL
+);
+
+
+
+INSERT INTO amulet (username, type, name, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image)
+VALUES ("Mizuhara1", "amulet", "Wooden Amulet", 1, 1, 1, 1, 1, 1, 0, "rare", "assets/images/items/weapons/wooden_amulet.png");
