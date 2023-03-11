@@ -3710,7 +3710,7 @@ def player_status():
                 SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
                 SCREEN.blit(gear_slot, gear_slot_rect)
                 temp_gear_change.clear()
-                temp_gear_change.append(player_slot.amulet)
+                temp_gear_change.append(player_slot.card)
                 show_player_slot('card')
 
             for button in [BACK, CHANGE]:
@@ -3740,91 +3740,93 @@ def player_status():
 
 def change_gear():
     global temp_gear_change, temp_gear_change_inventory
+    if temp_gear_change[0]['type'] == 'card':
+        cards('player_status')
+    else:
+        item_index = 1
+        SCREEN.blit(BG, (0, 0))
+        SCREEN.blit(BATTLE_BOX, (60, 40))
+        temp_iterable = []
 
-    item_index = 1
-    SCREEN.blit(BG, (0, 0))
-    SCREEN.blit(BATTLE_BOX, (60, 40))
-    temp_iterable = []
+        HEIGHT = 100
+        sorted_inventory = sorted(inventory, key=lambda x: (x.level, x.type), reverse=True)
+        iteration_rect = []
+        column_a = 0
+        for i in range(0, len(sorted_inventory)):
+            if sorted_inventory[i].__dict__['type'] == temp_gear_change[0]['type']:
+                text1 = get_bold_font(22).render(
+                    f"{item_index} — {sorted_inventory[i].__dict__['name']} (level {sorted_inventory[i].__dict__['level']})",
+                    True, WHITE)
+                text1_rect = text1.get_rect(midleft=(100, HEIGHT))
+                HEIGHT = HEIGHT + 23
+                SCREEN.blit(text1, text1_rect)
+                item_index = item_index + 1
+                iteration_rect.append(text1_rect)
+                temp_iterable.append(sorted_inventory[i].__dict__['name'])
+                temp_gear_change_inventory.append(sorted_inventory[i])
+                column_a = column_a + 1
+            if column_a == 20:
+                break
+        HEIGHT2 = 100
+        column_b = 0
+        for i in range(20, len(sorted_inventory)):
+            if sorted_inventory[i].__dict__['type'] == temp_gear_change[0]['type'] and sorted_inventory[i].__dict__[
+                'name'] not in temp_iterable:
+                text1 = get_bold_font(22).render(
+                    f"{item_index} — {sorted_inventory[i].__dict__['name']} (level {sorted_inventory[i].__dict__['level']})",
+                    True, WHITE)
+                text1_rect = text1.get_rect(midleft=(550, HEIGHT2))
+                HEIGHT2 = HEIGHT2 + 23
+                SCREEN.blit(text1, text1_rect)
+                item_index = item_index + 1
+                iteration_rect.append(text1_rect)
+                temp_gear_change_inventory.append(sorted_inventory[i])
+                column_b = column_b + 1
+            if column_b == 20:
+                break
+        temp_iterable.clear()
 
-    HEIGHT = 100
-    sorted_inventory = sorted(inventory, key=lambda x: (x.level, x.type), reverse=True)
-    iteration_rect = []
-    column_a = 0
-    for i in range(0, len(sorted_inventory)):
-        if sorted_inventory[i].__dict__['type'] == temp_gear_change[0]['type']:
-            text1 = get_bold_font(22).render(
-                f"{item_index} — {sorted_inventory[i].__dict__['name']} (level {sorted_inventory[i].__dict__['level']})",
-                True, WHITE)
-            text1_rect = text1.get_rect(midleft=(100, HEIGHT))
-            HEIGHT = HEIGHT + 23
-            SCREEN.blit(text1, text1_rect)
-            item_index = item_index + 1
-            iteration_rect.append(text1_rect)
-            temp_iterable.append(sorted_inventory[i].__dict__['name'])
-            temp_gear_change_inventory.append(sorted_inventory[i])
-            column_a = column_a + 1
-        if column_a == 20:
-            break
-    HEIGHT2 = 100
-    column_b = 0
-    for i in range(20, len(sorted_inventory)):
-        if sorted_inventory[i].__dict__['type'] == temp_gear_change[0]['type'] and sorted_inventory[i].__dict__[
-            'name'] not in temp_iterable:
-            text1 = get_bold_font(22).render(
-                f"{item_index} — {sorted_inventory[i].__dict__['name']} (level {sorted_inventory[i].__dict__['level']})",
-                True, WHITE)
-            text1_rect = text1.get_rect(midleft=(550, HEIGHT2))
-            HEIGHT2 = HEIGHT2 + 23
-            SCREEN.blit(text1, text1_rect)
-            item_index = item_index + 1
-            iteration_rect.append(text1_rect)
-            temp_gear_change_inventory.append(sorted_inventory[i])
-            column_b = column_b + 1
-        if column_b == 20:
-            break
-    temp_iterable.clear()
+        while True:
 
-    while True:
+            CHANGE_GEAR_MOUSE_POSITION = pygame.mouse.get_pos()
+            BUTTONS = main_menu_structure(CHANGE_GEAR_MOUSE_POSITION)
 
-        CHANGE_GEAR_MOUSE_POSITION = pygame.mouse.get_pos()
-        BUTTONS = main_menu_structure(CHANGE_GEAR_MOUSE_POSITION)
+            BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(180, 600),
+                          text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+            BUTTONS.append(BACK)
 
-        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(180, 600),
-                      text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS.append(BACK)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    main_menu_structure_events(CHANGE_GEAR_MOUSE_POSITION, BUTTONS)
+                    if BACK.checkForInput(CHANGE_GEAR_MOUSE_POSITION):
+                        player_status()
+                        # if consumable_type == 1:
+                        #     show_inventory_page_2(1)
+                        # else:
+                        #     print('page 2')
+                        #     show_inventory_page_2(consumable_type)
+                    # if BACK.checkForInput(INVENTORY_MOUSE_POSITION):
+                    #     pass
+                    for i in range(len(iteration_rect)):
+                        if iteration_rect[i].collidepoint(CHANGE_GEAR_MOUSE_POSITION):
+                            show_item(i, temp_gear_change_inventory[i])
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                main_menu_structure_events(CHANGE_GEAR_MOUSE_POSITION, BUTTONS)
-                if BACK.checkForInput(CHANGE_GEAR_MOUSE_POSITION):
-                    player_status()
-                    # if consumable_type == 1:
-                    #     show_inventory_page_2(1)
-                    # else:
-                    #     print('page 2')
-                    #     show_inventory_page_2(consumable_type)
-                # if BACK.checkForInput(INVENTORY_MOUSE_POSITION):
-                #     pass
-                for i in range(len(iteration_rect)):
-                    if iteration_rect[i].collidepoint(CHANGE_GEAR_MOUSE_POSITION):
-                        show_item(i, temp_gear_change_inventory[i])
+                    # if iteration_rect[0].collidepoint(INVENTORY_MOUSE_POSITION):
+                    #     show_item(sorted_inventory[0])
 
-                # if iteration_rect[0].collidepoint(INVENTORY_MOUSE_POSITION):
-                #     show_item(sorted_inventory[0])
+                    # if item_rect1.collidepoint(INVENTORY_MOUSE_POSITION):
+                    #     pygame.quit()
+                    #     sys.exit()
 
-                # if item_rect1.collidepoint(INVENTORY_MOUSE_POSITION):
-                #     pygame.quit()
-                #     sys.exit()
+            # if counter >= 2:
+            for button in BUTTONS:
+                button.changeColor(CHANGE_GEAR_MOUSE_POSITION)
+                button.update(SCREEN)
 
-        # if counter >= 2:
-        for button in BUTTONS:
-            button.changeColor(CHANGE_GEAR_MOUSE_POSITION)
-            button.update(SCREEN)
-
-        pygame.display.update()
+            pygame.display.update()
 
 
 def extras():
@@ -3867,7 +3869,7 @@ def extras():
                     counter = 0
                     main_menu()
                 if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
-                    cards()
+                    cards('cards')
                 if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                     roulette()
             if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
@@ -3882,7 +3884,7 @@ def extras():
             pygame.display.update()
 
 
-def cards():
+def cards(previous_screen):
     global counter, last_time_ms
 
     equipped_setter = False
@@ -4000,7 +4002,10 @@ def cards():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
-                    extras()
+                    if previous_screen == 'player_status':
+                        player_status()
+                    else:
+                        extras()
                 if squire_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Squire' in cards_obtained:
                     equip_card_update_status('Squire')
                     SCREEN.blit(equipped_text, equipped_text_rect)
