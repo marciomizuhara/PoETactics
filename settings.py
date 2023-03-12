@@ -6,6 +6,10 @@ SCREEN_HEIGHT = 720
 WINDOW_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 FPS = 60
 
+# PYGAME CONSTANTS
+SCREEN = pygame.display.set_mode(WINDOW_SIZE)
+
+
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")
 WHITE = pygame.Color(255, 255, 255)

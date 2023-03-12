@@ -49,8 +49,7 @@ pygame.init()
 clock = pygame.time.Clock()
 clock.tick(FPS)
 
-# PYGAME CONSTANTS
-SCREEN = pygame.display.set_mode(WINDOW_SIZE)
+
 
 GEAR_DROP_RATE = 35
 CONSUMABLE_DROP_RATE = 100
@@ -6422,20 +6421,7 @@ def main_menu():
 
 
 if __name__ == '__main__':
-    # Level 1 player instance
-    player: Player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
-    # player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
-    player_slot = PlayerSlot(amulet=amulet_type[0],
-                             armor=armor_type[0],
-                             gloves=gloves_type[0],
-                             helmet=helmet_type[0],
-                             legs=legs_type[0],
-                             ring1=ring_type[0],
-                             ring2=ring_type[0],
-                             second_hand=second_hand_type[0],
-                             weapon=weapon_type[0],
-                             boots=boots_type[0],
-                             card=card_collection[0])
+
     # Boss instances:
     wiegraf1 = Character(
         name=characters['Wiegraf 1']['name'],
