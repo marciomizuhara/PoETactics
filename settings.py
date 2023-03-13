@@ -1,14 +1,32 @@
 import pygame
+import time
 from playsound import playsound
+from cs50 import SQL
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 WINDOW_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 FPS = 60
+LAST_TIME_MS = int(round(time.time() * 4000))
+
+# Setup variables
+drop_quantity = 1
+counter = 0
+card_counter = 0
+
+# Drop Rates
+GEAR_DROP_RATE = 35
+CONSUMABLE_DROP_RATE = 100
+TICKET_DROP_RATE = 20
+CARD_DROP_RATE = 100
+UNIQUE_DROP_RATE = 7
+DROP_HEIGHT = 210
 
 # PYGAME CONSTANTS
 SCREEN = pygame.display.set_mode(WINDOW_SIZE)
 
+# Setting database
+db = SQL("sqlite:///database.db")
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")

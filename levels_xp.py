@@ -1,5 +1,8 @@
-from main import *
+import pygame
 from enemies.monsters import *
+import player_
+from fonts import *
+from settings import *
 
 levels = {
         '2': 50,
@@ -25,6 +28,17 @@ levels = {
 }
 
 
+def display_level_xp():
+    level_text = get_regular_font(25).render(f"LEVEL: {player_.player.level}", True, WHITE)
+    level_rect = level_text.get_rect(midright=(1260, 600))
+    next_level = str(player_.player.level + 1)
+    xp_text = get_regular_font(25).render(f"XP: {player_.player.xp}/{levels.get(next_level)}", True, WHITE)
+    xp_rect = xp_text.get_rect(midright=(1260, 630))
+    life_text = get_regular_font(25).render(f"Life Points: {round(player_.player.life)}/{player_.player.total_life}", True, WHITE)
+    life_rect = life_text.get_rect(midright=(1260, 660))
+    SCREEN.blit(life_text, life_rect)
+    SCREEN.blit(level_text, level_rect)
+    SCREEN.blit(xp_text, xp_rect)
 
 
 

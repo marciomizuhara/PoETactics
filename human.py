@@ -1,4 +1,4 @@
-from classes.enemy import Enemy
+from enemy import Enemy
 
 
 class Human(Enemy):
