@@ -1,6 +1,7 @@
 import pygame, sys
 from settings import *
 from assets.fonts.fonts import *
+from button import *
 from classes import encounter
 from classes import inventory
 from classes import player_

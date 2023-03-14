@@ -45,7 +45,7 @@ def extras():
                 main_menu.main_menu_structure_events(EXTRAS_MOUSE_POSITION, BUTTONS)
                 if BACK.checkForInput(EXTRAS_MOUSE_POSITION):
                     counter = 0
-                    main_menu()
+                    main_menu.main_menu()
                 if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                     card.cards('cards')
                 if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):

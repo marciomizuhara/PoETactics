@@ -1,5 +1,8 @@
 from classes import player_status_
+from classes import player_slot_
 from classes import player_
+from classes import extras
+from button import *
 from main import *
 from settings import *
 from items.cards import *
@@ -43,7 +46,7 @@ def equip_card_update_status(card_name):
     player_.player.magic_find = player_.player.magic_find - int(player_slot_.player_slot.card['magic_find'])
 
     # Adding new card status
-    new_card = [x for x in card.cards_list if x.__dict__['name'] == card_name][0].__dict__
+    new_card = [x for x in cards_list if x.__dict__['name'] == card_name][0].__dict__
 
     player_.player.total_life = player_.player.total_life + new_card['life']
     print('Total Life com card novo', player_.player.total_life)
@@ -53,7 +56,7 @@ def equip_card_update_status(card_name):
     player_.player.crit_damage = player_.player.crit_damage + new_card['crit_damage']
     player_.player.magic_find = player_.player.magic_find + new_card['magic_find']
     player_slot_.player_slot.card = new_card
-    card.player_slot_card_update(player_.player.name, new_card)
+    player_slot_card_update(player_.player.name, new_card)
 
 
 def add_card(username, drop):
