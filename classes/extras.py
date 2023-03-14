@@ -1,5 +1,10 @@
-from main_menu_structure import *
-from roulette_wheel import *
+import pygame, sys
+from settings import *
+from button import *
+from assets.fonts.fonts import *
+from classes import main_menu
+from classes import roulette_wheel
+from classes import card
 
 
 def extras():
@@ -26,7 +31,7 @@ def extras():
 
     while True:
         EXTRAS_MOUSE_POSITION = pygame.mouse.get_pos()
-        BUTTONS = main_menu_structure(EXTRAS_MOUSE_POSITION)
+        BUTTONS = main_menu.main_menu_structure(EXTRAS_MOUSE_POSITION)
 
         BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(160, 600),
                       text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
@@ -37,17 +42,14 @@ def extras():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                main_menu_structure_events(EXTRAS_MOUSE_POSITION, BUTTONS)
+                main_menu.main_menu_structure_events(EXTRAS_MOUSE_POSITION, BUTTONS)
                 if BACK.checkForInput(EXTRAS_MOUSE_POSITION):
                     counter = 0
-                    from main import main_menu
                     main_menu()
                 if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
-                    from card import cards_screen
-                    cards_screen('cards')
+                    card.cards('cards')
                 if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):
-                    from roulette_wheel import roulette
-                    roulette()
+                    roulette_wheel.roulette()
             if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                 print('cards')
             if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):

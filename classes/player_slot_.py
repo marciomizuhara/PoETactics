@@ -1,5 +1,6 @@
-from fonts import *
+import pygame,sys
 from settings import *
+from assets.fonts.fonts import *
 from items.amulets import *
 from items.armors import *
 from items.boots import *
@@ -27,6 +28,7 @@ class PlayerSlot:
         self.boots = boots
         self.card = card
 
+
 player_slot = PlayerSlot(amulet=amulet_type[0],
                          armor=armor_type[0],
                          gloves=gloves_type[0],
@@ -38,6 +40,28 @@ player_slot = PlayerSlot(amulet=amulet_type[0],
                          weapon=weapon_type[0],
                          boots=boots_type[0],
                          card=card_collection[0])
+
+
+def show_player_slot_helper(text1, level_text, type_text, life_text, attack_text, defense_text,
+                            crit_chance_text, crit_damage_text, magic_find_text):
+    text1_rect = text1.get_rect(midleft=(100, 160))
+    level_text_rect = level_text.get_rect(midleft=(100, 200))
+    type_text_rect = type_text.get_rect(midleft=(100, 260))
+    life_text_rect = life_text.get_rect(midleft=(100, 300))
+    attack_text_rect = attack_text.get_rect(midleft=(100, 340))
+    defense_text_rect = defense_text.get_rect(midleft=(100, 380))
+    crit_chance_text_rect = crit_chance_text.get_rect(midleft=(100, 420))
+    crit_damage_text_rect = crit_damage_text.get_rect(midleft=(100, 460))
+    magic_find_text_rect = magic_find_text.get_rect(midleft=(100, 500))
+    SCREEN.blit(text1, text1_rect)
+    SCREEN.blit(type_text, type_text_rect)
+    SCREEN.blit(level_text, level_text_rect)
+    SCREEN.blit(life_text, life_text_rect)
+    SCREEN.blit(attack_text, attack_text_rect)
+    SCREEN.blit(defense_text, defense_text_rect)
+    SCREEN.blit(crit_chance_text, crit_chance_text_rect)
+    SCREEN.blit(crit_damage_text, crit_damage_text_rect)
+    SCREEN.blit(magic_find_text, magic_find_text_rect)
 
 
 def show_player_slot(gear_type):
@@ -210,25 +234,3 @@ def show_player_slot(gear_type):
                                                    True, WHITE)
         show_player_slot_helper(text1, level_text, type_text, life_text, attack_text, defense_text,
                                 crit_chance_text, crit_damage_text, magic_find_text)
-
-
-def show_player_slot_helper(text1, level_text, type_text, life_text, attack_text, defense_text,
-                            crit_chance_text, crit_damage_text, magic_find_text):
-    text1_rect = text1.get_rect(midleft=(100, 160))
-    level_text_rect = level_text.get_rect(midleft=(100, 200))
-    type_text_rect = type_text.get_rect(midleft=(100, 260))
-    life_text_rect = life_text.get_rect(midleft=(100, 300))
-    attack_text_rect = attack_text.get_rect(midleft=(100, 340))
-    defense_text_rect = defense_text.get_rect(midleft=(100, 380))
-    crit_chance_text_rect = crit_chance_text.get_rect(midleft=(100, 420))
-    crit_damage_text_rect = crit_damage_text.get_rect(midleft=(100, 460))
-    magic_find_text_rect = magic_find_text.get_rect(midleft=(100, 500))
-    SCREEN.blit(text1, text1_rect)
-    SCREEN.blit(type_text, type_text_rect)
-    SCREEN.blit(level_text, level_text_rect)
-    SCREEN.blit(life_text, life_text_rect)
-    SCREEN.blit(attack_text, attack_text_rect)
-    SCREEN.blit(defense_text, defense_text_rect)
-    SCREEN.blit(crit_chance_text, crit_chance_text_rect)
-    SCREEN.blit(crit_damage_text, crit_damage_text_rect)
-    SCREEN.blit(magic_find_text, magic_find_text_rect)

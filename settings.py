@@ -1,32 +1,31 @@
-import pygame
-import time
-from playsound import playsound
+import pygame, time
 from cs50 import SQL
+from playsound import playsound
+
+# Setting database
+db = SQL("sqlite:///database.db")
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 WINDOW_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
 FPS = 60
-LAST_TIME_MS = int(round(time.time() * 4000))
-
-# Setup variables
-drop_quantity = 1
-counter = 0
-card_counter = 0
-
-# Drop Rates
-GEAR_DROP_RATE = 35
-CONSUMABLE_DROP_RATE = 100
-TICKET_DROP_RATE = 20
-CARD_DROP_RATE = 100
-UNIQUE_DROP_RATE = 7
-DROP_HEIGHT = 210
 
 # PYGAME CONSTANTS
 SCREEN = pygame.display.set_mode(WINDOW_SIZE)
 
-# Setting database
-db = SQL("sqlite:///database.db")
+
+LAST_TIME_MS = int(round(time.time() * 4000))
+counter = 0
+
+# DROP RATE
+GEAR_DROP_RATE = 35
+CONSUMABLE_DROP_RATE = 100
+TICKET_DROP_RATE = 20
+CARD_DROP_RATE = 100
+DELVE_DROP_RATE = 100
+UNIQUE_DROP_RATE = 7
+DROP_HEIGHT = 210
+
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")
@@ -165,7 +164,6 @@ BARD_DANCER_CARD_FRAME = pygame.transform.scale(pygame.image.load('assets/images
 
 
 CARD_LIST = [SQUIRE_CARD, CHEMIST_CARD]
-DASH = 160
 BACKGROUND_SONG = 'assets/music/opening_song.mp3'
 BOSS_FIGHT_SONG = 'assets/music/boss_fight.wav'
 GAME_OVER = 'assets/music/game_over.wav'

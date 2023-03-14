@@ -1,11 +1,14 @@
-from extras import *
-from player_slot import player_slot
-from player_ import player
-from items.cards import *
+from classes import player_status_
+from classes import player_
+from main import *
 from settings import *
-import globals_variables
+from items.cards import *
 import random
-import time
+
+
+temp_card_drop = []
+cards_list = []
+card_counter = 0
 
 
 class Card:
@@ -26,6 +29,33 @@ class Card:
         self.sound = sound
 
 
+def equip_card_update_status(card_name):
+    # Removing current card status
+    # current_card = player_slot.card
+    print('slot card', int(player_slot_.player_slot.card['life']))
+    print('Total Life com card antigo', player_.player.total_life)
+    player_.player.total_life = player_.player.total_life - int(player_slot_.player_slot.card['life'])
+    print('Total Life sem card antigo', player_.player.total_life)
+    player_.player.attack = player_.player.attack - int(player_slot_.player_slot.card['attack'])
+    player_.player.defense = player_.player.defense - int(player_slot_.player_slot.card['defense'])
+    player_.player.crit_chance = player_.player.crit_chance - int(player_slot_.player_slot.card['crit_chance'])
+    player_.player.crit_damage = player_.player.crit_damage - int(player_slot_.player_slot.card['crit_damage'])
+    player_.player.magic_find = player_.player.magic_find - int(player_slot_.player_slot.card['magic_find'])
+
+    # Adding new card status
+    new_card = [x for x in card.cards_list if x.__dict__['name'] == card_name][0].__dict__
+
+    player_.player.total_life = player_.player.total_life + new_card['life']
+    print('Total Life com card novo', player_.player.total_life)
+    player_.player.attack = player_.player.attack + new_card['attack']
+    player_.player.defense = player_.player.defense + new_card['defense']
+    player_.player.crit_chance = player_.player.crit_chance + new_card['crit_chance']
+    player_.player.crit_damage = player_.player.crit_damage + new_card['crit_damage']
+    player_.player.magic_find = player_.player.magic_find + new_card['magic_find']
+    player_slot_.player_slot.card = new_card
+    card.player_slot_card_update(player_.player.name, new_card)
+
+
 def add_card(username, drop):
     new_card = Card(type=drop['type'],
                     name=drop['name'],
@@ -41,18 +71,18 @@ def add_card(username, drop):
                     image=drop['image'],
                     sound=drop['sound'],
                     )
-    globals_variables.temp_card_drop.append(new_card)
-    print('ultimo card variavel global',  globals_variables.temp_card_drop[-1].__dict__['name'])
-    globals_variables.cards_list.append(new_card)
+    temp_card_drop.append(new_card)
+    print('ultimo card variavel global',  temp_card_drop[-1].__dict__['name'])
+    cards_list.append(new_card)
     card_list_update(username, new_card)
 
 
-def card_drop_rate(player):
+def card_drop_rate():
     card_drop_value = random.randint(0, 100)
     # inventory_cards = [value for elem in globals_variables.cards_list for value in elem.__dict__.values()]
-    inventory_cards = [card.__dict__['name'] for card in globals_variables.cards_list]
-    if card_drop_value <= CARD_DROP_RATE + (CARD_DROP_RATE * player.magic_find):
-        if len(list(set(globals_variables.cards_list))) >= 18:
+    inventory_cards = [card.__dict__['name'] for card in cards_list]
+    if card_drop_value <= CARD_DROP_RATE + (CARD_DROP_RATE * player_.player.magic_find):
+        if len(list(set(cards_list))) >= 18:
             print('card aqui 1')
             pass
         else:
@@ -60,9 +90,9 @@ def card_drop_rate(player):
             print('card aqui 2')
             if drop['name'] in inventory_cards:
                 print(f"{drop['name']} já tem")
-                card_drop_rate(player)
+                card_drop_rate()
             else:
-                add_card(player.name, drop)
+                add_card(player_.player.name, drop)
     else:
         pass
 
@@ -88,7 +118,7 @@ def card_instance_load(username):
                             rows3[i]['defense'], rows3[i]['crit_chance'], rows3[i]['crit_damage'],
                             rows3[i]['magic_find'], rows3[i]['level'], rows3[i]['rarity'], rows3[i]['image'],
                             rows3[i]['sound'])
-            globals_variables.cards_list.append(new_card)
+            cards_list.append(new_card)
             # card_list_update(username, new_card)
 
 
@@ -161,35 +191,7 @@ def duplicate_prevention(username, card_name):
             return 0
 
 
-def equip_card_update_status(card_name):
-    # Removing current card status
-    # current_card = player_slot.card
-    print('slot card', int(player_slot.card['life']))
-    print('Total Life com card antigo', player.total_life)
-    player.total_life = player.total_life - int(player_slot.card['life'])
-    print('Total Life sem card antigo', player.total_life)
-    player.attack = player.attack - int(player_slot.card['attack'])
-    player.defense = player.defense - int(player_slot.card['defense'])
-    player.crit_chance = player.crit_chance - int(player_slot.card['crit_chance'])
-    player.crit_damage = player.crit_damage - int(player_slot.card['crit_damage'])
-    player.magic_find = player.magic_find - int(player_slot.card['magic_find'])
-
-    # Adding new card status
-    new_card = [x for x in globals_variables.cards_list if x.__dict__['name'] == card_name][0].__dict__
-
-    player.total_life = player.total_life + new_card['life']
-    print('Total Life com card novo', player.total_life)
-    player.attack = player.attack + new_card['attack']
-    player.defense = player.defense + new_card['defense']
-    player.crit_chance = player.crit_chance + new_card['crit_chance']
-    player.crit_damage = player.crit_damage + new_card['crit_damage']
-    player.magic_find = player.magic_find + new_card['magic_find']
-    player_slot.card = new_card
-    player_slot_card_update(player.name, new_card)
-
-
-# CARDS SCREEN
-def cards_screen(previous_screen):
+def cards(previous_screen):
     global counter, LAST_TIME_MS
 
     equipped_setter = False
@@ -222,7 +224,7 @@ def cards_screen(previous_screen):
         setter += 1
     # SCREEN.blit(CHEMIST_CARD, (940, 100))
 
-    card_names = [x.__dict__['name'] for x in globals_variables.cards_list]
+    card_names = [x.__dict__['name'] for x in cards_list]
 
     if 'Squire' in card_names:
         SCREEN.blit(SQUIRE, (100, 100))
@@ -279,7 +281,7 @@ def cards_screen(previous_screen):
     ninja_rect = NINJA_CARD_FRAME.get_rect(center=(530, 460))
     calculator_rect = CALCULATOR_CARD_FRAME.get_rect(center=(660, 460))
     bard_dancer_rect = BARD_DANCER_CARD_FRAME.get_rect(center=(790, 460))
-    cards_obtained = [x.__dict__['name'] for x in globals_variables.cards_list]
+    cards_obtained = [x.__dict__['name'] for x in cards_list]
     # SCREEN.blit(SQUIRE_CARD, (250, 100))
 
     while True:
@@ -308,10 +310,9 @@ def cards_screen(previous_screen):
                 if BACK.checkForInput(CARDS_MOUSE_POSITION):
                     counter = 0
                     if previous_screen == 'player_status':
-                        from player_status import player_status
-                        player_status()
+                        player_status_.player_status()
                     else:
-                        extras()
+                        extras.extras()
                 if squire_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Squire' in cards_obtained:
                     equip_card_update_status('Squire')
                     SCREEN.blit(equipped_text, equipped_text_rect)
@@ -384,75 +385,75 @@ def cards_screen(previous_screen):
                     CARDS_MOUSE_POSITION) and not ninja_rect.collidepoint(
                     CARDS_MOUSE_POSITION) and not calculator_rect.collidepoint(
                     CARDS_MOUSE_POSITION) and not bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION):
-                if player_slot.card['name'] == 'Squire' and player_slot.card['name'] == 'Squire':
+                if player_slot_.player_slot.card['name'] == 'Squire' and player_slot_.player_slot.card['name'] == 'Squire':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(SQUIRE_CARD, (940, 100))
-                if player_slot.card['name'] == 'Chemist' and player_slot.card['name'] == 'Chemist':
+                if player_slot_.player_slot.card['name'] == 'Chemist' and player_slot_.player_slot.card['name'] == 'Chemist':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(CHEMIST_CARD, (940, 100))
-                if player_slot.card['name'] == 'Knight' and player_slot.card['name'] == 'Knight':
+                if player_slot_.player_slot.card['name'] == 'Knight' and player_slot_.player_slot.card['name'] == 'Knight':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(KNIGHT_CARD, (940, 100))
-                if player_slot.card['name'] == 'Archer' and player_slot.card['name'] == 'Archer':
+                if player_slot_.player_slot.card['name'] == 'Archer' and player_slot_.player_slot.card['name'] == 'Archer':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(ARCHER_CARD, (940, 100))
-                if player_slot.card['name'] == 'Priest' and player_slot.card['name'] == 'Priest':
+                if player_slot_.player_slot.card['name'] == 'Priest' and player_slot_.player_slot.card['name'] == 'Priest':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(PRIEST_CARD, (940, 100))
-                if player_slot.card['name'] == 'Wizard' and player_slot.card['name'] == 'Wizard':
+                if player_slot_.player_slot.card['name'] == 'Wizard' and player_slot_.player_slot.card['name'] == 'Wizard':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(WIZARD_CARD, (940, 100))
-                if player_slot.card['name'] == 'Monk' and player_slot.card['name'] == 'Monk':
+                if player_slot_.player_slot.card['name'] == 'Monk' and player_slot_.player_slot.card['name'] == 'Monk':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(MONK_CARD, (940, 100))
-                if player_slot.card['name'] == 'Thief' and player_slot.card['name'] == 'Thief':
+                if player_slot_.player_slot.card['name'] == 'Thief' and player_slot_.player_slot.card['name'] == 'Thief':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(THIEF_CARD, (940, 100))
-                if player_slot.card['name'] == 'Oracle' and player_slot.card['name'] == 'Oracle':
+                if player_slot_.player_slot.card['name'] == 'Oracle' and player_slot_.player_slot.card['name'] == 'Oracle':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(ORACLE_CARD, (940, 100))
-                if player_slot.card['name'] == 'Time Mage' and player_slot.card['name'] == 'Time Mage':
+                if player_slot_.player_slot.card['name'] == 'Time Mage' and player_slot_.player_slot.card['name'] == 'Time Mage':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(TIME_MAGE_CARD, (940, 100))
-                if player_slot.card['name'] == 'Geomancer' and player_slot.card['name'] == 'Geomancer':
+                if player_slot_.player_slot.card['name'] == 'Geomancer' and player_slot_.player_slot.card['name'] == 'Geomancer':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(GEOMANCER_CARD, (940, 100))
-                if player_slot.card['name'] == 'Lancer' and player_slot.card['name'] == 'Lancer':
+                if player_slot_.player_slot.card['name'] == 'Lancer' and player_slot_.player_slot.card['name'] == 'Lancer':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(LANCER_CARD, (940, 100))
-                if player_slot.card['name'] == 'Mediator' and player_slot.card['name'] == 'Mediator':
+                if player_slot_.player_slot.card['name'] == 'Mediator' and player_slot_.player_slot.card['name'] == 'Mediator':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(MEDIATOR_CARD, (940, 100))
-                if player_slot.card['name'] == 'Summoner' and player_slot.card['name'] == 'Summoner':
+                if player_slot_.player_slot.card['name'] == 'Summoner' and player_slot_.player_slot.card['name'] == 'Summoner':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(SUMMONER_CARD, (940, 100))
-                if player_slot.card['name'] == 'Samurai' and player_slot.card['name'] == 'Samurai':
+                if player_slot_.player_slot.card['name'] == 'Samurai' and player_slot_.player_slot.card['name'] == 'Samurai':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(SAMURAI_CARD, (940, 100))
-                if player_slot.card['name'] == 'Ninja' and player_slot.card['name'] == 'Ninja':
+                if player_slot_.player_slot.card['name'] == 'Ninja' and player_slot_.player_slot.card['name'] == 'Ninja':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(NINJA_CARD, (940, 100))
-                if player_slot.card['name'] == 'Calculator' and player_slot.card['name'] == 'Calculator':
+                if player_slot_.player_slot.card['name'] == 'Calculator' and player_slot_.player_slot.card['name'] == 'Calculator':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(CALCULATOR_CARD, (940, 100))
-                if player_slot.card['name'] == 'Bard/Dancer':
+                if player_slot_.player_slot.card['name'] == 'Bard/Dancer':
                     SCREEN.blit(CARD_EQUIPPED, (940, 440))
                     SCREEN.blit(equipped_text, equipped_text_rect)
                     SCREEN.blit(BARD_DANCER_CARD, (940, 100))
@@ -535,3 +536,4 @@ def cards_screen(previous_screen):
                 button.changeColor(CARDS_MOUSE_POSITION)
                 button.update(SCREEN)
         pygame.display.update()
+

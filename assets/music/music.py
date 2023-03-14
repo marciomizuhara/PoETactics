@@ -1,5 +1,5 @@
 import pygame, sys
-from main import *
+# from main import *
 from settings import *
 import time
 

@@ -1,15 +1,4 @@
-from main import *
-from settings import *
-import pygame
-
-# def __init__(self, name, life, attack, defense, level, xp, crit_chance, status, quote1, quote2, quote3):
-
-# --------------------------------------------------------------------------------------------------------------
-# wiegraf1 = Character('Wiegraf', 1500, 120, 30, 5, 150, 50)
-# --------------------------------------------------------------------------------------------------------------
-
-
-characters = {
+characters_list = {
     'Wiegraf 1': {'name': 'Wiegraf',
                   'life': 1000,
                   'attack': 180,

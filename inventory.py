@@ -1,4 +1,0 @@
-global inventory
-inventory = []
-
-

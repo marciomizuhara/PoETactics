@@ -1,39 +1,21 @@
-import random, sys
-import player_
-import character
-import levels_xp
-from assets.music.music import *
+import pygame,sys, random
 from button import *
-from monster import *
-from fonts import *
-from player_ import player
-from enemies.enemy_type import *
-from enemies.humans import *
-from enemies.monsters import *
-from main_menu_structure import *
-from human import *
+from classes import enemy
+from assets.music.music import *
+from classes import character
+from classes import drop
+from classes import encounter
+from classes import inventory
+from classes import main_menu
+from classes import player_
+from classes import save_load
+from assets.fonts.fonts import *
 from settings import *
-
-
-def crit_chance(character_crit_chance, character_attack, character_critdamage):
-    crit_chance_random = random.randint(1, 100)
-    if crit_chance_random <= character_crit_chance:
-        random2 = random.randint(10, character_attack // 2)
-        crit_damage = int((character_attack + random2) + (character_critdamage / character_attack * 100))
-        return crit_damage
-    else:
-        return character_attack
-
-
-def boss_battle(boss_instance):
-    global counter
-    boss_music()
-    show_dialogue(boss_instance)
 
 
 def show_dialogue(character):
     print(f'{character.name}')
-    global counter, LAST_TIME_MS
+    # global counter, LAST_TIME_MS
     height = 100
     character_setter = False
     quote1_setter = False
@@ -45,12 +27,12 @@ def show_dialogue(character):
     SCREEN.blit(BATTLE_BOX, (60, 40))
 
     # PLAYER
-    SCREEN.blit(player.image, (130, 300))
+    SCREEN.blit(player_.player.image, (130, 300))
     # ENEMY
     image_rect = pygame.image.load(enemy.image).get_rect(midbottom=(750, 500))
     SCREEN.blit(pygame.image.load(enemy.image), image_rect)
 
-    levels_xp.display_level_xp()
+    player_.display_level_xp()
     while True:
         QUOTING_MOUSE_POSITION = pygame.mouse.get_pos()
         CONTINUE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 590),
@@ -69,11 +51,11 @@ def show_dialogue(character):
                 if CONTINUE.checkForInput(QUOTING_MOUSE_POSITION):
                     if character.life != 0:
                         print('entrou char vivo')
-                        battle()
+                        battle.battle()
                     else:
                         print('entrou char morto')
                         character.status = False
-                        username = player.name
+                        username = player_.player.name
                         if character.name == 'Wiegraf':
                             db.execute("UPDATE boss_instance SET wiegraf1 = :wiegraf1 WHERE username = :username",
                                        wiegraf1=0,
@@ -95,8 +77,8 @@ def show_dialogue(character):
                         pygame.mixer.music.fadeout(3)
                         pygame.mixer.music.stop()
                         background_music()
-                        battle_elements_resetter()
-                        battle_finish()
+                        battle.battle_elements_resetter()
+                        battle.battle_finish()
 
         if counter > 0 and character.life == 0:
             if quote4_setter is not True:
@@ -146,58 +128,119 @@ def show_dialogue(character):
         pygame.display.update()
 
 
+def boss_battle(boss_instance):
+    boss_music()
+    show_dialogue(boss_instance)
+
+
+def battle_elements_resetter():
+    SCREEN.blit(BG, (0, 0))
+    SCREEN.blit(BATTLE_BOX, (60, 40))
+    # PLAYER
+    SCREEN.blit(player_.player.image, (130, 300))
+    # ENEMY
+    if encounter.enemy.life > 0:
+        image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
+        SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
+    if player_.player.life < 0:
+        player_.player.life = 0
+
+    # CONVERTION
+    player_ratio = player_.player.life / player_.player.total_life
+    player_life_width = 200 * player_ratio
+
+    enemy_ratio = encounter.enemy.life / encounter.enemy.total_life
+    enemy_life_width = 200 * enemy_ratio
+
+    text1 = get_regular_font(20).render(f"{round(player_.player.life)}/{player_.player.total_life}", True, WHITE)
+    text1_rect = text1.get_rect(midleft=(100, 540))
+    text1_5 = get_bold_font(20).render(f"{player_.player.name}", True, WHITE)
+    text1_5_rect = text1_5.get_rect(midleft=(100, 570))
+    text2 = get_regular_font(20).render(f"{round(encounter.enemy.life)}/{encounter.enemy.total_life}", True, WHITE)
+    text2_rect = text2.get_rect(midright=(830, 540))
+    text3 = get_bold_font(20).render(f"{encounter.enemy.name}", True, WHITE)
+    text3_rect = text3.get_rect(midright=(830, 570))
+    player_life_bar_rect = pygame.Rect(100, 500, 200, 20)  # left/ top / widht / height
+    enemy_life_bar_rect = pygame.Rect(630, 500, 200, 20)  # left/ top / widht / height
+    player_red_life_bar_rect = pygame.Rect(100, 500, player_life_width, 20)  # left/ top / widht / height
+    enemy_red_life_bar_rect = pygame.Rect(630, 500, enemy_life_width, 20)
+    pygame.draw.rect(pygame.display.get_surface(), DARK_GREY, player_life_bar_rect)
+    pygame.draw.rect(pygame.display.get_surface(), BLUE, player_red_life_bar_rect)
+    pygame.draw.rect(pygame.display.get_surface(), DARK_GREY, enemy_life_bar_rect)
+    pygame.draw.rect(pygame.display.get_surface(), BLUE, enemy_red_life_bar_rect)
+    #
+    # # SCREEN.blit(BLACK_LIFE_BAR, player_life_bar_rect)
+    # SCREEN.blit(BLACK_LIFE_BAR, enemy_life_bar_rect)
+    # # SCREEN.blit(RED_LIFE_BAR, player_red_life_bar_rect)
+    # print(f'PLAYER WIDHT {player_life_width}')
+    # SCREEN.blit(RED_LIFE_BAR, enemy_red_life_bar_rect)
+    SCREEN.blit(text1, text1_rect)
+    SCREEN.blit(text1_5, text1_5_rect)
+    SCREEN.blit(text2, text2_rect)
+    SCREEN.blit(text3, text3_rect)
+    player_.check_player_life()
+
+
+def crit_chance(character_crit_chance, character_attack, character_critdamage):
+    crit_chance_random = random.randint(1, 100)
+    if crit_chance_random <= character_crit_chance:
+        random2 = random.randint(10, character_attack // 2)
+        crit_damage = int((character_attack + random2) + (character_critdamage / character_attack * 100))
+        return crit_damage
+    else:
+        return character_attack
+
 
 def battle():
-    global counter
-    if enemy.life > 0:
+    if encounter.enemy.life > 0:
         # life_bars()
         battle_elements_resetter()
 
         # IF ENEMY ATTACK IS ZERO
-        if enemy.attack <= player.defense:
+        if encounter.enemy.attack <= player_.player.defense:
             battle_condition_1()
 
         # # IF ENEMY ATTACK IS NOT ZERO
         else:
-            a = crit_chance(player.crit_chance, player.attack, player.crit_damage)
-            b = crit_chance(enemy.crit_chance, enemy.attack, 1.4)
+            a = crit_chance(player_.player.crit_chance, player_.player.attack, player_.player.crit_damage)
+            b = crit_chance(encounter.enemy.crit_chance, encounter.enemy.attack, 1.4)
             # PLAYER CRITICAL AND ENEMY NORMAL ATTACK
-            if a > player.attack and b == enemy.attack:
-                enemy_damage = a - enemy.defense
+            if a > player_.player.attack and b == encounter.enemy.attack:
+                enemy_damage = a - encounter.enemy.defense
                 counter = 0
                 battle_condition_2a(enemy_damage)
 
             # PLAYER AND ENEMY CRITICAL
-            elif a > player.attack and b > enemy.attack:
-                enemy_damage = a - enemy.defense
-                player_damage = b - player.defense
+            elif a > player_.player.attack and b > encounter.enemy.attack:
+                enemy_damage = a - encounter.enemy.defense
+                player_damage = b - player_.player.defense
                 counter = 0
                 battle_condition_2b(enemy_damage, player_damage)
 
             # PLAYER NORMAL ATTACK AND ENEMY CRITICAL
-            elif a == player.attack and b > enemy.attack:
-                enemy_damage = player.attack - enemy.defense
-                player_damage = b - player.defense
+            elif a == player_.player.attack and b > encounter.enemy.attack:
+                enemy_damage = player_.player.attack - encounter.enemy.defense
+                player_damage = b - player_.player.defense
                 counter = 0
                 battle_condition_2c(enemy_damage, player_damage)
 
             else:
-                enemy_damage = player.attack - enemy.defense
-                player_damage = enemy.attack - player.defense
+                enemy_damage = player_.player.attack - encounter.enemy.defense
+                player_damage = encounter.enemy.attack - player_.player.defense
                 counter = 0
                 battle_condition_2d(enemy_damage, player_damage)
 
     else:
-        enemy.life = 0
+        encounter.enemy.life = 0
         battle_elements_resetter()
         if enemy in [character.wiegraf1, character.wiegraf2, character.dycedarg1, character.dycedarg2]:
             show_dialogue(enemy)
-        if enemy.life == 0:
+        if encounter.enemy.life == 0:
             SCREEN.fill(0)
             SCREEN.blit(BG, (0, 0))
             SCREEN.blit(BATTLE_BOX, (60, 40))
             # PLAYER
-            SCREEN.blit(player.image, (130, 300))
+            SCREEN.blit(player_.player.image, (130, 300))
             player_.player_level_up()
             battle_finish()
             # battle_elements_resetter()
@@ -205,11 +248,11 @@ def battle():
 
 # IF ENEMY ATTACK IS ZERO AND PLAYER ATTACK IS CRITICAL
 def battle_condition_1_a(player_damage, a):
-    global counter, LAST_TIME_MS
-    levels_xp.display_level_xp()
-    enemy_damage = a - enemy.defense
-    enemy.life = enemy.life - enemy_damage
-    player.life = player.life - player_damage
+    global LAST_TIME_MS, counter
+    player_.display_level_xp()
+    enemy_damage = a - encounter.enemy.defense
+    encounter.enemy.life = encounter.enemy.life - enemy_damage
+    player_.player.life = player_.player.life - player_damage
     counter = 0
     c_a = False
     e_a_s = False
@@ -250,13 +293,13 @@ def battle_condition_1_a(player_damage, a):
 
 # IF ENEMY ATTACK IS ZERO AND PLAYER ATTACK IS NORMAL
 def battle_condition_1_b(player_damage):
-    levels_xp.display_level_xp()
     global LAST_TIME_MS, counter
+    player_.display_level_xp()
     p_a_s = False
     e_a_s = False
-    enemy_damage = player.attack - enemy.defense
-    enemy.life = enemy.life - enemy_damage
-    player.life = player.life - player_damage
+    enemy_damage = player_.player.attack - encounter.enemy.defense
+    encounter.enemy.life = encounter.enemy.life - enemy_damage
+    player_.player.life = player_.player.life - player_damage
 
     while True:
         text1 = get_bold_font(50).render(f'{enemy_damage}', True, RED)
@@ -293,8 +336,8 @@ def battle_condition_1_b(player_damage):
 def battle_condition_1():
     global counter
     player_damage = 0
-    a = crit_chance(player.crit_chance, player.attack, player.crit_damage)
-    if a > player.attack:
+    a = crit_chance(player_.player.crit_chance, player_.player.attack, player_.player.crit_damage)
+    if a > player_.player.attack:
         counter = 0
         battle_condition_1_a(player_damage, a)
     else:
@@ -305,10 +348,10 @@ def battle_condition_1():
 # PLAYER CRITICAL AND ENEMY NORMAL ATTACK
 def battle_condition_2a(e_damage):
     global counter, LAST_TIME_MS
-    levels_xp.display_level_xp()
-    player_damage = enemy.attack - player.defense
-    enemy.life = enemy.life - e_damage
-    player.life = player.life - player_damage
+    player_.display_level_xp()
+    player_damage = encounter.enemy.attack - player_.player.defense
+    encounter.enemy.life = encounter.enemy.life - e_damage
+    player_.player.life = player_.player.life - player_damage
     c_a = False
     e_a_s = False
 
@@ -350,9 +393,9 @@ def battle_condition_2a(e_damage):
 # PLAYER AND ENEMY CRITICAL
 def battle_condition_2b(e_damage, p_damage):
     global counter, LAST_TIME_MS
-    levels_xp.display_level_xp()
-    enemy.life = enemy.life - e_damage
-    player.life = player.life - p_damage
+    player_.display_level_xp()
+    encounter.enemy.life = encounter.enemy.life - e_damage
+    player_.player.life = player_.player.life - p_damage
     c_a = False
     c_a_2 = False
 
@@ -397,9 +440,9 @@ def battle_condition_2b(e_damage, p_damage):
 # PLAYER NORMAL ATTACK AND ENEMY CRITICAL
 def battle_condition_2c(e_damage, p_damage):
     global counter, LAST_TIME_MS
-    levels_xp.display_level_xp()
-    enemy.life = enemy.life - e_damage
-    player.life = player.life - p_damage
+    player_.display_level_xp()
+    encounter.enemy.life = encounter.enemy.life - e_damage
+    player_.player.life = player_.player.life - p_damage
     p_a_s = False
     c_a = False
     while True:
@@ -442,9 +485,9 @@ def battle_condition_2c(e_damage, p_damage):
 # PLAYER AND ENEMY NORMAL ATTACK
 def battle_condition_2d(e_damage, p_damage):
     global counter, LAST_TIME_MS
-    levels_xp.display_level_xp()
-    enemy.life = enemy.life - e_damage
-    player.life = player.life - p_damage
+    player_.display_level_xp()
+    encounter.enemy.life = encounter.enemy.life - e_damage
+    player_.player.life = player_.player.life - p_damage
     p_a_s = False
     e_a_s = False
     while True:
@@ -481,33 +524,33 @@ def battle_condition_2d(e_damage, p_damage):
 
 def battle_finish():
     global counter, LAST_TIME_MS, DROP_HEIGHT, drop_quantity
-    check_player_life()
+    player_.check_player_life()
     player_.shaman()
-    gear_drop_rate()
-    unique_drop_rate()
-    consumable_drop_rate()
+    drop.gear_drop_rate()
+    drop.unique_drop_rate()
+    drop.consumable_drop_rate()
     # player_level_up()
-    draw_player_level_up()
-    save_state()
+    player_.draw_player_level_up()
+    save_load.save_state()
 
-    if enemy.name == 'Wiegraf':
-        wiegraf1.status = False
-    elif enemy.name == 'Dycedarg':
-        dycedarg1.status = False
-    elif enemy.name == 'Wiegraf, Corpse Brigade Head':
-        wiegraf2.status = False
-    elif enemy.name == 'Dycedarg, the Betrayer God':
-        dycedarg2.status = False
+    if encounter.enemy.name == 'Wiegraf':
+        character.wiegraf1.status = False
+    elif encounter.enemy.name == 'Dycedarg':
+        character.dycedarg1.status = False
+    elif encounter.enemy.name == 'Wiegraf, Corpse Brigade Head':
+        character.wiegraf2.status = False
+    elif encounter.enemy.name == 'Dycedarg, the Betrayer God':
+        character.dycedarg2.status = False
     else:
         pass
     battle_elements_resetter()
-    levels_xp.display_level_xp()
+    player_.display_level_xp()
     counter = 0
     text1 = get_bold_font(30).render(
-        f"You've defeated level {enemy.level} {enemy.name} and gained {enemy.xp} xp points!", True, "White")
+        f"You've defeated level {encounter.enemy.level} {encounter.enemy.name} and gained {encounter.enemy.xp} xp points!", True, "White")
     text1_rect = text1.get_rect(center=(440, 100))
     SCREEN.blit(text1, text1_rect)
-    text2 = get_regular_font(25).render(f"Your shaman healed you {player.shaman} life points!", True, "White")
+    text2 = get_regular_font(25).render(f"Your shaman healed you {player_.player.shaman} life points!", True, "White")
     text2_rect = text2.get_rect(center=(440, 170))
     SCREEN.blit(text2, text2_rect)
     drop_setter = False
@@ -517,7 +560,7 @@ def battle_finish():
     while True:
         # battle_elements_resetter()
         BATTLE_FINISH_MOUSE_POSITION = pygame.mouse.get_pos()
-        BUTTONS = main_menu_structure(BATTLE_FINISH_MOUSE_POSITION)
+        BUTTONS = main_menu.main_menu_structure(BATTLE_FINISH_MOUSE_POSITION)
         CONTINUE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 550),
                           text_input="CONTINUE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BUTTONS.append(CONTINUE)
@@ -532,73 +575,73 @@ def battle_finish():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                main_menu_structure_events(BATTLE_FINISH_MOUSE_POSITION, BUTTONS)
+                main_menu.main_menu_structure_events(BATTLE_FINISH_MOUSE_POSITION, BUTTONS)
                 if CONTINUE.checkForInput(BATTLE_FINISH_MOUSE_POSITION):
                     DROP_HEIGHT = 210
                     counter = 0
-                    encounter()
+                    encounter.encounter()
 
         if counter == 1:
-            if len(temp_gear_drop) != 0:
+            if len(drop.temp_gear_drop) != 0:
                 if drop_setter is False:
-                    if len(inventory) >= 150:
+                    if len(inventory.inventory) >= 150:
                         gear_drop_text = get_bold_font(35).render(f"[INVENTORY FULL! Get rid of unwanted gear first!]",
                                                                   True, YELLOW)
                     else:
-                        gear_drop_text = get_bold_font(35).render(f"{temp_gear_drop[-1].__dict__['name']} level "
-                                                                  f"{temp_gear_drop[-1].__dict__['level']} dropped!",
+                        gear_drop_text = get_bold_font(35).render(f"{drop.temp_gear_drop[-1].__dict__['name']} level "
+                                                                  f"{drop.temp_gear_drop[-1].__dict__['level']} dropped!",
                                                                   True,
                                                                   YELLOW)
                     gear_drop_text_rect = gear_drop_text.get_rect(center=(440, DROP_HEIGHT))
                     SCREEN.blit(gear_drop_text, gear_drop_text_rect)
                     gear_drop_sound()
                     # playsound(DROP_1, True)
-                    temp_gear_drop.clear()
+                    drop.temp_gear_drop.clear()
                     DROP_HEIGHT = DROP_HEIGHT + 40
                     drop_setter = True
                     counter = 0
 
         if counter == 1:
-            if len(temp_unique_drop) != 0:
+            if len(drop.temp_unique_drop) != 0:
                 if unique_setter is False:
-                    unique_drop_text = get_bold_font(35).render(f"{temp_unique_drop[-1].__dict__['name']} level "
-                                                                f"{temp_unique_drop[-1].__dict__['level']} dropped!",
+                    unique_drop_text = get_bold_font(35).render(f"{drop.temp_unique_drop[-1].__dict__['name']} level "
+                                                                f"{drop.temp_unique_drop[-1].__dict__['level']} dropped!",
                                                                 True,
                                                                 ORANGE)
                     unique_drop_text_rect = unique_drop_text.get_rect(center=(440, DROP_HEIGHT))
                     SCREEN.blit(unique_drop_text, unique_drop_text_rect)
                     gear_drop_sound()
                     # playsound(DROP_1, False)
-                    temp_unique_drop.clear()
+                    drop.temp_unique_drop.clear()
                     DROP_HEIGHT = DROP_HEIGHT + 40
                     unique_setter = True
                     counter = 0
 
         if counter == 1:
-            if len(temp_consumable_drop) != 0:
+            if len(drop.temp_consumable_drop) != 0:
                 if consumable_setter is False:
                     consumable_drop_text = get_bold_font(35).render(
-                        f"{drop_quantity}x {temp_consumable_drop[-1].__dict__['name']} dropped!",
+                        f"{drop.drop_quantity}x {drop.temp_consumable_drop[-1].__dict__['name']} dropped!",
                         True, CYAN)
                     consumable_drop_text_rect = consumable_drop_text.get_rect(center=(440, DROP_HEIGHT))
                     SCREEN.blit(consumable_drop_text, consumable_drop_text_rect)
                     consumable_drop_sound()
-                    temp_consumable_drop.clear()
+                    drop.temp_consumable_drop.clear()
                     drop_quantity = 1
                     consumable_setter = True
                     counter = 0
         if counter == 1:
-            if len(temp_ticket_drop) != 0:
+            if len(drop.temp_ticket_drop) != 0:
                 if ticket_setter is False:
                     DROP_HEIGHT = DROP_HEIGHT + 40
                     ticket_drop_text = get_bold_font(35).render(
-                        f"{temp_ticket_drop[-1].__dict__['name']} dropped!",
+                        f"{drop.temp_ticket_drop[-1].__dict__['name']} dropped!",
                         True, PINK)
                     ticket_drop_text_rect = ticket_drop_text.get_rect(center=(440, DROP_HEIGHT))
                     SCREEN.blit(ticket_drop_text, ticket_drop_text_rect)
                     consumable_drop_sound()
                     # playsound(temp_ticket_drop[0].__dict__['sound'], False)
-                    temp_ticket_drop.clear()
+                    drop.temp_ticket_drop.clear()
                     ticket_setter = True
                     counter = 0
 
@@ -607,154 +650,6 @@ def battle_finish():
 
         for button in BUTTONS:
             button.changeColor(BATTLE_FINISH_MOUSE_POSITION)
-            button.update(SCREEN)
-
-        pygame.display.update()
-
-def battle_elements_resetter():
-    # if hoard[i].life > 0:
-    # print('still life')
-    # BG AND BOX
-    SCREEN.blit(BG, (0, 0))
-    SCREEN.blit(BATTLE_BOX, (60, 40))
-    # PLAYER
-    SCREEN.blit(player.image, (130, 300))
-    # ENEMY
-    if enemy.life > 0:
-        image_rect = pygame.image.load(enemy.image).get_rect(midbottom=(750, 500))
-        SCREEN.blit(pygame.image.load(enemy.image), image_rect)
-    if player.life < 0:
-        player.life = 0
-
-    # CONVERTION
-    player_ratio = player.life / player.total_life
-    player_life_width = 200 * player_ratio
-
-    enemy_ratio = enemy.life / enemy.total_life
-    enemy_life_width = 200 * enemy_ratio
-
-    text1 = get_regular_font(20).render(f"{round(player.life)}/{player.total_life}", True, WHITE)
-    text1_rect = text1.get_rect(midleft=(100, 540))
-    text1_5 = get_bold_font(20).render(f"{player.name}", True, WHITE)
-    text1_5_rect = text1_5.get_rect(midleft=(100, 570))
-    text2 = get_regular_font(20).render(f"{round(enemy.life)}/{enemy.total_life}", True, WHITE)
-    text2_rect = text2.get_rect(midright=(830, 540))
-    text3 = get_bold_font(20).render(f"{enemy.name}", True, WHITE)
-    text3_rect = text3.get_rect(midright=(830, 570))
-    player_life_bar_rect = pygame.Rect(100, 500, 200, 20)  # left/ top / widht / height
-    enemy_life_bar_rect = pygame.Rect(630, 500, 200, 20)  # left/ top / widht / height
-    player_red_life_bar_rect = pygame.Rect(100, 500, player_life_width, 20)  # left/ top / widht / height
-    enemy_red_life_bar_rect = pygame.Rect(630, 500, enemy_life_width, 20)
-    pygame.draw.rect(pygame.display.get_surface(), DARK_GREY, player_life_bar_rect)
-    pygame.draw.rect(pygame.display.get_surface(), BLUE, player_red_life_bar_rect)
-    pygame.draw.rect(pygame.display.get_surface(), DARK_GREY, enemy_life_bar_rect)
-    pygame.draw.rect(pygame.display.get_surface(), BLUE, enemy_red_life_bar_rect)
-    #
-    # # SCREEN.blit(BLACK_LIFE_BAR, player_life_bar_rect)
-    # SCREEN.blit(BLACK_LIFE_BAR, enemy_life_bar_rect)
-    # # SCREEN.blit(RED_LIFE_BAR, player_red_life_bar_rect)
-    # print(f'PLAYER WIDHT {player_life_width}')
-    # SCREEN.blit(RED_LIFE_BAR, enemy_red_life_bar_rect)
-    SCREEN.blit(text1, text1_rect)
-    SCREEN.blit(text1_5, text1_5_rect)
-    SCREEN.blit(text2, text2_rect)
-    SCREEN.blit(text3, text3_rect)
-    player_.check_player_life()
-
-
-def encounter():
-    global enemy, LAST_TIME_MS, counter
-    enemy_choice = random.choice(enemy_type)
-    if enemy_choice == 'monster':
-        enemy_type_choice = random.choice(list(monster_type))
-        enemy_dict = monster_type[enemy_type_choice]
-        enemy = Monster(enemy_dict['name'],
-                        enemy_dict['life'],
-                        enemy_dict['life'],
-                        enemy_dict['attack'],
-                        enemy_dict['defense'],
-                        enemy_dict['level'],
-                        enemy_dict['xp'],
-                        enemy_dict['crit_chance'],
-                        enemy_dict['delve_drop'],
-                        enemy_dict['image']
-
-                        )
-    elif enemy_choice == 'human':
-        enemy_type_choice = random.choice(list(human_type))
-        enemy_dict = human_type[enemy_type_choice]
-        enemy = Human(enemy_dict['name'],
-                      enemy_dict['life'],
-                      enemy_dict['life'],
-                      enemy_dict['attack'],
-                      enemy_dict['defense'],
-                      enemy_dict['level'],
-                      enemy_dict['xp'],
-                      enemy_dict['crit_chance'],
-                      enemy_dict['image'])
-    # level setter
-    if enemy.level > player.level + 2:
-        encounter()
-    elif enemy.level < player.level - 1:
-        encounter()
-    else:
-        if player.level == 5 and character.wiegraf1.status is True:
-            enemy = character.wiegraf1
-            boss_battle(character.wiegraf1)
-        elif player.level == 10 and character.dycedarg1.status is True:
-            enemy = character.dycedarg1
-            boss_battle(character.dycedarg1)
-        elif player.level == 15 and character.wiegraf2.status is True:
-            enemy = character.wiegraf2
-            boss_battle(character.wiegraf2)
-        elif player.level == 20 and character.dycedarg2.status is True:
-            enemy = character.dycedarg2
-            boss_battle(character.dycedarg2)
-        else:
-            pass
-    battle_elements_resetter()
-    levels_xp.display_level_xp()
-    # level_text = get_regular_font(25).render(f"LEVEL: {player.level}", True, WHITE)
-    # level_rect = level_text.get_rect(midright=(1260, 630))
-    # next_level = str(player.level + 1)
-    # xp_text = get_regular_font(25).render(f"XP: {player.xp}/{levels.get(next_level)}", True, WHITE)
-    # xp_rect = xp_text.get_rect(midright=(1260, 660))
-    # SCREEN.blit(level_text, level_rect)
-    # SCREEN.blit(xp_text, xp_rect)
-    text1 = get_bold_font(35).render(f"You've encountered a level {enemy.level} {enemy.name}!", True, WHITE)
-    text1_rect = text1.get_rect(center=(440, 100))
-    SCREEN.blit(text1, text1_rect)
-    while True:
-        ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()
-        BUTTONS = main_menu_structure(ENCOUNTER_MOUSE_POSITION)
-        ATTACK = Button(image=pygame.image.load("assets/images/Next Rect.png"), pos=(600, 200),
-                        text_input="ATTACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        RUN = Button(image=pygame.image.load("assets/images/Next Rect.png"), pos=(300, 200),
-                     text_input="RUN", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS.extend([ATTACK, RUN])
-
-        diff_time_ms = int(round(time.time() * 4000)) - LAST_TIME_MS
-        if diff_time_ms >= 4000:
-            counter = counter + 1
-            LAST_TIME_MS = int(round(time.time() * 4000))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                main_menu_structure_events(ENCOUNTER_MOUSE_POSITION, BUTTONS)
-                if ATTACK.checkForInput(ENCOUNTER_MOUSE_POSITION):
-                    counter = 0
-                    battle_elements_resetter()
-                    battle()
-                if RUN.checkForInput(ENCOUNTER_MOUSE_POSITION):
-                    counter = 0
-                    encounter()
-
-        # if counter >= 2:
-        for button in BUTTONS:
-            button.changeColor(ENCOUNTER_MOUSE_POSITION)
             button.update(SCREEN)
 
         pygame.display.update()

@@ -1,8 +1,8 @@
-import sys
+import pygame, sys
 from settings import *
-from fonts import *
-from inventory import *
+from assets.fonts.fonts import *
 from button import *
+from classes import inventory
 
 
 def game_over():
@@ -36,8 +36,7 @@ def game_over():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if CONTINUE.checkForInput(GAME_OVER_MOUSE_POSITION):
-                    inventory.clear()
-                    from main import login_menu
+                    inventory.inventory.clear()
                     login_menu()
 
         if counter >= 1:
