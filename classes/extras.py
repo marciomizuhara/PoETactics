@@ -4,7 +4,6 @@ from button import *
 from assets.fonts.fonts import *
 from classes import main_menu
 from classes import roulette_wheel
-from classes import roulette_wheel_
 from classes import card
 
 
@@ -50,8 +49,7 @@ def extras():
                 if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                     card.cards('cards')
                 if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):
-                    roulette_wheel_.roulette()
-                    #roulette_wheel.roulette()
+                    roulette_wheel.roulette()
             if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                 print('cards')
             if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):

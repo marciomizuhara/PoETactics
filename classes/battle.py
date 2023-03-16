@@ -253,6 +253,7 @@ def battle_elements_resetter():
     SCREEN.blit(BATTLE_BOX, (60, 40))
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
+    player_.display_level_xp()
     # ENEMY
     if encounter.enemy.life >= 0:
         image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
@@ -691,6 +692,7 @@ def battle_finish():
     SCREEN.fill(0)
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
+    player_.display_level_xp()
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
     player_.player_level_up()
