@@ -120,7 +120,7 @@ def confirm_use_consumable_item(item):
     global counter
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
-    SCREEN.blit(player_.player_.player.image, (130, 300))
+    SCREEN.blit(player_.player.image, (130, 300))
     confirm_text = get_bold_font(40).render(f'Confirm you want to use {item.name}?', True, WHITE)
     confirm_text_rect = confirm_text.get_rect(center=(SCREEN_WIDTH / 2 - 180, 270))
     SCREEN.blit(confirm_text, confirm_text_rect)
@@ -155,7 +155,7 @@ def use_consumable_item(item):
     global counter, LAST_TIME_MS
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
-    SCREEN.blit(player_.player_.player.image, (130, 300))
+    SCREEN.blit(player_.player.image, (130, 300))
     potion_setter = False
     hi_potion_setter = False
     x_potion_setter = False
@@ -304,7 +304,7 @@ def show_consumable_items():
     global INPUT_TEXT
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(CONSUMABLES_GRID, (60, 40))
-    SCREEN.blit(player_.player_.player.image, (130, 300))
+    SCREEN.blit(player_.player.image, (130, 300))
     player_.display_level_xp()
     # Items images
     if potion.quantity != 0:

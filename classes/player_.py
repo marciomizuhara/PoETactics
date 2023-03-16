@@ -5,7 +5,7 @@ from assets.fonts.fonts import *
 from classes import battle
 from classes import enemy
 from classes import encounter
-
+from classes import game_over
 from assets.music.music import *
 from items.amulets import *
 from items.armors import *
@@ -165,7 +165,7 @@ def draw_player_level_up():
 
 
 def check_player_life():
-    global counter, last_time_ms
+    global counter, LAST_TIME_MS
     death_setter = False
     if player.life <= 0:
         player.life = 0
@@ -185,10 +185,10 @@ def check_player_life():
 
         SCREEN.blit(text1, text1_rect)
         while True:
-            diff_time_ms = int(round(time.time() * 4000)) - last_time_ms
+            diff_time_ms = int(round(time.time() * 4000)) - LAST_TIME_MS
             if diff_time_ms >= 4000:
                 counter = counter + 1
-                last_time_ms = int(round(time.time() * 4000))
+                LAST_TIME_MS = int(round(time.time() * 4000))
             if counter >= 1:
                 pygame.mixer.music.fadeout(2)
                 pygame.mixer.music.stop()
@@ -198,7 +198,7 @@ def check_player_life():
                 death_setter = True
             if counter >= 5:
                 counter = 0
-                game_over()
+                game_over.game_over()
             pygame.display.update()
 
 

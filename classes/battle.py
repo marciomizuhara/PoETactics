@@ -13,6 +13,120 @@ from assets.fonts.fonts import *
 from settings import *
 
 
+previous_time = pygame.time.get_ticks()
+time_counter = 0.0
+enemy_setter = True
+
+
+def increment_time(previous_time, time_counter):
+    current_time = pygame.time.get_ticks()
+    if current_time - previous_time >= 100:
+        time_counter += 0.1
+        previous_time = current_time
+    return round(previous_time, 2), round(time_counter, 2)
+
+
+def transform_image_color(image, color):
+    width, height = image.get_size()
+    width -= 2
+    height -= 2
+    new_image = pygame.Surface((width, height), pygame.SRCALPHA)
+    for x in range(width):
+        for y in range(height):
+            cor = image.get_at((x, y))
+            if cor.a > 0: # verifica se o pixel não é transparente
+                new_image.set_at((x, y), (color))
+    return new_image
+
+
+def player_hit_effect(enemy_image, type):
+    global time_counter, previous_time
+    previous_time, time_counter = increment_time(previous_time, time_counter)
+    if type == 'normal' or type == 'critical':
+        color = ''
+        if type == 'normal':
+            color = BLACK
+        else:
+            color = RED
+        if time_counter == 0.0:
+            new_image = transform_image_color(pygame.image.load(enemy_image), color)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.1:
+            new_image = transform_image_color(pygame.image.load(enemy_image), WHITE)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.2:
+            new_image = transform_image_color(pygame.image.load(enemy_image), color)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.3:
+            new_image = transform_image_color(pygame.image.load(enemy_image), WHITE)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.4:
+            new_image = transform_image_color(pygame.image.load(enemy_image), color)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.5:
+            new_image = transform_image_color(pygame.image.load(enemy_image), WHITE)
+            image_rect = pygame.image.load(enemy_image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+        if time_counter == 0.6:
+            new_image = pygame.image.load(enemy_image)
+            image_rect = new_image.get_rect(midbottom=(750, 500))
+            SCREEN.blit(new_image, image_rect)
+            battle_elements_resetter()
+    else:
+        pass
+
+
+def enemy_hit_effect(player_image, type):
+    global time_counter, previous_time
+    previous_time, time_counter = increment_time(previous_time, time_counter)
+    if type == 'normal' or type == 'critical':
+        color = ''
+        if type == 'normal':
+            color = BLACK
+        else:
+            color = RED
+
+        if color != 0:
+            if time_counter == 1.0:
+                new_image = transform_image_color(player_image, color)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.1:
+                new_image = transform_image_color(player_image, WHITE)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.2:
+                new_image = transform_image_color(player_image, color)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.3:
+                new_image = transform_image_color(player_image, WHITE)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.4:
+                new_image = transform_image_color(player_image, color)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.5:
+                new_image = transform_image_color(player_image, WHITE)
+                image_rect = player_image.get_rect(midbottom=(175, 488))
+                SCREEN.blit(new_image, image_rect)
+            if time_counter == 1.6:
+                # new_image = PLAYER
+                # image_rect = new_image.get_rect(midbottom=(179, 480))
+                # SCREEN.blit(new_image, image_rect)
+                SCREEN.blit(player_.player.image, (130, 300))
+                battle_elements_resetter()
+    else:
+        pass
+
+
+
 def show_dialogue(character):
     print(f'{character.name}')
     # global counter, LAST_TIME_MS
@@ -134,14 +248,16 @@ def boss_battle(boss_instance):
 
 
 def battle_elements_resetter():
+    global enemy_setter
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
     # ENEMY
-    if encounter.enemy.life > 0:
+    if encounter.enemy.life >= 0:
         image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
         SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
+
     if player_.player.life < 0:
         player_.player.life = 0
 
@@ -151,7 +267,8 @@ def battle_elements_resetter():
 
     enemy_ratio = encounter.enemy.life / encounter.enemy.total_life
     enemy_life_width = 200 * enemy_ratio
-
+    if encounter.enemy.life < 0:
+        encounter.enemy.life = 0
     text1 = get_regular_font(20).render(f"{round(player_.player.life)}/{player_.player.total_life}", True, WHITE)
     text1_rect = text1.get_rect(midleft=(100, 540))
     text1_5 = get_bold_font(20).render(f"{player_.player.name}", True, WHITE)
@@ -192,7 +309,8 @@ def crit_chance(character_crit_chance, character_attack, character_critdamage):
 
 
 def battle():
-    if encounter.enemy.life > 0:
+    global enemy_setter
+    if encounter.enemy.life > 0 and enemy_setter is True:
         # life_bars()
         battle_elements_resetter()
 
@@ -232,23 +350,19 @@ def battle():
 
     else:
         encounter.enemy.life = 0
-        battle_elements_resetter()
+        enemy_setter = False
+        # battle_elements_resetter()
         if enemy in [character.wiegraf1, character.wiegraf2, character.dycedarg1, character.dycedarg2]:
             show_dialogue(enemy)
         if encounter.enemy.life == 0:
-            SCREEN.fill(0)
-            SCREEN.blit(BG, (0, 0))
-            SCREEN.blit(BATTLE_BOX, (60, 40))
-            # PLAYER
-            SCREEN.blit(player_.player.image, (130, 300))
-            player_.player_level_up()
             battle_finish()
             # battle_elements_resetter()
 
 
 # IF ENEMY ATTACK IS ZERO AND PLAYER ATTACK IS CRITICAL
 def battle_condition_1_a(player_damage, a):
-    global LAST_TIME_MS, counter
+    print('1a')
+    global LAST_TIME_MS, counter, previous_time, time_counter
     player_.display_level_xp()
     enemy_damage = a - encounter.enemy.defense
     encounter.enemy.life = encounter.enemy.life - enemy_damage
@@ -256,6 +370,7 @@ def battle_condition_1_a(player_damage, a):
     counter = 0
     c_a = False
     e_a_s = False
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
     while True:
         text0 = get_regular_font(20).render(f'CRITICAL!', True, WHITE)
         text0_rect = text0.get_rect(center=(750, 220))
@@ -280,11 +395,18 @@ def battle_condition_1_a(player_damage, a):
             if not c_a:
                 critical_attack_sound()
                 c_a = True
+
+            player_hit_effect(encounter.enemy.image, 'critical')
+
+            # SCREEN.blit(transform_image_color(pygame.image.load(encounter.enemy.image), BLACK), (130, 300))
+            # print(transform_image_color(encounter.enemy.image, BLACK))
+
         if counter == 2:
             SCREEN.blit(text2, text2_rect)
             if not e_a_s:
                 enemy_attack_sound()
                 e_a_s = True
+            enemy_hit_effect(time_counter, PLAYER, 'zero')
         if counter == 3:
             counter = 0
             battle()
@@ -293,14 +415,16 @@ def battle_condition_1_a(player_damage, a):
 
 # IF ENEMY ATTACK IS ZERO AND PLAYER ATTACK IS NORMAL
 def battle_condition_1_b(player_damage):
-    global LAST_TIME_MS, counter
+    print('1b')
+    global LAST_TIME_MS, counter, previous_time, time_counter
     player_.display_level_xp()
     p_a_s = False
     e_a_s = False
     enemy_damage = player_.player.attack - encounter.enemy.defense
     encounter.enemy.life = encounter.enemy.life - enemy_damage
     player_.player.life = player_.player.life - player_damage
-
+    counter = 0
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
     while True:
         text1 = get_bold_font(50).render(f'{enemy_damage}', True, RED)
         text1_rect = text1.get_rect(center=(750, 260))
@@ -316,16 +440,20 @@ def battle_condition_1_b(player_damage):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
         if counter == 1:
             if not p_a_s:
                 SCREEN.blit(text1, text1_rect)
                 critical_attack_sound()
                 p_a_s = True
+            player_hit_effect(encounter.enemy.image, 'normal')
+
         if counter == 2:
             if not e_a_s:
                 SCREEN.blit(text2, text2_rect)
                 enemy_attack_sound()
                 e_a_s = True
+            enemy_hit_effect(time_counter, PLAYER, 'zero')
         if counter == 3:
             counter = 0
             battle()
@@ -347,14 +475,15 @@ def battle_condition_1():
 
 # PLAYER CRITICAL AND ENEMY NORMAL ATTACK
 def battle_condition_2a(e_damage):
-    global counter, LAST_TIME_MS
+    global counter, LAST_TIME_MS, previous_time, time_counter
     player_.display_level_xp()
     player_damage = encounter.enemy.attack - player_.player.defense
     encounter.enemy.life = encounter.enemy.life - e_damage
     player_.player.life = player_.player.life - player_damage
     c_a = False
     e_a_s = False
-
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
+    print('2a')
     while True:
         text0 = get_regular_font(20).render(f'CRITICAL!', True, WHITE)
         text0_rect = text0.get_rect(center=(750, 220))
@@ -379,11 +508,13 @@ def battle_condition_2a(e_damage):
                 SCREEN.blit(text1, text1_rect)
                 critical_attack_sound()
                 c_a = True
+            player_hit_effect(encounter.enemy.image, 'critical')
         if counter == 2:
             if not e_a_s:
                 SCREEN.blit(text2, text2_rect)
                 enemy_attack_sound()
                 e_a_s = True
+            enemy_hit_effect(PLAYER, 'normal')
         if counter == 3:
             counter = 0
             battle()
@@ -392,13 +523,14 @@ def battle_condition_2a(e_damage):
 
 # PLAYER AND ENEMY CRITICAL
 def battle_condition_2b(e_damage, p_damage):
+    print('2b')
     global counter, LAST_TIME_MS
     player_.display_level_xp()
     encounter.enemy.life = encounter.enemy.life - e_damage
     player_.player.life = player_.player.life - p_damage
     c_a = False
     c_a_2 = False
-
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
     while True:
         text0 = get_regular_font(20).render(f'CRITICAL!', True, WHITE)
         text0_rect = text0.get_rect(center=(750, 220))
@@ -425,12 +557,14 @@ def battle_condition_2b(e_damage, p_damage):
                 SCREEN.blit(text1, text1_rect)
                 critical_attack_sound()
                 c_a = True
+            player_hit_effect(encounter.enemy.image, 'normal')
         if counter == 2:
             if not c_a_2:
                 SCREEN.blit(text1_5, text1_5_rect)
                 SCREEN.blit(text2, text2_rect)
                 critical_attack_sound()
                 c_a_2 = True
+            enemy_hit_effect(PLAYER, 'normal')
         if counter == 3:
             counter = 0
             battle()
@@ -439,12 +573,14 @@ def battle_condition_2b(e_damage, p_damage):
 
 # PLAYER NORMAL ATTACK AND ENEMY CRITICAL
 def battle_condition_2c(e_damage, p_damage):
-    global counter, LAST_TIME_MS
+    print('2c')
+    global counter, LAST_TIME_MS, previous_time, time_counter
     player_.display_level_xp()
     encounter.enemy.life = encounter.enemy.life - e_damage
     player_.player.life = player_.player.life - p_damage
     p_a_s = False
     c_a = False
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
     while True:
         # text0 = get_regular_font(20).render(f'CRITICAL!', True, WHITE)
         # text0_rect = text0.get_rect(center=(750, 220))
@@ -470,12 +606,14 @@ def battle_condition_2c(e_damage, p_damage):
                 SCREEN.blit(text1, text1_rect)
                 player_attack_sound()
                 p_a_s = True
+            player_hit_effect(encounter.enemy.image, 'normal')
         if counter == 2:
             if not c_a:
                 SCREEN.blit(text1_5, text1_5_rect)
                 SCREEN.blit(text2, text2_rect)
                 critical_attack_sound()
                 c_a = True
+            enemy_hit_effect(PLAYER, 'critical')
         if counter == 3:
             counter = 0
             battle()
@@ -484,12 +622,15 @@ def battle_condition_2c(e_damage, p_damage):
 
 # PLAYER AND ENEMY NORMAL ATTACK
 def battle_condition_2d(e_damage, p_damage):
-    global counter, LAST_TIME_MS
+    print('2d')
+    global counter, LAST_TIME_MS, previous_time, time_counter
     player_.display_level_xp()
     encounter.enemy.life = encounter.enemy.life - e_damage
     player_.player.life = player_.player.life - p_damage
+    counter = 0
     p_a_s = False
     e_a_s = False
+    previous_time, time_counter = pygame.time.get_ticks(), 0.0
     while True:
         text1 = get_bold_font(50).render(f'{e_damage}', True, RED)
         text1_rect = text1.get_rect(center=(750, 260))
@@ -511,11 +652,13 @@ def battle_condition_2d(e_damage, p_damage):
                 SCREEN.blit(text1, text1_rect)
                 player_attack_sound()
                 p_a_s = True
+            player_hit_effect(encounter.enemy.image, 'normal')
         if counter == 2:
             if not e_a_s:
                 SCREEN.blit(text2, text2_rect)
                 critical_attack_sound()
                 e_a_s = True
+            enemy_hit_effect(PLAYER, 'normal')
         if counter == 3:
             counter = 0
             battle()
@@ -523,7 +666,7 @@ def battle_condition_2d(e_damage, p_damage):
 
 
 def battle_finish():
-    global counter, LAST_TIME_MS, DROP_HEIGHT, drop_quantity
+    global counter, LAST_TIME_MS, DROP_HEIGHT, drop_quantity, enemy_setter
     player_.check_player_life()
     player_.shaman()
     drop.gear_drop_rate()
@@ -545,6 +688,13 @@ def battle_finish():
         pass
     battle_elements_resetter()
     player_.display_level_xp()
+    SCREEN.fill(0)
+    SCREEN.blit(BG, (0, 0))
+    SCREEN.blit(BATTLE_BOX, (60, 40))
+    # PLAYER
+    SCREEN.blit(player_.player.image, (130, 300))
+    player_.player_level_up()
+    enemy_setter = True
     counter = 0
     text1 = get_bold_font(30).render(
         f"You've defeated level {encounter.enemy.level} {encounter.enemy.name} and gained {encounter.enemy.xp} xp points!", True, "White")
