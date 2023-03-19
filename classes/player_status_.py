@@ -9,6 +9,13 @@ from classes import player_slot_
 from levels_xp import *
 
 
+def player_life_color():
+    life_color = WHITE
+    if round(player_.player.life / player_.player.total_life * 100, 0) < 30.0:
+        life_color = RED
+    return life_color
+
+
 def player_status():
     # global inventory.inventory.temp_gear_change, inventory.inventory.temp_gear_change_inventory
 
@@ -19,13 +26,15 @@ def player_status():
     SCREEN.blit(PLAYER_STATUS, (SCREEN_WIDTH / 2 - 70, 180))
 
     # PLAYER STATUS
+    life_color = player_life_color()
+
     next_level = str(player_.player.level + 1)
     player_text1 = get_bold_font(35).render(f"PLAYER STATUS", True, WHITE)
     player_name_text = get_bold_font(25).render(f"Name: {player_.player.name}", True, WHITE)
     player_level_text = get_bold_font(25).render(f"Level: {player_.player.level}", True, WHITE)
     player_experience_text = get_bold_font(25).render(f"Experience: {player_.player.xp}/{str(levels.get(next_level))[:6]}",
                                                       True, WHITE)
-    player_life_text = get_bold_font(25).render(f"Life Points: {player_.player.life}/{player_.player.total_life}", True, WHITE)
+    player_life_text = get_bold_font(25).render(f"Life Points: {player_.player.life}/{player_.player.total_life}", True, life_color)
     player_attack_text = get_bold_font(25).render(f"Attack: {player_.player.attack}", True, WHITE)
     player_defense_text = get_bold_font(25).render(f"Defense: {player_.player.defense}", True, WHITE)
     player_crit_chance_text = get_bold_font(25).render(f"Critical Chance: {round(player_.player.crit_chance, 2)} %", True,

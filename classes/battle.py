@@ -8,6 +8,7 @@ from classes import encounter
 from classes import inventory
 from classes import main_menu
 from classes import player_
+from classes import player_status_
 from classes import save_load
 from assets.fonts.fonts import *
 from settings import *
@@ -270,8 +271,11 @@ def battle_elements_resetter():
     enemy_life_width = 200 * enemy_ratio
     if encounter.enemy.life < 0:
         encounter.enemy.life = 0
-    text1 = get_regular_font(20).render(f"{round(player_.player.life)}/{player_.player.total_life}", True, WHITE)
+    life_color = player_status_.player_life_color()
+
+    text1 = get_regular_font(20).render(f"{round(player_.player.life)}/{player_.player.total_life}" , True, life_color)
     text1_rect = text1.get_rect(midleft=(100, 540))
+
     text1_5 = get_bold_font(20).render(f"{player_.player.name}", True, WHITE)
     text1_5_rect = text1_5.get_rect(midleft=(100, 570))
     text2 = get_regular_font(20).render(f"{round(encounter.enemy.life)}/{encounter.enemy.total_life}", True, WHITE)

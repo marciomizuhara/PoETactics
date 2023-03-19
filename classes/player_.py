@@ -203,14 +203,14 @@ def check_player_life():
 
 
 def display_level_xp():
-    level_text = get_regular_font(25).render(f"LEVEL: {player.level}", True, WHITE)
-    level_rect = level_text.get_rect(midright=(1260, 600))
+    level_text = get_regular_font(20).render(f"LEVEL: {player.level}", True, WHITE)
+    level_rect = level_text.get_rect(midright=(1260, 670))
     next_level = str(player.level + 1)
-    xp_text = get_regular_font(25).render(f"XP: {player.xp}/{levels.get(next_level)}", True, WHITE)
-    xp_rect = xp_text.get_rect(midright=(1260, 630))
-    life_text = get_regular_font(25).render(f"Life Points: {round(player.life)}/{player.total_life}", True, WHITE)
-    life_rect = life_text.get_rect(midright=(1260, 660))
-    SCREEN.blit(life_text, life_rect)
+    xp_text = get_regular_font(20).render(f"XP: {player.xp}/{levels.get(next_level)}", True, WHITE)
+    xp_rect = xp_text.get_rect(midright=(1260, 650))
+    # life_text = get_regular_font(20).render(f"Life Points: {round(player.life)}/{player.total_life} ({round(player.life/player.total_life*100, 0)}%)" , True, WHITE)
+    # life_rect = life_text.get_rect(midright=(1260, 600))
+    # SCREEN.blit(life_text, life_rect)
     SCREEN.blit(level_text, level_rect)
     SCREEN.blit(xp_text, xp_rect)
 
