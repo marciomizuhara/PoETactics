@@ -5,6 +5,7 @@ from assets.music.music import *
 from classes import character
 from classes import drop
 from classes import encounter
+from classes import essences
 from classes import inventory
 from classes import main_menu
 from classes import player_
@@ -257,8 +258,16 @@ def battle_elements_resetter():
     player_.display_level_xp()
     # ENEMY
     if encounter.enemy.life >= 0:
-        image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
-        SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
+        if encounter.enemy.essence:
+            print('com essencia')
+            new_image = essences.essence_effect(encounter.enemy.image)
+            image_rect = new_image.get_rect(midbottom=(750, 500))
+            SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
+            SCREEN.blit(new_image, image_rect)
+        else:
+            print('sem essencia')
+            image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
+            SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
 
     if player_.player.life < 0:
         player_.player.life = 0
@@ -271,6 +280,10 @@ def battle_elements_resetter():
     enemy_life_width = 200 * enemy_ratio
     if encounter.enemy.life < 0:
         encounter.enemy.life = 0
+    if encounter.enemy.life == 0:
+        if encounter.enemy.essence is True:
+            print('entrou clear')
+            essences.essences_applied.clear()
     life_color = player_status_.player_life_color()
 
     text1 = get_regular_font(20).render(f"{round(player_.player.life)}/{player_.player.total_life}" , True, life_color)
@@ -290,6 +303,19 @@ def battle_elements_resetter():
     pygame.draw.rect(pygame.display.get_surface(), BLUE, player_red_life_bar_rect)
     pygame.draw.rect(pygame.display.get_surface(), DARK_GREY, enemy_life_bar_rect)
     pygame.draw.rect(pygame.display.get_surface(), BLUE, enemy_red_life_bar_rect)
+
+    if encounter.enemy.essence is True:
+        essence_height = 595
+        for essence in essences.essences_applied:
+            text = get_bold_font(20).render(f"modified by {essence.name}!", True, PINK)
+            rect = text.get_rect(midright=(830, essence_height))
+            SCREEN.blit(text, rect)
+            essence_height += 20
+
+
+        # text4 = get_bold_font(20).render(f"modified by {essences.essences_applied[0].name}!", True, PINK)
+        # text4_rect = text4.get_rect(midright=(830, 595))
+        # SCREEN.blit(text4, text4_rect)
     #
     # # SCREEN.blit(BLACK_LIFE_BAR, player_life_bar_rect)
     # SCREEN.blit(BLACK_LIFE_BAR, enemy_life_bar_rect)
@@ -704,10 +730,10 @@ def battle_finish():
     counter = 0
     text1 = get_bold_font(30).render(
         f"You've defeated level {encounter.enemy.level} {encounter.enemy.name} and gained {encounter.enemy.xp} xp points!", True, "White")
-    text1_rect = text1.get_rect(center=(440, 100))
+    text1_rect = text1.get_rect(center=(SCREEN_WIDTH / 2 - 180, 100))
     SCREEN.blit(text1, text1_rect)
     text2 = get_regular_font(25).render(f"Your shaman healed you {player_.player.shaman} life points!", True, "White")
-    text2_rect = text2.get_rect(center=(440, 170))
+    text2_rect = text2.get_rect(center=(SCREEN_WIDTH / 2 - 180 , 170))
     SCREEN.blit(text2, text2_rect)
     drop_setter = False
     unique_setter = False
@@ -717,9 +743,9 @@ def battle_finish():
         # battle_elements_resetter()
         BATTLE_FINISH_MOUSE_POSITION = pygame.mouse.get_pos()
         BUTTONS = main_menu.main_menu_structure(BATTLE_FINISH_MOUSE_POSITION)
-        CONTINUE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 550),
-                          text_input="CONTINUE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS.append(CONTINUE)
+        EXPLORE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 450),
+                          text_input="EXPLORE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BUTTONS.append(EXPLORE)
 
         diff_time_ms = int(round(time.time() * 4000)) - LAST_TIME_MS
         if diff_time_ms >= 4000:
@@ -732,8 +758,9 @@ def battle_finish():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main_menu.main_menu_structure_events(BATTLE_FINISH_MOUSE_POSITION, BUTTONS)
-                if CONTINUE.checkForInput(BATTLE_FINISH_MOUSE_POSITION):
+                if EXPLORE.checkForInput(BATTLE_FINISH_MOUSE_POSITION):
                     DROP_HEIGHT = 210
+                    drop_quantity = 1
                     counter = 0
                     encounter.encounter()
 
@@ -748,7 +775,7 @@ def battle_finish():
                                                                   f"{drop.temp_gear_drop[-1].__dict__['level']} dropped!",
                                                                   True,
                                                                   YELLOW)
-                    gear_drop_text_rect = gear_drop_text.get_rect(center=(440, DROP_HEIGHT))
+                    gear_drop_text_rect = gear_drop_text.get_rect(center=(SCREEN_WIDTH / 2 - 180, DROP_HEIGHT))
                     SCREEN.blit(gear_drop_text, gear_drop_text_rect)
                     gear_drop_sound()
                     # playsound(DROP_1, True)
@@ -764,7 +791,7 @@ def battle_finish():
                                                                 f"{drop.temp_unique_drop[-1].__dict__['level']} dropped!",
                                                                 True,
                                                                 ORANGE)
-                    unique_drop_text_rect = unique_drop_text.get_rect(center=(440, DROP_HEIGHT))
+                    unique_drop_text_rect = unique_drop_text.get_rect(center=(SCREEN_WIDTH / 2 - 180, DROP_HEIGHT))
                     SCREEN.blit(unique_drop_text, unique_drop_text_rect)
                     gear_drop_sound()
                     # playsound(DROP_1, False)
@@ -779,7 +806,7 @@ def battle_finish():
                     consumable_drop_text = get_bold_font(35).render(
                         f"{drop.drop_quantity}x {drop.temp_consumable_drop[-1].__dict__['name']} dropped!",
                         True, CYAN)
-                    consumable_drop_text_rect = consumable_drop_text.get_rect(center=(440, DROP_HEIGHT))
+                    consumable_drop_text_rect = consumable_drop_text.get_rect(center=(SCREEN_WIDTH / 2 - 180, DROP_HEIGHT))
                     SCREEN.blit(consumable_drop_text, consumable_drop_text_rect)
                     consumable_drop_sound()
                     drop.temp_consumable_drop.clear()
@@ -793,7 +820,7 @@ def battle_finish():
                     ticket_drop_text = get_bold_font(35).render(
                         f"{drop.temp_ticket_drop[-1].__dict__['name']} dropped!",
                         True, PINK)
-                    ticket_drop_text_rect = ticket_drop_text.get_rect(center=(440, DROP_HEIGHT))
+                    ticket_drop_text_rect = ticket_drop_text.get_rect(center=(SCREEN_WIDTH / 2 - 180, DROP_HEIGHT))
                     SCREEN.blit(ticket_drop_text, ticket_drop_text_rect)
                     consumable_drop_sound()
                     # playsound(temp_ticket_drop[0].__dict__['sound'], False)

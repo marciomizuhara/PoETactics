@@ -4,6 +4,7 @@ from settings import *
 from assets.music.music import *
 from assets.fonts.fonts import *
 from classes import encounter
+from classes import explore
 from classes import consumable_item_
 from classes import card
 from classes import delve
@@ -80,7 +81,7 @@ def main_menu_structure(mouse):
 def main_menu_structure_events(mouse, buttons):
     if player_.player.level == 20:
         if buttons[0].checkForInput(mouse):
-            encounter.encounter()
+            explore.explore()
         if buttons[1].checkForInput(mouse):
             inventory.show_inventory_page_1(1)
         if buttons[2].checkForInput(mouse):
@@ -109,7 +110,7 @@ def main_menu_structure_events(mouse, buttons):
             sys.exit()
     else:
         if buttons[0].checkForInput(mouse):
-            encounter.encounter()
+            explore.explore()
         if buttons[1].checkForInput(mouse):
             inventory.show_inventory_page_1(1)
         if buttons[2].checkForInput(mouse):
@@ -310,7 +311,7 @@ def main_menu():
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if START_BATTLE.checkForInput(MENU_MOUSE_POSITION):
-                        encounter.encounter()
+                        explore.explore()
                     if INVENTORY.checkForInput(MENU_MOUSE_POSITION):
                         if len(inventory.inventory) == 0:
                             pass
@@ -387,7 +388,7 @@ def main_menu():
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if START_BATTLE.checkForInput(MENU_MOUSE_POSITION):
-                        encounter.encounter()
+                        explore.explore()
                     if INVENTORY.checkForInput(MENU_MOUSE_POSITION):
                         if len(inventory.inventory) == 0:
                             pass

@@ -832,6 +832,10 @@ def show_inventory_page_1(consumable_type):
                                 consumable_item_.fossil_reforge_cannot_reforge(sorted_inventory[i].__dict__, 1, consumable_type)
                             else:
                                 consumable_item_.use_fossil(consumable_type, i, sorted_inventory[i])
+            # BOTAR DESTAQUE NO ITEM HOVERADO
+            # for i in range(len(iteration_rect)):
+            #     if iteration_rect[i].collidepoint(INVENTORY_MOUSE_POSITION):
+            #         pass
 
         for button in BUTTONS:
             button.changeColor(INVENTORY_MOUSE_POSITION)

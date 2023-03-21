@@ -9,5 +9,9 @@ def get_regular_font(size):
     return pygame.font.Font('assets/fonts/AvenirNextLTPro-LightCond.otf', size)
 
 
+def get_italic_font(size):
+    return pygame.font.Font('assets/fonts/AvenirNextLTPro-LightCondItalic.otf', size)
+
+
 def get_quote_font(size):
     return pygame.font.Font('assets/fonts/AvenirNextLTPro-LightCondItalic.otf', size)

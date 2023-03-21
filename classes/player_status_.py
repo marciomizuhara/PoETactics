@@ -3,6 +3,7 @@ from settings import *
 from assets.fonts.fonts import *
 from button import *
 from classes import encounter
+from classes import explore
 from classes import inventory
 from classes import player_
 from classes import player_slot_
@@ -131,7 +132,7 @@ def player_status():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if BACK.checkForInput(PLAYER_STATUS_MOUSE_POSITION):
                     counter = 0
-                    encounter.encounter()
+                    explore.explore()
                 if CHANGE.checkForInput(PLAYER_STATUS_MOUSE_POSITION):
                     inventory.temp_gear_change_inventory.clear()
                     counter = 0

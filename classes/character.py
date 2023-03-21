@@ -6,14 +6,15 @@ print(characters.characters_list)
 class Character(Enemy):
 
     def __init__(self, name, total_life, life, attack, defense, level, xp, crit_chance, status, quote1, quote2, quote3,
-                 quote4, image):
-        super().__init__(name, total_life, life, attack, defense, level, xp, crit_chance)
+                 quote4, image, essence):
+        super().__init__(name, total_life, life, attack, defense, level, xp, crit_chance, essence)
         self.status = status
         self.quote1 = quote1
         self.quote2 = quote2
         self.quote3 = quote3
         self.quote4 = quote4
         self.image = image
+        self.essence = False
 
 
 # Boss instances:
@@ -31,7 +32,8 @@ wiegraf1 = Character(
     quote2=characters.characters_list['Wiegraf 1']['quote2'],
     quote3=characters.characters_list['Wiegraf 1']['quote3'],
     quote4=characters.characters_list['Wiegraf 1']['quote4'],
-    image=characters.characters_list['Wiegraf 1']['image']
+    image=characters.characters_list['Wiegraf 1']['image'],
+    essence=False
 )
 dycedarg1 = Character(
     name=characters.characters_list['Dycedarg 1']['name'],
@@ -47,7 +49,8 @@ dycedarg1 = Character(
     quote2=characters.characters_list['Dycedarg 1']['quote2'],
     quote3=characters.characters_list['Dycedarg 1']['quote3'],
     quote4=characters.characters_list['Dycedarg 1']['quote4'],
-    image=characters.characters_list['Dycedarg 1']['image']
+    image=characters.characters_list['Dycedarg 1']['image'],
+    essence=False
 )
 wiegraf2 = Character(
     name=characters.characters_list['Wiegraf 2']['name'],
@@ -63,7 +66,8 @@ wiegraf2 = Character(
     quote2=characters.characters_list['Wiegraf 2']['quote2'],
     quote3=characters.characters_list['Wiegraf 2']['quote3'],
     quote4=characters.characters_list['Wiegraf 2']['quote4'],
-    image=characters.characters_list['Wiegraf 2']['image']
+    image=characters.characters_list['Wiegraf 2']['image'],
+    essence=False
 )
 dycedarg2 = Character(
     name=characters.characters_list['Dycedarg 2']['name'],
@@ -79,5 +83,6 @@ dycedarg2 = Character(
     quote2=characters.characters_list['Dycedarg 2']['quote2'],
     quote3=characters.characters_list['Dycedarg 2']['quote3'],
     quote4=characters.characters_list['Dycedarg 2']['quote4'],
-    image=characters.characters_list['Dycedarg 2']['image']
+    image=characters.characters_list['Dycedarg 2']['image'],
+    essence=False
 )

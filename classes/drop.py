@@ -198,12 +198,12 @@ def unique_drop_rate():
                 else:
                     unique.uniques_list.append(drop['name'])
                 unique_drop_rate()
-            elif drop['name'] == player_slot.player_slot.amulet['name'] or drop['name'] == player_slot.player_slot.armor['name'] or drop[
+            elif drop['name'] == player_slot_.player_slot.amulet['name'] or drop['name'] == player_slot_.player_slot.armor['name'] or drop[
                 'name'] == \
-                    player_slot.player_slot.boots['name'] or drop['name'] == player_slot.player_slot.gloves['name'] or drop['name'] == \
-                    player_slot.player_slot.helmet['name'] or drop['name'] == player_slot.player_slot.legs['name'] or drop['name'] == \
-                    player_slot.player_slot.ring1['name'] or drop['name'] == player_slot.player_slot.ring2['name'] or drop['name'] == \
-                    player_slot.player_slot.second_hand['name'] or drop['name'] == player_slot.player_slot.weapon['name']:
+                    player_slot_.player_slot.boots['name'] or drop['name'] == player_slot_.player_slot.gloves['name'] or drop['name'] == \
+                    player_slot_.player_slot.helmet['name'] or drop['name'] == player_slot_.player_slot.legs['name'] or drop['name'] == \
+                    player_slot_.player_slot.ring1['name'] or drop['name'] == player_slot_.player_slot.ring2['name'] or drop['name'] == \
+                    player_slot_.player_slot.second_hand['name'] or drop['name'] == player_slot_.player_slot.weapon['name']:
                 if drop['name'] in unique.uniques_list:
                     pass
                 else:
