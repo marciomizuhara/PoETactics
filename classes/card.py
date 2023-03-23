@@ -319,57 +319,75 @@ def cards(previous_screen):
                 if squire_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Squire' in cards_obtained:
                     equip_card_update_status('Squire')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in cards_obtained:
                     equip_card_update_status('Chemist')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if knight_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Knight' in cards_obtained:
                     equip_card_update_status('Knight')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if archer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Archer' in cards_obtained:
                     equip_card_update_status('Archer')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if priest_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Priest' in cards_obtained:
                     equip_card_update_status('Priest')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if wizard_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Wizard' in cards_obtained:
                     equip_card_update_status('Wizard')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if monk_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Monk' in cards_obtained:
                     equip_card_update_status('Monk')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if thief_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Thief' in cards_obtained:
                     equip_card_update_status('Thief')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if oracle_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Oracle' in cards_obtained:
                     equip_card_update_status('Oracle')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Time Mage' in cards_obtained:
                     equip_card_update_status('Time Mage')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Geomancer' in cards_obtained:
                     equip_card_update_status('Geomancer')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if lancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Lancer' in cards_obtained:
                     equip_card_update_status('Lancer')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if mediator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Mediator' in cards_obtained:
                     equip_card_update_status('Mediator')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if summoner_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Summoner' in cards_obtained:
                     equip_card_update_status('Summoner')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if samurai_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Samurai' in cards_obtained:
                     equip_card_update_status('Samurai')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if ninja_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Ninja' in cards_obtained:
                     equip_card_update_status('Ninja')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if calculator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Calculator' in cards_obtained:
                     equip_card_update_status('Calculator')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
                 if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Bard/Dancer' in cards_obtained:
                     equip_card_update_status('Bard/Dancer')
                     SCREEN.blit(equipped_text, equipped_text_rect)
+                    card_change_sound()
 
             if not squire_rect.collidepoint(CARDS_MOUSE_POSITION) and not chemist_rect.collidepoint(
                     CARDS_MOUSE_POSITION) and not knight_rect.collidepoint(

@@ -175,7 +175,7 @@ PLAYER_ATTACK = 'assets/music/slash2.wav'
 ENEMY_ATTACK = 'assets/music/slash1.wav'
 CRITICAL_ATTACK = 'assets/music/criticalhit.wav'
 DELVE = 'assets/music/delve.mp3'
-
-
+CARD_CHANGE = 'assets/music/card_change.mp3'
+ESSENCE_ENCOUNTER = 'assets/music/essence_encounter.mp3'
 
 

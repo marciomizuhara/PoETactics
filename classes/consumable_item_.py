@@ -115,7 +115,6 @@ fractured_fossil = Fossil(consumables['fractured fossil']['type'],
                           consumables['fractured fossil']['attribute'])
 
 
-
 def confirm_use_consumable_item(item):
     global counter
     SCREEN.blit(BG, (0, 0))
@@ -547,6 +546,24 @@ def show_consumable_items():
                 BOX.update(screen=SCREEN)
                 INPUT_TEXT = f"{fractured_fossil.name}: Unpredicably reforges all values of an item"
 
+            if not potion_rect.collidepoint(SHOW_CONSUMABLES_MOUSE_POSITION) and not hi_potion_rect.collidepoint(
+                    SHOW_CONSUMABLES_MOUSE_POSITION) and not x_potion_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not elixir_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not chaos_orb_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not divine_orb_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not exalted_orb_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not mirror_of_kalandra_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not pristine_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not dense_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not serrated_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not pristine_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not deft_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not fractured_fossil_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION) and not roulette_wheel_ticket_rect.collidepoint(
+                SHOW_CONSUMABLES_MOUSE_POSITION):
+                BOX.update(screen=SCREEN)
+                INPUT_TEXT = f""
+
             for button in BUTTONS:
                 button.changeColor(SHOW_CONSUMABLES_MOUSE_POSITION)
                 button.update(SCREEN)
@@ -805,12 +822,11 @@ def fossil_reforge_cannot_reforge(item, inventory_page, consumable_type):
     # text2_rect = text2.get_rect(center=(SCREEN_WIDTH / 2 - 180, 520))
     SCREEN.blit(confirm_text1, confirm_text1_rect)
 
-
     while True:
         USE_FOSSIL_MOUSE_POSITION = pygame.mouse.get_pos()
         BUTTONS = main_menu.main_menu_structure(USE_FOSSIL_MOUSE_POSITION)
         BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 390),
-                          text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+                      text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BUTTONS.append(BACK)
 
         # NO_BUTTON = Button(image=pygame.image.load("images/Smallest Rect.png"), pos=(380, 600),
@@ -861,4 +877,3 @@ def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
         magic_find=new_item.__dict__['magic_find'],
         rarity=new_item.__dict__['rarity'],
         image=new_item.__dict__['image'])
-

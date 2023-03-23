@@ -1,5 +1,6 @@
 import pygame, random
 from assets.fonts.fonts import *
+from assets.music.music import *
 from classes import encounter
 from classes import player_
 from classes import player_status_
@@ -7,7 +8,7 @@ from settings import *
 from classes import battle
 
 
-ESSENCE_DROP_RATE = 100
+ESSENCE_DROP_RATE = 50
 essences_applied = []
 
 
@@ -57,6 +58,7 @@ def is_essence(enemy):
     if roll <= ESSENCE_DROP_RATE:
         enemy = apply_essence(enemy)
         enemy.essence = True
+        essence_encounter_sound()
         return enemy
     else:
         return enemy

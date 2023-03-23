@@ -70,3 +70,15 @@ def gear_drop_sound():
     g_d_s = pygame.mixer.Sound(DROP_1)
     g_d_s.set_volume(0.6)  # Now plays at 50% of full volume.
     g_d_s.play(0)
+
+
+def card_change_sound():
+    c_g_s = pygame.mixer.Sound(CARD_CHANGE)
+    c_g_s.set_volume(0.6)  # Now plays at 50% of full volume.
+    c_g_s.play(0)
+
+
+def essence_encounter_sound():
+    e_e = pygame.mixer.Sound(ESSENCE_ENCOUNTER)
+    e_e.set_volume(0.6)  # Now plays at 50% of full volume.
+    e_e.play(0)
