@@ -23,9 +23,11 @@ CONSUMABLE_DROP_RATE = 100
 TICKET_DROP_RATE = 20
 CARD_DROP_RATE = 100
 DELVE_DROP_RATE = 100
-UNIQUE_DROP_RATE = 7
+UNIQUE_DROP_RATE = 100
 DROP_HEIGHT = 210
 
+# GAME ICONS
+RIGHT_ARROW = pygame.transform.scale(pygame.image.load('assets/images/arrow_2.png'), (120, 90))
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")
@@ -37,6 +39,7 @@ RED = pygame.Color('#FF0000')
 ORANGE = pygame.Color('#FF6600')
 YELLOW = pygame.Color('#FFE800')
 CYAN = pygame.Color('#4ADEDE')
+GREEN = pygame.Color('#6bfa1f')
 
 
 # Images

@@ -5,7 +5,7 @@ from items.gear_type import *
 
 class Item:
 
-    def __init__(self, type, name, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image):
+    def __init__(self, type, name, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, crafted, image):
         self.type = type
         self.name = name
         self.level = level
@@ -16,6 +16,7 @@ class Item:
         self.crit_damage = crit_damage
         self.magic_find = magic_find
         self.rarity = rarity
+        self.crafted = crafted
         self.image = image
 
 

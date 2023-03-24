@@ -297,15 +297,17 @@ def show_item(item_index, item):
 
         ITEM_DISP_MOUSE_POSITION = pygame.mouse.get_pos()
         BUTTONS = main_menu.main_menu_structure(ITEM_DISP_MOUSE_POSITION)
-        DELETE_ITEM = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(380, 600),
-                             text_input="DELETE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        EQUIP_ITEM = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(540, 600),
+        EQUIP_ITEM = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(380, 500),
                             text_input="EQUIP", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(160, 600),
-                      text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        NEXT = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(770, 600),
-                      text_input="NEXT", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS.extend([DELETE_ITEM, EQUIP_ITEM, BACK, NEXT])
+        DELETE_ITEM = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(540, 500),
+                             text_input="DELETE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        RETURN = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(460, 600),
+                             text_input="CANCEL", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BACK = Button(image=pygame.image.load("assets/images/Small Quit Rect.png"), pos=(140, 600),
+                      text_input="<<", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        NEXT = Button(image=pygame.image.load("assets/images/Small Quit Rect.png"), pos=(790, 600),
+                      text_input=">>", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        BUTTONS.extend([DELETE_ITEM, EQUIP_ITEM, BACK, NEXT, RETURN])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -323,6 +325,8 @@ def show_item(item_index, item):
                     show_item(item_index, sorted_inventory[item_index])
                 if DELETE_ITEM.checkForInput(ITEM_DISP_MOUSE_POSITION):
                     delete_item_confirmation(item_index, item)
+                if RETURN.checkForInput(ITEM_DISP_MOUSE_POSITION):
+                    show_inventory_page_1(1)
 
                 if EQUIP_ITEM.checkForInput(ITEM_DISP_MOUSE_POSITION):
                     print('aqui 1')
@@ -447,39 +451,26 @@ def item_type_confirmation(item_index, item):
         equip_item(item_index, item, 0)
 
 
+def color_check(old_status, new_status):
+    color = ''
+    if new_status == old_status:
+        color = WHITE
+        return color
+    elif new_status > old_status:
+        color = GREEN
+        return color
+    else:
+        color = RED
+        return color
+
+
 def equip_item(item_index, item, ring_slot):
     global counter, slot_item
 
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
-    text1 = get_bold_font(30).render(f"{item.name}", True, WHITE)
-    level_text = get_regular_font(20).render(f"Level {item.level}", True, WHITE)
-    type_text = get_bold_font(20).render(f"Type: {item.type}", True, WHITE)
-    life_text = get_bold_font(20).render(f"Life: {item.life}", True, WHITE)
-    attack_text = get_bold_font(20).render(f"Attack: {item.attack}", True, WHITE)
-    defense_text = get_bold_font(20).render(f"Defense: {item.defense}", True, WHITE)
-    crit_chance_text = get_bold_font(20).render(f"Critical Chance: {item.crit_chance} %", True, WHITE)
-    crit_damage_text = get_bold_font(20).render(f"Critical Damage: {item.crit_damage} %", True, WHITE)
-    magic_find_text = get_bold_font(20).render(f"Magic Find: {round(item.magic_find * 100, 2)} %", True, WHITE)
-    text1_rect = text1.get_rect(midleft=(600, 100))
-    level_text_rect = level_text.get_rect(midleft=(600, 130))
-    type_text_rect = type_text.get_rect(midleft=(600, 180))
-    life_text_rect = life_text.get_rect(midleft=(600, 210))
-    attack_text_rect = attack_text.get_rect(midleft=(600, 240))
-    defense_text_rect = defense_text.get_rect(midleft=(600, 270))
-    crit_chance_text_rect = crit_chance_text.get_rect(midleft=(600, 300))
-    crit_damage_text_rect = crit_damage_text.get_rect(midleft=(600, 330))
-    magic_find_text_rect = magic_find_text.get_rect(midleft=(600, 360))
-    SCREEN.blit(text1, text1_rect)
-    SCREEN.blit(type_text, type_text_rect)
-    SCREEN.blit(level_text, level_text_rect)
-    SCREEN.blit(life_text, life_text_rect)
-    SCREEN.blit(attack_text, attack_text_rect)
-    SCREEN.blit(defense_text, defense_text_rect)
-    SCREEN.blit(crit_chance_text, crit_chance_text_rect)
-    SCREEN.blit(crit_damage_text, crit_damage_text_rect)
-    SCREEN.blit(magic_find_text, magic_find_text_rect)
-
+    SCREEN.blit(RIGHT_ARROW, (SCREEN_WIDTH / 2 - 250, 200))
+    
     if ring_slot == 1:
         slot_item = getattr(player_slot_.player_slot, item.type + '1')
     elif ring_slot == 2:
@@ -487,17 +478,19 @@ def equip_item(item_index, item, ring_slot):
     elif ring_slot == 0:
         slot_item = getattr(player_slot_.player_slot, item.type)
 
+    
+    # TO REMOVE
     print(f'aqui B {slot_item}')
-    slot_text1 = get_bold_font(30).render(f"{slot_item['name']}", True, BLUE)
-    slot_level_text = get_regular_font(20).render(f"Level {slot_item['level']}", True, BLUE)
-    slot_type_text = get_bold_font(20).render(f"Type: {slot_item['type']}", True, BLUE)
-    slot_life_text = get_bold_font(20).render(f"Life: {slot_item['life']}", True, BLUE)
-    slot_attack_text = get_bold_font(20).render(f"Attack: {slot_item['attack']}", True, BLUE)
-    slot_defense_text = get_bold_font(20).render(f"Defense: {slot_item['defense']}", True, BLUE)
-    slot_crit_chance_text = get_bold_font(20).render(f"Critical Chance: {slot_item['crit_chance']} %", True, BLUE)
-    slot_crit_damage_text = get_bold_font(20).render(f"Critical Damage: {slot_item['crit_damage']} %", True, BLUE)
+    slot_text1 = get_bold_font(30).render(f"{slot_item['name']}", True, WHITE)
+    slot_level_text = get_regular_font(20).render(f"Level {slot_item['level']}", True, WHITE)
+    slot_type_text = get_bold_font(20).render(f"Type: {slot_item['type']}", True, WHITE)
+    slot_life_text = get_bold_font(20).render(f"Life: {slot_item['life']}", True, WHITE)
+    slot_attack_text = get_bold_font(20).render(f"Attack: {slot_item['attack']}", True, WHITE)
+    slot_defense_text = get_bold_font(20).render(f"Defense: {slot_item['defense']}", True, WHITE)
+    slot_crit_chance_text = get_bold_font(20).render(f"Critical Chance: {slot_item['crit_chance']} %", True, WHITE)
+    slot_crit_damage_text = get_bold_font(20).render(f"Critical Damage: {slot_item['crit_damage']} %", True, WHITE)
     slot_magic_find_text = get_bold_font(20).render(f"Magic Find: {round(slot_item['magic_find'] * 100, 2)} %", True,
-                                                    BLUE)
+                                                        WHITE)
     slot_text1_rect = slot_text1.get_rect(midleft=(100, 100))
     slot_level_text_rect = slot_level_text.get_rect(midleft=(100, 130))
     slot_type_text_rect = slot_type_text.get_rect(midleft=(100, 180))
@@ -528,16 +521,50 @@ def equip_item(item_index, item, ring_slot):
 
     SCREEN.blit(confirm_text, confirm_text_rect)
     SCREEN.blit(item_to_equip_text, item_to_equip_text_rect)
-    # Equipping item
-    # if ring_slot == 0:
-    #     slot_item = getattr(player_slot, item.type + '1')
-    # elif ring_slot == 2:
-    #     slot_item = getattr(player_slot, item.type + '2')
-    # elif ring_slot == 0:
-    #     slot_item = getattr(player_slot, item.type)
 
-    # item_type = item.type
-    # slot_item = getattr(player_slot, item_type)
+    # TO EQUIP
+    color = color_check(item.life, slot_item['life'])
+    # if item.life == slot_item['life']:
+    #     color = WHITE
+    # elif item.life > slot_item['life']:
+    #     color = GREEN
+    # else:
+    #     color = RED
+
+    text1 = get_bold_font(30).render(f"{item.name}", True, WHITE)
+    level_text = get_regular_font(20).render(f"Level {item.level}", True, WHITE)
+    type_text = get_bold_font(20).render(f"Type: {item.type}", True, WHITE)
+    life_color = color_check(slot_item['life'], item.life)
+    life_text = get_bold_font(20).render(f"Life: {item.life}", True, life_color)
+    attack_color = color_check(slot_item['attack'], item.attack)
+    attack_text = get_bold_font(20).render(f"Attack: {item.attack}", True, attack_color)
+    defense_color = color_check(slot_item['defense'], item.defense)
+    defense_text = get_bold_font(20).render(f"Defense: {item.defense}", True, defense_color)
+    crit_chance_color = color_check(slot_item['crit_chance'], item.crit_chance)
+    crit_chance_text = get_bold_font(20).render(f"Critical Chance: {item.crit_chance} %", True, crit_chance_color)
+    crit_damage_color = color_check(slot_item['crit_damage'], item.crit_damage)
+    crit_damage_text = get_bold_font(20).render(f"Critical Damage: {item.crit_damage} %", True, crit_damage_color)
+    magic_find_color = color_check(slot_item['magic_find'], item.magic_find)
+    magic_find_text = get_bold_font(20).render(f"Magic Find: {round(item.magic_find * 100, 2)} %", True, magic_find_color)
+    text1_rect = text1.get_rect(midleft=(600, 100))
+    level_text_rect = level_text.get_rect(midleft=(600, 130))
+    type_text_rect = type_text.get_rect(midleft=(600, 180))
+    life_text_rect = life_text.get_rect(midleft=(600, 210))
+    attack_text_rect = attack_text.get_rect(midleft=(600, 240))
+    defense_text_rect = defense_text.get_rect(midleft=(600, 270))
+    crit_chance_text_rect = crit_chance_text.get_rect(midleft=(600, 300))
+    crit_damage_text_rect = crit_damage_text.get_rect(midleft=(600, 330))
+    magic_find_text_rect = magic_find_text.get_rect(midleft=(600, 360))
+    SCREEN.blit(text1, text1_rect)
+    SCREEN.blit(type_text, type_text_rect)
+    SCREEN.blit(level_text, level_text_rect)
+    SCREEN.blit(life_text, life_text_rect)
+    SCREEN.blit(attack_text, attack_text_rect)
+    SCREEN.blit(defense_text, defense_text_rect)
+    SCREEN.blit(crit_chance_text, crit_chance_text_rect)
+    SCREEN.blit(crit_damage_text, crit_damage_text_rect)
+    SCREEN.blit(magic_find_text, magic_find_text_rect)
+
     if slot_item is None:
         SCREEN.blit(none_text1, none_text1_rect)
     else:
@@ -595,13 +622,13 @@ def inventory_update(username, item):
 
         db.execute(
             "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance,"
-            "crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense,"
-            ":crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+            "crit_damage, magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense,"
+            ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
             username=username, name=item.name, type=item.type,
             level=item.level, life=item.life,
             attack=item.attack, defense=item.defense,
             crit_chance=item.crit_chance, crit_damage=item.crit_damage,
-            magic_find=item.magic_find, rarity=item.rarity, image=item.image)
+            magic_find=item.magic_find, rarity=item.rarity, crafted=item.crafted, image=item.image)
 
 
 def inventory_removal(username, item):
@@ -647,12 +674,13 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
                         to_inventory['rarity'],
+                        to_inventory['crafted'],
                         to_inventory['image']
                         )
         inventory.append(new_item)
         unequip_update_status(new_item)
         inventory.remove(item)
-        inventory_removal(player_.playername, item)
+        inventory_removal(player_.player.name, item)
         player_slot_.player_slot.ring1 = item.__dict__
         equip_update_status(item)
         print(f"{item.__dict__['name']} level {item.__dict__['level']} equipped!")
@@ -669,6 +697,7 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
                         to_inventory['rarity'],
+                        to_inventory['crafted'],
                         to_inventory['image']
                         )
         inventory.append(new_item)
@@ -691,6 +720,7 @@ def item_equipped_confirmation(item_index, item, ring_slot):
                         to_inventory['crit_damage'],
                         to_inventory['magic_find'],
                         to_inventory['rarity'],
+                        to_inventory['crafted'],
                         to_inventory['image']
                         )
         # inventory list
@@ -774,7 +804,12 @@ def show_inventory_page_1(consumable_type):
     iteration_rect = []
     column_a = 0
     for i in range(0, len(sorted_inventory)):
-        color = ORANGE if sorted_inventory[i].__dict__['rarity'] == 'unique' else WHITE
+        print(sorted_inventory[i].__dict__['crafted'])
+        color = ''
+        if sorted_inventory[i].__dict__['rarity'] == 'unique':
+            color = ORANGE
+        else:
+            color = CYAN if sorted_inventory[i].__dict__['crafted'] else WHITE
         text1 = get_bold_font(22).render(
             f"{item_index} — {sorted_inventory[i].__dict__['name']} (level {sorted_inventory[i].__dict__['level']})",
             True, color)

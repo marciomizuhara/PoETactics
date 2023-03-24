@@ -135,7 +135,9 @@ def save_state():
     username = player_.player.name
     # Player status
     db.execute(
-        "UPDATE user_data SET level = :level, experience = :experience, total_life = :total_life, life = :life, attack = :attack, defense = :defense, shaman = :shaman, crit_chance = :crit_chance, crit_damage = :crit_damage, magic_find = :magic_find  WHERE username = :username",
+        "UPDATE user_data SET level = :level, experience = :experience, total_life = :total_life, life = :life, "
+        "attack = :attack, defense = :defense, shaman = :shaman, crit_chance = :crit_chance, crit_damage = "
+        ":crit_damage, magic_find = :magic_find  WHERE username = :username",
         level=player_.player.level, experience=player_.player.xp, total_life=player_.player.total_life, life=player_.player.life,
         attack=player_.player.attack, defense=player_.player.defense, shaman=player_.player.shaman,
         crit_chance=player_.player.crit_chance, crit_damage=player_.player.crit_damage, magic_find=player_.player.magic_find,
@@ -145,94 +147,124 @@ def save_state():
     db.execute("DELETE FROM amulet WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO amulet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO amulet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, "
+        "magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, "
+        ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.amulet['name'], type=player_slot_.player_slot.amulet['type'],
         level=player_slot_.player_slot.amulet['level'], life=player_slot_.player_slot.amulet['life'],
         attack=player_slot_.player_slot.amulet['attack'], defense=player_slot_.player_slot.amulet['defense'],
         crit_chance=player_slot_.player_slot.amulet['crit_chance'], crit_damage=player_slot_.player_slot.amulet['crit_damage'],
-        magic_find=player_slot_.player_slot.amulet['magic_find'], rarity=player_slot_.player_slot.amulet['rarity'], image=player_slot_.player_slot.amulet['image'])
+        magic_find=player_slot_.player_slot.amulet['magic_find'], rarity=player_slot_.player_slot.amulet['rarity'],
+        crafted=player_slot_.player_slot.amulet['crafted'], image=player_slot_.player_slot.amulet['image'])
     db.execute("DELETE FROM armor WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO armor (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO armor (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, "
+        "rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, "
+        ":crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.armor['name'], type=player_slot_.player_slot.armor['type'],
         level=player_slot_.player_slot.armor['level'], life=player_slot_.player_slot.armor['life'],
         attack=player_slot_.player_slot.armor['attack'], defense=player_slot_.player_slot.armor['defense'],
         crit_chance=player_slot_.player_slot.armor['crit_chance'], crit_damage=player_slot_.player_slot.armor['crit_damage'],
-        magic_find=player_slot_.player_slot.armor['magic_find'], rarity=player_slot_.player_slot.armor['rarity'], image=player_slot_.player_slot.armor['image'])
+        magic_find=player_slot_.player_slot.armor['magic_find'], rarity=player_slot_.player_slot.armor['rarity'],
+        crafted=player_slot_.player_slot.armor['crafted'], image=player_slot_.player_slot.armor['image'])
     db.execute("DELETE FROM gloves WHERE username = :user"
                "name",
                username=username)
     db.execute(
-        "INSERT INTO gloves (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO gloves (username, name, type, level, life, attack, defense, crit_chance, crit_damage, "
+        "magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, "
+        ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.gloves['name'], type=player_slot_.player_slot.gloves['type'],
         level=player_slot_.player_slot.gloves['level'], life=player_slot_.player_slot.gloves['life'],
         attack=player_slot_.player_slot.gloves['attack'], defense=player_slot_.player_slot.gloves['defense'],
         crit_chance=player_slot_.player_slot.gloves['crit_chance'], crit_damage=player_slot_.player_slot.gloves['crit_damage'],
-        magic_find=player_slot_.player_slot.gloves['magic_find'], rarity=player_slot_.player_slot.gloves['rarity'], image=player_slot_.player_slot.gloves['image'])
+        magic_find=player_slot_.player_slot.gloves['magic_find'], rarity=player_slot_.player_slot.gloves['rarity'],
+        crafted=player_slot_.player_slot.gloves['crafted'], image=player_slot_.player_slot.gloves['image'])
     db.execute("DELETE FROM helmet WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO helmet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO helmet (username, name, type, level, life, attack, defense, crit_chance, crit_damage, "
+        "magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, "
+        ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.helmet['name'], type=player_slot_.player_slot.helmet['type'],
         level=player_slot_.player_slot.helmet['level'], life=player_slot_.player_slot.helmet['life'],
         attack=player_slot_.player_slot.helmet['attack'], defense=player_slot_.player_slot.helmet['defense'],
         crit_chance=player_slot_.player_slot.helmet['crit_chance'], crit_damage=player_slot_.player_slot.helmet['crit_damage'],
-        magic_find=player_slot_.player_slot.helmet['magic_find'], rarity=player_slot_.player_slot.helmet['rarity'], image=player_slot_.player_slot.helmet['image'])
+        magic_find=player_slot_.player_slot.helmet['magic_find'], rarity=player_slot_.player_slot.helmet['rarity'],
+        crafted=player_slot_.player_slot.helmet['crafted'], image=player_slot_.player_slot.helmet['image'])
     db.execute("DELETE FROM legs WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO legs (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO legs (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, "
+        "rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, "
+        ":crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.legs['name'], type=player_slot_.player_slot.legs['type'],
         level=player_slot_.player_slot.legs['level'], life=player_slot_.player_slot.legs['life'],
         attack=player_slot_.player_slot.legs['attack'], defense=player_slot_.player_slot.legs['defense'],
         crit_chance=player_slot_.player_slot.legs['crit_chance'], crit_damage=player_slot_.player_slot.legs['crit_damage'],
-        magic_find=player_slot_.player_slot.legs['magic_find'], rarity=player_slot_.player_slot.legs['rarity'], image=player_slot_.player_slot.legs['image'])
+        magic_find=player_slot_.player_slot.legs['magic_find'], rarity=player_slot_.player_slot.legs['rarity'],
+        crafted=player_slot_.player_slot.legs['crafted'], image=player_slot_.player_slot.legs['image'])
     db.execute("DELETE FROM ring1 WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO ring1 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO ring1 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, "
+        "rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, "
+        ":crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.ring1['name'], type=player_slot_.player_slot.ring1['type'],
         level=player_slot_.player_slot.ring1['level'], life=player_slot_.player_slot.ring1['life'],
         attack=player_slot_.player_slot.ring1['attack'], defense=player_slot_.player_slot.ring1['defense'],
         crit_chance=player_slot_.player_slot.ring1['crit_chance'], crit_damage=player_slot_.player_slot.ring1['crit_damage'],
-        magic_find=player_slot_.player_slot.ring1['magic_find'], rarity=player_slot_.player_slot.ring1['rarity'], image=player_slot_.player_slot.ring1['image'])
+        magic_find=player_slot_.player_slot.ring1['magic_find'], rarity=player_slot_.player_slot.ring1['rarity'],
+        crafted=player_slot_.player_slot.ring1['crafted'], image=player_slot_.player_slot.ring1['image'])
     db.execute("DELETE FROM ring2 WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO ring2 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO ring2 (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, "
+        "rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, "
+        ":crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.ring2['name'], type=player_slot_.player_slot.ring2['type'],
         level=player_slot_.player_slot.ring2['level'], life=player_slot_.player_slot.ring2['life'],
         attack=player_slot_.player_slot.ring2['attack'], defense=player_slot_.player_slot.ring2['defense'],
         crit_chance=player_slot_.player_slot.ring2['crit_chance'], crit_damage=player_slot_.player_slot.ring2['crit_damage'],
-        magic_find=player_slot_.player_slot.ring2['magic_find'], rarity=player_slot_.player_slot.ring2['rarity'], image=player_slot_.player_slot.ring2['image'])
+        magic_find=player_slot_.player_slot.ring2['magic_find'], rarity=player_slot_.player_slot.ring2['rarity'],
+        crafted=player_slot_.player_slot.ring2['crafted'], image=player_slot_.player_slot.ring2['image'])
     db.execute("DELETE FROM second_hand WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO second_hand (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO second_hand (username, name, type, level, life, attack, defense, crit_chance, crit_damage, "
+        "magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, "
+        ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.second_hand['name'], type=player_slot_.player_slot.second_hand['type'],
         level=player_slot_.player_slot.second_hand['level'], life=player_slot_.player_slot.second_hand['life'],
         attack=player_slot_.player_slot.second_hand['attack'], defense=player_slot_.player_slot.second_hand['defense'],
         crit_chance=player_slot_.player_slot.second_hand['crit_chance'], crit_damage=player_slot_.player_slot.second_hand['crit_damage'],
-        magic_find=player_slot_.player_slot.second_hand['magic_find'], rarity=player_slot_.player_slot.second_hand['rarity'], image=player_slot_.player_slot.second_hand['image'])
+        magic_find=player_slot_.player_slot.second_hand['magic_find'], rarity=player_slot_.player_slot.second_hand['rarity'],
+        crafted=player_slot_.player_slot.second_hand['crafted'], image=player_slot_.player_slot.second_hand['image'])
     db.execute("DELETE FROM weapon WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO weapon (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO weapon (username, name, type, level, life, attack, defense, crit_chance, crit_damage, "
+        "magic_find, rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, "
+        ":crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.weapon['name'], type=player_slot_.player_slot.weapon['type'],
         level=player_slot_.player_slot.weapon['level'], life=player_slot_.player_slot.weapon['life'],
         attack=player_slot_.player_slot.weapon['attack'], defense=player_slot_.player_slot.weapon['defense'],
         crit_chance=player_slot_.player_slot.weapon['crit_chance'], crit_damage=player_slot_.player_slot.weapon['crit_damage'],
-        magic_find=player_slot_.player_slot.weapon['magic_find'], rarity=player_slot_.player_slot.weapon['rarity'], image=player_slot_.player_slot.weapon['image'])
+        magic_find=player_slot_.player_slot.weapon['magic_find'], rarity=player_slot_.player_slot.weapon['rarity'],
+        crafted=player_slot_.player_slot.weapon['crafted'], image=player_slot_.player_slot.weapon['image'])
     db.execute("DELETE FROM boots WHERE username = :username",
                username=username)
     db.execute(
-        "INSERT INTO boots (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO boots (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, "
+        "rarity, crafted, image) VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, "
+        ":crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name, name=player_slot_.player_slot.boots['name'], type=player_slot_.player_slot.boots['type'],
         level=player_slot_.player_slot.boots['level'], life=player_slot_.player_slot.boots['life'],
         attack=player_slot_.player_slot.boots['attack'], defense=player_slot_.player_slot.boots['defense'],
         crit_chance=player_slot_.player_slot.boots['crit_chance'], crit_damage=player_slot_.player_slot.boots['crit_damage'],
-        magic_find=player_slot_.player_slot.boots['magic_find'], rarity=player_slot_.player_slot.boots['rarity'], image=player_slot_.player_slot.boots['image'])
+        magic_find=player_slot_.player_slot.boots['magic_find'], rarity=player_slot_.player_slot.boots['rarity'],
+        crafted=player_slot_.player_slot.boots['crafted'], image=player_slot_.player_slot.boots['image'])
 
     # Consumables
     db.execute("UPDATE potion SET quantity = :quantity WHERE username = :username", quantity=consumable_item_.potion.quantity,

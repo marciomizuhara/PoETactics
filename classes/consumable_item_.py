@@ -649,37 +649,41 @@ def fossil_reforge(fossil, item_index, item_to_reforge):
             number = random.randint(dense_fossil.value // 2, dense_fossil.value)
             item_to_reforge.__dict__['defense'] = item_to_reforge.__dict__['defense'] + number
             item_to_reforge.__dict__['level'] = item_to_reforge.__dict__['level'] + 1
-            if '*' in item_to_reforge.__dict__['name']:
-                pass
-            else:
-                item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
+            item_to_reforge.__dict__['crafted'] = 1
+            # if item_to_reforge.__dict__['name']:
+            #     pass
+            # else:
+            #     item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
             fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
         elif fossil.name == 'Serrated Fossil':
             number = random.randint(serrated_fossil.value // 2, serrated_fossil.value)
             item_to_reforge.__dict__['attack'] = item_to_reforge.__dict__['attack'] + number
             item_to_reforge.__dict__['level'] = item_to_reforge.__dict__['level'] + 1
-            if '*' in item_to_reforge.__dict__['name']:
-                pass
-            else:
-                item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
+            item_to_reforge.__dict__['crafted'] = 1
+            # if '*' in item_to_reforge.__dict__['name']:
+            #     pass
+            # else:
+            #     item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
             fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
         elif fossil.name == 'Pristine Fossil':
             number = random.randint(pristine_fossil.value // 2, pristine_fossil.value)
             item_to_reforge.__dict__['life'] = item_to_reforge.__dict__['life'] + number
             item_to_reforge.__dict__['level'] = item_to_reforge.__dict__['level'] + 1
-            if '*' in item_to_reforge.__dict__['name']:
-                pass
-            else:
-                item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
-            fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
+            item_to_reforge.__dict__['crafted'] = 1
+            # if '*' in item_to_reforge.__dict__['name']:
+            #     pass
+            # else:
+            #     item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
+            # fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
         elif fossil.name == 'Deft Fossil':
             number = random.randint(deft_fossil.value // 2, deft_fossil.value)
             item_to_reforge.__dict__['crit_damage'] = item_to_reforge.__dict__['crit_damage'] + number
             item_to_reforge.__dict__['level'] = item_to_reforge.__dict__['level'] + 1
-            if '*' in item_to_reforge.__dict__['name']:
-                pass
-            else:
-                item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
+            item_to_reforge.__dict__['crafted'] = 1
+            # if '*' in item_to_reforge.__dict__['name']:
+            #     pass
+            # else:
+            #     item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
             fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
         elif fossil.name == 'Fractured Fossil':
             number = random.randint(fractured_fossil.value // 2, fractured_fossil.value)
@@ -689,10 +693,11 @@ def fossil_reforge(fossil, item_index, item_to_reforge):
             item_to_reforge.__dict__['crit_chance'] = item_to_reforge.__dict__['crit_chance'] + number
             item_to_reforge.__dict__['crit_damage'] = item_to_reforge.__dict__['crit_damage'] + number
             item_to_reforge.__dict__['level'] = item_to_reforge.__dict__['level'] + 1
-            if '*' in item_to_reforge.__dict__['name']:
-                pass
-            else:
-                item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
+            item_to_reforge.__dict__['crafted'] = 1
+            # if '*' in item_to_reforge.__dict__['name']:
+            #     pass
+            # else:
+            #     item_to_reforge.__dict__['name'] = '*' + item_to_reforge.__dict__['name']
             fossil_reforge_success(fossil, item_index, old_item_name, old_item_level, item_to_reforge)
         else:
             pass
@@ -863,8 +868,8 @@ def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
     db.execute("DELETE FROM inventory WHERE id = :id",
                id=id)
     db.execute(
-        "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, image)"
-        "VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :image)",
+        "INSERT INTO inventory (username, name, type, level, life, attack, defense, crit_chance, crit_damage, magic_find, rarity, crafted, image)"
+        "VALUES (:username, :name, :type, :level, :life, :attack, :defense, :crit_chance, :crit_damage, :magic_find, :rarity, :crafted, :image)",
         username=player_.player.name,
         name=new_item.__dict__['name'],
         type=new_item.__dict__['type'],
@@ -876,4 +881,5 @@ def reforged_item_update(item_index, old_item_name, old_item_level, new_item):
         crit_damage=new_item.__dict__['crit_damage'],
         magic_find=new_item.__dict__['magic_find'],
         rarity=new_item.__dict__['rarity'],
+        crafted=new_item.__dict__['crafted'],
         image=new_item.__dict__['image'])

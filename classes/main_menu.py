@@ -168,7 +168,8 @@ def main_menu():
                 new_item = item_.Item(rows2[i]['type'], rows2[i]['name'], rows2[i]['level'],
                                 rows2[i]['life'], rows2[i]['attack'],
                                 rows2[i]['defense'], rows2[i]['crit_chance'],
-                                rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'], rows2[i]['image'])
+                                rows2[i]['crit_damage'], rows2[i]['magic_find'], rows2[i]['rarity'],
+                                rows2[i]['crafted'], rows2[i]['image'])
                 inventory.inventory.append(new_item)
 
         # Card

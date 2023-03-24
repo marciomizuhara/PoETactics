@@ -98,6 +98,7 @@ def enemy_gear_drop():
                     item_type[0]['crit_damage'],
                     item_type[0]['magic_find'],
                     item_type[0]['rarity'],
+                    item_type[0]['crafted'],
                     item_type[0]['image'],
                     )
 
@@ -191,7 +192,7 @@ def unique_drop_rate():
     else:
         if drop_rate_value <= UNIQUE_DROP_RATE + (UNIQUE_DROP_RATE * player_.player.magic_find):
             drop = random.choice(uniques)
-            inventory_uniques = [value for elem in inventory for value in elem.__dict__.values()]
+            inventory_uniques = [value for elem in inventory.inventory for value in elem.__dict__.values()]
             if drop['name'] in inventory_uniques:
                 if drop['name'] in unique.uniques_list:
                     pass
@@ -220,14 +221,15 @@ def unique_drop_rate():
                                   drop['crit_damage'],
                                   drop['magic_find'],
                                   drop['rarity'],
+                                  drop['crafted'],
                                   drop['image'],
                                   )
                 if drop['name'] in unique.uniques_list:
                     pass
                 else:
                     unique.uniques_list.append(drop['name'])
-                inventory.append(new_item)
-                db.execute("INSERT INTO unique.uniques_list (username, name) VALUES (:username, :name)",
+                inventory.inventory.append(new_item)
+                db.execute("INSERT INTO uniques_list (username, name) VALUES (:username, :name)",
                            username=player_.player.name, name=drop['name'])
                 inventory.inventory_update(player_.player.name, new_item)
                 temp_unique_drop.append(new_item)
