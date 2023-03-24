@@ -123,7 +123,7 @@ def enemy_consumable_drop():
     drop = random.randint(0, 100)
     quantity = random.randint(0, 100)
     ticket_drop = random.randint(0, 100)
-
+    print('quantity rollado', quantity)
     if quantity >= 95:
         drop_quantity += 2
     elif 75 <= quantity < 95:

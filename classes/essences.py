@@ -8,7 +8,7 @@ from settings import *
 from classes import battle
 
 
-ESSENCE_DROP_RATE = 50
+ESSENCE_DROP_RATE = 0
 essences_applied = []
 
 

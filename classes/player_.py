@@ -1,7 +1,7 @@
 from settings import *
 from classes.player_slot_ import PlayerSlot
 from assets.fonts.fonts import *
-
+from button import *
 from classes import battle
 from classes import enemy
 from classes import encounter
@@ -23,6 +23,7 @@ from items.uniques import *
 from items.weapons import *
 from levels_xp import *
 temp_level_up = False
+temp_xp = False
 
 
 class Player:
@@ -47,32 +48,24 @@ player: Player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYE
 # player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
 
 
-
-def player_level_up():
+def gain_xp():
     global temp_level_up
     next_level = str(player.level + 1)
-
+    player.xp += encounter.enemy.xp
+    print('Player XP: ', player.xp)
     if player.xp >= 175000:
         player.xp = 175000
     else:
-        player.xp += encounter.enemy.xp
-
         if player.xp >= levels.get(next_level):
-            # player.level = player.level + 1
-            # total_life_level_up = player.total_life * 0.1
-            # shaman_level_up = 1.5
-            # attack_level_up = player.attack * 0.02
-            # defense_level_up = player.defense * 0.02
-            # crit_chance_level_up = 0.5
-            # crit_damage_level_up = 0.1
-            print('chegou aqui morto')
+            print('levelou')
             temp_level_up = True
-            draw_player_level_up()
+            player_level_up()
         else:
-            battle.battle_finish()
+            pass
+            # battle.battle_finish()
 
 
-def draw_player_level_up():
+def player_level_up():
     global temp_level_up, counter, LAST_TIME_MS
     level_up_sound_setter = False
     if temp_level_up is True:

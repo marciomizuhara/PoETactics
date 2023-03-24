@@ -259,13 +259,11 @@ def battle_elements_resetter():
     # ENEMY
     if encounter.enemy.life >= 0:
         if encounter.enemy.essence:
-            print('com essencia')
             new_image = essences.essence_effect(encounter.enemy.image)
             image_rect = new_image.get_rect(midbottom=(750, 500))
             SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
             SCREEN.blit(new_image, image_rect)
         else:
-            print('sem essencia')
             image_rect = pygame.image.load(encounter.enemy.image).get_rect(midbottom=(750, 500))
             SCREEN.blit(pygame.image.load(encounter.enemy.image), image_rect)
 
@@ -386,6 +384,7 @@ def battle():
         if enemy in [character.wiegraf1, character.wiegraf2, character.dycedarg1, character.dycedarg2]:
             show_dialogue(enemy)
         if encounter.enemy.life == 0:
+            player_.gain_xp()
             battle_finish()
             # battle_elements_resetter()
 
@@ -703,8 +702,6 @@ def battle_finish():
     drop.gear_drop_rate()
     drop.unique_drop_rate()
     drop.consumable_drop_rate()
-    # player_level_up()
-    player_.draw_player_level_up()
     save_load.save_state()
 
     if encounter.enemy.name == 'Wiegraf':
@@ -810,7 +807,9 @@ def battle_finish():
                     SCREEN.blit(consumable_drop_text, consumable_drop_text_rect)
                     consumable_drop_sound()
                     drop.temp_consumable_drop.clear()
-                    drop_quantity = 1
+                    print('antes' , drop.drop_quantity)
+                    drop.drop_quantity = 1
+                    print('depois', drop.drop_quantity)
                     consumable_setter = True
                     counter = 0
         if counter == 1:
