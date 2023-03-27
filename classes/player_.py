@@ -4,6 +4,7 @@ from assets.fonts.fonts import *
 from button import *
 from classes import battle
 from classes import enemy
+from classes.souls import souls
 from classes import encounter
 from classes import game_over
 from assets.music.music import *
@@ -28,7 +29,7 @@ temp_xp = False
 
 class Player:
     def __init__(self, name, total_life, life, attack, defense, level, xp, shaman, crit_chance, crit_damage,
-                 magic_find, image):
+                 magic_find, souls, image):
         self.name = name
         self.total_life = total_life
         self.life = life
@@ -39,12 +40,13 @@ class Player:
         self.shaman = shaman
         self.crit_chance = crit_chance
         self.crit_damage = crit_damage
-        self.magic_find = magic_find
+        self.magic_find = magic_find,
+        self.souls = souls
         self.image = image
 
 
 # Level 1 player instance
-player: Player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
+player: Player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, 0, PLAYER)
 # player = Player('unknown', 500, 500, 100, 100, 1, 0, 1, 15, 15, 0, PLAYER)
 
 
@@ -88,6 +90,7 @@ def player_level_up():
         SCREEN.blit(BG, (0, 0))
         SCREEN.blit(BATTLE_BOX, (60, 40))
         display_level_xp()
+        souls.draw_souls_icon()
         # PLAYER
         SCREEN.blit(player.image, (130, 300))
         level_up_text = get_bold_font(40).render(

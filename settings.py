@@ -28,6 +28,7 @@ DROP_HEIGHT = 210
 
 # GAME ICONS
 RIGHT_ARROW = pygame.transform.scale(pygame.image.load('assets/images/arrow_2.png'), (120, 90))
+SOULS_ICON = pygame.transform.scale(pygame.image.load('assets/images/souls_icon.png'), (40, 40))
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")

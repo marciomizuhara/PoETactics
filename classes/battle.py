@@ -11,6 +11,7 @@ from classes import main_menu
 from classes import player_
 from classes import player_status_
 from classes import save_load
+from classes.souls import souls
 from assets.fonts.fonts import *
 from settings import *
 
@@ -256,6 +257,7 @@ def battle_elements_resetter():
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
     player_.display_level_xp()
+    souls.draw_souls_icon()
     # ENEMY
     if encounter.enemy.life >= 0:
         if encounter.enemy.essence:
@@ -483,7 +485,7 @@ def battle_condition_1_b(player_damage):
                 SCREEN.blit(text2, text2_rect)
                 enemy_attack_sound()
                 e_a_s = True
-            enemy_hit_effect(time_counter, PLAYER, 'zero')
+            enemy_hit_effect(PLAYER, 'zero')
         if counter == 3:
             counter = 0
             battle()
@@ -702,8 +704,8 @@ def battle_finish():
     drop.gear_drop_rate()
     drop.unique_drop_rate()
     drop.consumable_drop_rate()
+    souls.gain_souls(1)
     save_load.save_state()
-
     if encounter.enemy.name == 'Wiegraf':
         character.wiegraf1.status = False
     elif encounter.enemy.name == 'Dycedarg':

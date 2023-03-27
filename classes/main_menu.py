@@ -152,6 +152,7 @@ def main_menu():
         player_.player.crit_chance = rows[0]['crit_chance']
         player_.player.crit_damage = rows[0]['crit_damage']
         player_.player.magic_find = rows[0]['magic_find']
+        player_.player.souls = rows[0]['souls']
 
         print(player_.player.name, player_.player.level)
         # Inventory

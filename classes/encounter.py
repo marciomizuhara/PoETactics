@@ -4,6 +4,7 @@ from assets.fonts.fonts import *
 from classes import battle
 from classes import character
 from classes import essences
+from classes.souls import souls
 from classes.monster import Monster
 from classes.human import Human
 from classes import player_
@@ -68,6 +69,7 @@ def encounter():
     enemy = essences.is_essence(enemy)
     battle.battle_elements_resetter()
     player_.display_level_xp()
+    souls.draw_souls_icon()
     # level_text = get_regular_font(25).render(f"LEVEL: {player.player.level}", True, WHITE)
     # level_rect = level_text.get_rect(midright=(1260, 630))
     # next_level = str(player.player.level + 1)

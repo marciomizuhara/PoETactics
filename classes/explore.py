@@ -5,6 +5,7 @@ from classes import battle
 from classes import player_status_
 from classes import character
 from classes import encounter
+from classes.souls import souls
 from classes.monster import Monster
 from classes.human import Human
 from classes import player_
@@ -22,6 +23,7 @@ def explore_menu():
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
     player_.display_level_xp()
+    souls.draw_souls_icon()
     # ENEMY
     # CONVERTION
     player_ratio = player_.player.life / player_.player.total_life

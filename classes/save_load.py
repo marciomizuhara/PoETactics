@@ -31,6 +31,7 @@ def load_state():
     player_.player.crit_chance = rows[0]['crit_chance']
     player_.player.crit_damage = rows[0]['crit_damage']
     player_.player.magic_find = rows[0]['magic_find']
+    player_.player.souls = rows[0]['souls']
 
     print(player_.player.name, player_.player.level)
     # Inventory
@@ -137,12 +138,13 @@ def save_state():
     db.execute(
         "UPDATE user_data SET level = :level, experience = :experience, total_life = :total_life, life = :life, "
         "attack = :attack, defense = :defense, shaman = :shaman, crit_chance = :crit_chance, crit_damage = "
-        ":crit_damage, magic_find = :magic_find  WHERE username = :username",
+        ":crit_damage, magic_find = :magic_find, souls = :souls  WHERE username = :username",
         level=player_.player.level, experience=player_.player.xp, total_life=player_.player.total_life, life=player_.player.life,
         attack=player_.player.attack, defense=player_.player.defense, shaman=player_.player.shaman,
         crit_chance=player_.player.crit_chance, crit_damage=player_.player.crit_damage, magic_find=player_.player.magic_find,
+        souls=player_.player.souls,
         username=username)
-
+    print('salvou souls', player_.player.souls)
     # Player_Slot
     db.execute("DELETE FROM amulet WHERE username = :username",
                username=username)
