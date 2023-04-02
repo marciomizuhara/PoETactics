@@ -16,6 +16,7 @@ SCREEN = pygame.display.set_mode(WINDOW_SIZE)
 
 LAST_TIME_MS = int(round(time.time() * 4000))
 counter = 0
+confirmation_counter = 0
 
 # DROP RATE
 GEAR_DROP_RATE = 35

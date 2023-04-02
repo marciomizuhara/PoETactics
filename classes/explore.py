@@ -1,7 +1,9 @@
 import pygame, random, sys, time
 from button import *
 from assets.fonts.fonts import *
+from assets.fonts import fonts
 from classes import battle
+from classes import dialogues
 from classes import player_status_
 from classes import character
 from classes import encounter
@@ -59,18 +61,24 @@ def explore():
     global LAST_TIME_MS, counter
     explore_menu()
     player_.display_level_xp()
-    text0 = get_italic_font(25).render(f"The Kingdom of Ivalice is dangerous...", True, WHITE)
-    text0_rect = text0.get_rect(center=(450, 110))
-    text1 = get_italic_font(25).render(f"When you start exploring, you may face powerful enemies.", True, WHITE)
-    text1_rect = text1.get_rect(center=(450, 170))
-    text2 = get_italic_font(25).render(f"Make sure you got enough life points", True, WHITE)
-    text2_rect = text2.get_rect(center=(450, 210))
-    text3 = get_italic_font(25).render(f"and are properly equipped according to the level.", True, WHITE)
-    text3_rect = text3.get_rect(center=(450, 250))
-    SCREEN.blit(text0, text0_rect)
-    SCREEN.blit(text1, text1_rect)
-    SCREEN.blit(text2, text2_rect)
-    SCREEN.blit(text3, text3_rect)
+
+    # text0 = get_italic_font(25).render(f"The Kingdom of Ivalice is dangerous...", True, WHITE)
+    # text0_rect = text0.get_rect(center=(450, 110))
+    # text1 = get_italic_font(25).render(f"When you start exploring, you may face powerful enemies.", True, WHITE)
+    # text1_rect = text1.get_rect(center=(450, 170))
+    # text2 = get_italic_font(25).render(f"Make sure you got enough life points", True, WHITE)
+    # text2_rect = text2.get_rect(center=(450, 210))
+    # text3 = get_italic_font(25).render(f"and are properly equipped according to the level.", True, WHITE)
+    # text3_rect = text3.get_rect(center=(450, 250))
+    # SCREEN.blit(text0, text0_rect)
+    # SCREEN.blit(text1, text1_rect)
+    # SCREEN.blit(text2, text2_rect)
+    # SCREEN.blit(text3, text3_rect)
+
+    fonts.draw_dialogue_box(screen=SCREEN, x=250, y=110, width=400,
+                            text='The Kingdom of Ivalice is dangerous... When you start exploring, you may face powerful enemies. Yes, I know. I was simply pointing that he has not initialized pygame for the use of the display. The font is a secondary issue. ')
+
+
     while True:
         ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()
         BUTTONS = main_menu.main_menu_structure(ENCOUNTER_MOUSE_POSITION)

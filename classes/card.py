@@ -234,9 +234,8 @@ def draw_equipped_card(card_equipped):
 
 
 def cards(previous_screen):
-    global counter, LAST_TIME_MS
+    global counter, LAST_TIME_MS, confirmation_counter
     hovering_card = True
-    equipped_setter = False
     equipped_text = get_bold_font(30).render('Equipped', True, WHITE)
     equipped_text_rect = equipped_text.get_rect(center=(1063, 465))
 
@@ -388,7 +387,9 @@ def cards(previous_screen):
         diff_time_ms = int(round(time.time() * 4000)) - LAST_TIME_MS
 
         if diff_time_ms >= 4000:
-            counter = counter + 1
+            counter += 1
+            confirmation_counter += 1
+            print('confirmation counter', confirmation_counter)
             LAST_TIME_MS = int(round(time.time() * 4000))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -404,74 +405,92 @@ def cards(previous_screen):
                 if squire_rect.collidepoint(CARDS_MOUSE_POSITION)  and 'Squire' in cards_obtained:
                     equip_card_update_status('Squire')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if chemist_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Chemist' in cards_obtained:
                     equip_card_update_status('Chemist')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if knight_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Knight' in cards_obtained:
                     equip_card_update_status('Knight')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if archer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Archer' in cards_obtained:
                     equip_card_update_status('Archer')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if priest_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Priest' in cards_obtained:
                     equip_card_update_status('Priest')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if wizard_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Wizard' in cards_obtained:
                     equip_card_update_status('Wizard')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if monk_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Monk' in cards_obtained:
                     equip_card_update_status('Monk')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if thief_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Thief' in cards_obtained:
                     equip_card_update_status('Thief')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if oracle_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Oracle' in cards_obtained:
                     equip_card_update_status('Oracle')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if time_mage_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Time Mage' in cards_obtained:
                     equip_card_update_status('Time Mage')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if geomancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Geomancer' in cards_obtained:
                     equip_card_update_status('Geomancer')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if lancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Lancer' in cards_obtained:
                     equip_card_update_status('Lancer')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if mediator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Mediator' in cards_obtained:
                     equip_card_update_status('Mediator')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if summoner_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Summoner' in cards_obtained:
                     equip_card_update_status('Summoner')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if samurai_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Samurai' in cards_obtained:
                     equip_card_update_status('Samurai')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if ninja_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Ninja' in cards_obtained:
                     equip_card_update_status('Ninja')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if calculator_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Calculator' in cards_obtained:
                     equip_card_update_status('Calculator')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
                 if bard_dancer_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Bard/Dancer' in cards_obtained:
                     equip_card_update_status('Bard/Dancer')
                     card_change_sound()
+                    confirmation_counter = 0
                     equipped_confirmation = True
 
             if squire_rect.collidepoint(CARDS_MOUSE_POSITION) and 'Squire' in card_names:
@@ -548,11 +567,12 @@ def cards(previous_screen):
                 # print('bard/dancer')
                 SCREEN.blit(BARD_DANCER_CARD, (940, 100))
 
-            if equipped_confirmation:
-                card = f'{player_slot_.player_slot.card["name"]} equipped!'
-                show_confirmation_message(card, WHITE, 40, 600, 600)
-                pygame.time.delay(2000)
-                equipped_confirmation = False
+        if equipped_confirmation and confirmation_counter >= 0:
+            card = f'{player_slot_.player_slot.card["name"]} equipped!'
+            show_confirmation_message(card, WHITE, 40, 600, 600)
+        if confirmation_counter == 3:
+            confirmation_counter = 0
+            equipped_confirmation = False
         for button in [BACK]:
             button.changeColor(CARDS_MOUSE_POSITION)
             button.update(SCREEN)

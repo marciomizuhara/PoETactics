@@ -1,4 +1,6 @@
 import pygame,sys, random
+from pygame.locals import *
+import pytweening
 from button import *
 from classes import enemy
 from assets.music.music import *
@@ -19,6 +21,45 @@ from settings import *
 previous_time = pygame.time.get_ticks()
 time_counter = 0.0
 enemy_setter = True
+tween_setter = True
+
+size = SOULS_ICON.get_size()
+tween_time = 200
+
+
+def tween_image_in(image, duration):
+    start_time = pygame.time.get_ticks() / tween_time
+    end_time = start_time + duration
+
+    while pygame.time.get_ticks() / tween_time < end_time:
+        elapsed_time = pygame.time.get_ticks() / tween_time - start_time
+        progress = elapsed_time / duration
+        alpha = pytweening.easeInOutSine(progress)
+        color = (255 * (1 - alpha), 255 * alpha, 255)
+        surface = SOULS_ICON.copy()
+        surface = transform_image_color(surface, color)
+        surface.set_alpha(alpha * 255)
+        # surface.blit(image, (1020, 633))
+        SCREEN.blit(surface, (1020, 633))
+        pygame.display.flip()
+    return surface
+
+
+def tween_image_out(surface, duration):
+    start_time = pygame.time.get_ticks() / tween_time
+    end_time = start_time + duration
+
+    while pygame.time.get_ticks() / tween_time < end_time:
+        elapsed_time = pygame.time.get_ticks() / tween_time - start_time
+        progress = elapsed_time / duration
+        alpha = pytweening.easeInOutSine(progress)
+        color = (255, 255, 255)
+        surface = SOULS_ICON.copy()
+        surface = transform_image_color(surface, color)
+        surface.set_alpha(alpha * 255)
+        # surface.blit(image, (1020, 633))
+        SCREEN.blit(surface, (1020, 633))
+        pygame.display.flip()
 
 
 def increment_time(previous_time, time_counter):
@@ -438,7 +479,7 @@ def battle_condition_1_a(player_damage, a):
             if not e_a_s:
                 enemy_attack_sound()
                 e_a_s = True
-            enemy_hit_effect(time_counter, PLAYER, 'zero')
+            enemy_hit_effect(PLAYER, 'zero')
         if counter == 3:
             counter = 0
             battle()
@@ -698,7 +739,7 @@ def battle_condition_2d(e_damage, p_damage):
 
 
 def battle_finish():
-    global counter, LAST_TIME_MS, DROP_HEIGHT, drop_quantity, enemy_setter
+    global counter, LAST_TIME_MS, DROP_HEIGHT, drop_quantity, enemy_setter, highlight_start_frame, tween_setter
     player_.check_player_life()
     player_.shaman()
     drop.gear_drop_rate()
@@ -738,6 +779,7 @@ def battle_finish():
     unique_setter = False
     consumable_setter = False
     ticket_setter = False
+    draw_soul = True
     while True:
         # battle_elements_resetter()
         BATTLE_FINISH_MOUSE_POSITION = pygame.mouse.get_pos()
@@ -745,7 +787,7 @@ def battle_finish():
         EXPLORE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(SCREEN_WIDTH / 2 - 180, 450),
                           text_input="EXPLORE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         BUTTONS.append(EXPLORE)
-
+        # souls.draw_souls_icon()
         diff_time_ms = int(round(time.time() * 4000)) - LAST_TIME_MS
         if diff_time_ms >= 4000:
             counter = counter + 1
@@ -758,6 +800,7 @@ def battle_finish():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 main_menu.main_menu_structure_events(BATTLE_FINISH_MOUSE_POSITION, BUTTONS)
                 if EXPLORE.checkForInput(BATTLE_FINISH_MOUSE_POSITION):
+                    tween_setter = True
                     DROP_HEIGHT = 210
                     drop_quantity = 1
                     counter = 0
@@ -782,6 +825,15 @@ def battle_finish():
                     DROP_HEIGHT = DROP_HEIGHT + 40
                     drop_setter = True
                     counter = 0
+
+        if tween_setter:
+            surface = tween_image_in(SOULS_ICON, 1)
+            tween_image_out(surface, 1)
+            tween_setter = False
+        if draw_soul:
+            souls.draw_souls_icon()
+            draw_soul = False
+
 
         if counter == 1:
             if len(drop.temp_unique_drop) != 0:
