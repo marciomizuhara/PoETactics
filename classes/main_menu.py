@@ -21,9 +21,10 @@ from classes import unique
 main_menu_setter = True
 
 
+# SIDE MENU
 def main_menu_structure(mouse):
     if player_.player.level != 20 and character.dycedarg2.status is True:
-        START_BATTLE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 50),
+        EXPLORE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 50),
                               text_input="EXPLORE", font=get_bold_font(30), base_color="White",
                               hovering_color=BLUE)
         INVENTORY = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 105),
@@ -44,10 +45,10 @@ def main_menu_structure(mouse):
                            text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 420),
                              text_input="QUIT", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS = [START_BATTLE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, MAIN_MENU, QUIT_BUTTON]
+        BUTTONS = [EXPLORE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, MAIN_MENU, QUIT_BUTTON]
         return BUTTONS
     else:
-        START_BATTLE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 50),
+        EXPLORE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 50),
                               text_input="EXPLORE", font=get_bold_font(30), base_color="White",
                               hovering_color=BLUE)
         INVENTORY = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 105),
@@ -73,7 +74,7 @@ def main_menu_structure(mouse):
                            text_input="MAIN MENU", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(1100, 545),
                              text_input="QUIT", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
-        BUTTONS_LIST = [START_BATTLE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, DELVE, ENDGAME_BOSSES, EXTRAS, HELP,
+        BUTTONS_LIST = [EXPLORE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, DELVE, ENDGAME_BOSSES, EXTRAS, HELP,
                         MAIN_MENU, QUIT_BUTTON]
         return BUTTONS_LIST
 
@@ -96,16 +97,14 @@ def main_menu_structure_events(mouse, buttons):
             delve.delve_menu()
         if buttons[5].checkForInput(mouse):
             # bosses
-            pass
+            print('bosses')
         if buttons[6].checkForInput(mouse):
-            extras.extras()  # help
+            extras.extras()
         if buttons[7].checkForInput(mouse):
-            # help
-            pass
+            print('help')
         if buttons[8].checkForInput(mouse):
             main_menu()
         if buttons[9].checkForInput(mouse):
-            print('aqui 2')
             pygame.quit()
             sys.exit()
     else:
@@ -118,8 +117,16 @@ def main_menu_structure_events(mouse, buttons):
         if buttons[3].checkForInput(mouse):
             player_status_.player_status()
         if buttons[4].checkForInput(mouse):
-            extras.extras()
+            print('not available')
         if buttons[5].checkForInput(mouse):
+            print('not available')
+        if buttons[6].checkForInput(mouse):
+            extras.extras()
+        if buttons[7].checkForInput(mouse):
+            print('help')
+        if buttons[8].checkForInput(mouse):
+            main_menu()
+        if buttons[9].checkForInput(mouse):
             pygame.quit()
             sys.exit()
 
@@ -269,6 +276,8 @@ def main_menu():
           REMOVER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           '''
         main_menu_setter = False
+
+    # MAIN MENU
     if player_.player.level != 20 and character.dycedarg2.status is True:
         while True:
             SCREEN.blit(BG, (0, 0))
@@ -281,7 +290,7 @@ def main_menu():
             menu_rect1 = menu_text1.get_rect(center=(640, 100))
             menu_rect2 = menu_text2.get_rect(center=(640, 160))
 
-            START_BATTLE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 300),
+            EXPLORE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 300),
                                   text_input="EXPLORE", font=get_bold_font(30), base_color="White",
                                   hovering_color=BLUE)
             INVENTORY = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 355),
@@ -303,7 +312,7 @@ def main_menu():
             SCREEN.blit(menu_text1, menu_rect1)
             SCREEN.blit(menu_text2, menu_rect2)
 
-            for button in [START_BATTLE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, QUIT_BUTTON]:
+            for button in [EXPLORE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POSITION)
                 button.update(SCREEN)
 
@@ -312,7 +321,7 @@ def main_menu():
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if START_BATTLE.checkForInput(MENU_MOUSE_POSITION):
+                    if EXPLORE.checkForInput(MENU_MOUSE_POSITION):
                         explore.explore()
                     if INVENTORY.checkForInput(MENU_MOUSE_POSITION):
                         if len(inventory.inventory) == 0:
@@ -345,7 +354,7 @@ def main_menu():
             menu_rect1 = menu_text1.get_rect(center=(640, 100))
             menu_rect2 = menu_text2.get_rect(center=(640, 160))
 
-            START_BATTLE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 225),
+            EXPLORE = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 225),
                                   text_input="EXPLORE", font=get_bold_font(30), base_color="White",
                                   hovering_color=BLUE)
             INVENTORY = Button(image=pygame.image.load("assets/images/ONE_LINE_OPTION.png"), pos=(640, 280),
@@ -379,7 +388,7 @@ def main_menu():
             SCREEN.blit(menu_text1, menu_rect1)
             SCREEN.blit(menu_text2, menu_rect2)
 
-            for button in [START_BATTLE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, QUIT_BUTTON,
+            for button in [EXPLORE, INVENTORY, CONSUMABLE_ITEMS, PLAYER_STATUS, EXTRAS, HELP, QUIT_BUTTON,
                            DELVE, ENDGAME_BOSSES]:
                 button.changeColor(MENU_MOUSE_POSITION)
                 button.update(SCREEN)
@@ -389,7 +398,7 @@ def main_menu():
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if START_BATTLE.checkForInput(MENU_MOUSE_POSITION):
+                    if EXPLORE.checkForInput(MENU_MOUSE_POSITION):
                         explore.explore()
                     if INVENTORY.checkForInput(MENU_MOUSE_POSITION):
                         if len(inventory.inventory) == 0:
@@ -406,7 +415,7 @@ def main_menu():
                         delve_music()
                         delve.delve_menu()
                     if ENDGAME_BOSSES.checkForInput(MENU_MOUSE_POSITION):
-                        player_status_.player_status()
+                       pass
                     if EXTRAS.checkForInput(MENU_MOUSE_POSITION):
                         counter = 0
                         extras.extras()
