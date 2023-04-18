@@ -26,6 +26,7 @@ def explore_menu():
     SCREEN.blit(player_.player.image, (130, 300))
     player_.display_level_xp()
     souls.draw_souls_icon()
+    souls.draw_souls_quantity()
     # ENEMY
     # CONVERTION
     player_ratio = player_.player.life / player_.player.total_life
@@ -77,7 +78,7 @@ def explore():
 
     fonts.draw_dialogue_box(screen=SCREEN, x=250, y=110, width=400,
                             text='The Kingdom of Ivalice is dangerous... When you start exploring, you may face powerful enemies. Yes, I know. I was simply pointing that he has not initialized pygame for the use of the display. The font is a secondary issue. ')
-
+    SCREEN.blit(RIGHT_ARROW, (650, 110))
 
     while True:
         ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()

@@ -24,7 +24,7 @@ enemy_setter = True
 tween_setter = True
 
 size = SOULS_ICON.get_size()
-tween_time = 200
+tween_time = 600
 
 
 def tween_image_in(image, duration):
@@ -299,6 +299,7 @@ def battle_elements_resetter():
     SCREEN.blit(player_.player.image, (130, 300))
     player_.display_level_xp()
     souls.draw_souls_icon()
+    souls.draw_souls_quantity()
     # ENEMY
     if encounter.enemy.life >= 0:
         if encounter.enemy.essence:
@@ -763,6 +764,7 @@ def battle_finish():
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX, (60, 40))
     player_.display_level_xp()
+    souls.draw_souls_quantity()
     # PLAYER
     SCREEN.blit(player_.player.image, (130, 300))
     player_.player_level_up()

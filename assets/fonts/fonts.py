@@ -52,7 +52,7 @@ def wrap_text(dialogue_font, text, width):
 #
 def draw_dialogue_box(screen, x, y, width, text):
     lines = wrap_text(dialogue_font, text, width)
-    height = dialogue_font.size(' ')[1] * len(lines) + 10
+    height = dialogue_font.size(' ')[1] * len(lines) + 50
     rect = pygame.Rect(x, y, width, height)
     pygame.draw.rect(screen, (255, 255, 255), rect)
     pygame.draw.rect(screen, (90, 90, 90), rect, 0)

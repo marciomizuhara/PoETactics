@@ -91,6 +91,7 @@ def player_level_up():
         SCREEN.blit(BATTLE_BOX, (60, 40))
         display_level_xp()
         souls.draw_souls_icon()
+        souls.draw_souls_quantity()
         # PLAYER
         SCREEN.blit(player.image, (130, 300))
         level_up_text = get_bold_font(40).render(
