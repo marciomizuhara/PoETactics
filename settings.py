@@ -112,6 +112,11 @@ G_PRISTINE_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_pr
 G_DEFT_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_deft_fossil.png'), (60, 60))
 G_FRACTURED_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_fractured_fossil.png'), (60, 60))
 
+# SOUL SKILLS
+SOUL_REAPER_1 = pygame.transform.scale(pygame.image.load('assets/images/soul_reaper_1.png'), (45, 45))
+ONE_WITH_THE_NATURE = pygame.transform.scale(pygame.image.load('assets/images/one_with_the_nature.png'), (45, 45))
+ASSASSINATION = pygame.transform.scale(pygame.image.load('assets/images/assassination.png'), (45, 45))
+
 # Cards
 SQUIRE = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire.png'), (100, 133))
 SQUIRE_CARD = pygame.image.load('assets/images/characters/cards/squire_card.png')

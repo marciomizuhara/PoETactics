@@ -4,7 +4,7 @@ from assets.fonts.fonts import *
 from button import *
 from classes import battle
 from classes import enemy
-from classes.souls import souls
+from classes import souls
 from classes import encounter
 from classes import game_over
 from assets.music.music import *

@@ -7,7 +7,7 @@ from classes import dialogues
 from classes import player_status_
 from classes import character
 from classes import encounter
-from classes.souls import souls
+from classes import souls
 from classes.monster import Monster
 from classes.human import Human
 from classes import player_
@@ -77,7 +77,7 @@ def explore():
     # SCREEN.blit(text3, text3_rect)
 
     fonts.draw_dialogue_box(screen=SCREEN, x=250, y=110, width=400,
-                            text='The Kingdom of Ivalice is dangerous... When you start exploring, you may face powerful enemies. Yes, I know. I was simply pointing that he has not initialized pygame for the use of the display. The font is a secondary issue. ')
+                            text='The Kingdom of Ivalice is dangerous... \n When you start exploring, you may face powerful enemies. Make sure you got enough life points and are properly set up before continuing')
 
     while True:
         ENCOUNTER_MOUSE_POSITION = pygame.mouse.get_pos()

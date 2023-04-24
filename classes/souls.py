@@ -14,43 +14,57 @@ from items.uniques import *
 from classes import unique
 
 
+def draw_souls_icon():
+    SCREEN.blit(SOULS_ICON, (1020, 633))
+
+
+def draw_souls_quantity():
+    souls_text = get_regular_font(25).render(f" {player_.player.souls}", True, WHITE)
+    souls_rect = souls_text.get_rect(midleft=(1065, 653))
+    SCREEN.blit(souls_text, souls_rect)
+
+
+def gain_souls(number):
+    player_.player.souls += number
+
+
 def souls_menu():
     global counter, LAST_TIME_MS
 
     SCREEN.blit(BG, (0, 0))
     SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
-    SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
+    # SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
 
-    text1 = get_bold_font(40).render('Roulette Wheel', True, WHITE)
-    text2 = get_regular_font(30).render('Feeling lucky?', True, WHITE)
-    text3 = get_regular_font(25).render('Sping the wheel of good fortune', True, WHITE)
-    text4 = get_regular_font(25).render('and receive powerful items!', True, WHITE)
-    WIDTH = SCREEN_WIDTH / 5
-    text1_rect = text1.get_rect(center=(WIDTH, 100))
-    text2_rect = text2.get_rect(center=(WIDTH, 140))
-    text3_rect = text3.get_rect(center=(WIDTH, 200))
-    text4_rect = text4.get_rect(center=(WIDTH, 230))
-
-
-    SCREEN.blit(text1, text1_rect)
-    SCREEN.blit(text2, text2_rect)
-    SCREEN.blit(text3, text3_rect)
-    SCREEN.blit(text4, text4_rect)
-
-
-
-    angle = 0
-    roulette_index = 0
-    roll = True
-    setter = random.randrange(360, 720, 10)
-    # PLAYER STATUS
-    slice = 360 / 19
+    draw_dialogue_box(screen=SCREEN, x=110, y=70, width=700,
+                            text='Welcome to the Soul Pantheon. \n \n '
+                                 'Here you can exchange your souls points to unlock powerful perks and skills.')
 
     while True:
         HELP_MOUSE_POSITION = pygame.mouse.get_pos()
         # BUTTONS = main_menu_structure(PLAYER_STATUS_MOUSE_POSITION)
-        SPIN = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(WIDTH, 380),
-                      text_input="SPIN", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+
+        SOUL_SKILL_1 = SoulBox(image=pygame.image.load("assets/images/SOUL_SKILLS_BOX.png"), pos=(460, 220),
+                      skill='Soul Reaper 1', description='+ 100% to soul gain permanently', soul_cost='100',
+                               soul_icon=SOUL_REAPER_1,
+                               skill_font=get_bold_font(20),
+                               description_font=get_regular_font(20), soul_cost_font=get_bold_font(25),
+                               base_color='White', hovering_color=BLUE)
+
+        SOUL_SKILL_2 = SoulBox(image=pygame.image.load("assets/images/SOUL_SKILLS_BOX.png"), pos=(460, 280),
+                               soul_icon=ONE_WITH_THE_NATURE,
+                               skill='One with the Nature', description='+ 10% to total life permanently', soul_cost='250',
+                               skill_font=get_bold_font(20),
+                               description_font=get_regular_font(20), soul_cost_font=get_bold_font(25),
+                               base_color='White', hovering_color=BLUE)
+
+        SOUL_SKILL_3 = SoulBox(image=pygame.image.load("assets/images/SOUL_SKILLS_BOX.png"), pos=(460, 340),
+                               soul_icon=ASSASSINATION,
+                               skill='Assassination',
+                               description='+ 10% to attack permanently', soul_cost='270',
+                               skill_font=get_bold_font(20),
+                               description_font=get_regular_font(20), soul_cost_font=get_bold_font(25),
+                               base_color='White', hovering_color=BLUE)
+
 
         BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1110, 610),
                       text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
@@ -73,66 +87,11 @@ def souls_menu():
                 if BACK.checkForInput(HELP_MOUSE_POSITION):
                     counter = 0
                     extras.extras()
-                if SPIN.checkForInput(HELP_MOUSE_POSITION):
-                    while click_blocking:
-                        if consumable_item_.roulette_wheel_ticket.quantity > 0:
-                            consumable_item_.roulette_wheel_ticket.quantity = consumable_item_.roulette_wheel_ticket.quantity + - 1
-                            roll = True
-                            click_blocking = False
-                            while roll:
-                                SCREEN.blit(BG, (0, 0))
-                                SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
-                                SCREEN.blit(PLAYER_STATUS_BOX, (80, 60))
 
-                                text1 = get_bold_font(40).render('Roulette Wheel', True, WHITE)
-                                text2 = get_regular_font(30).render('Feeling lucky?', True, WHITE)
-                                text3 = get_regular_font(25).render('Sping the wheel of good fortune', True, WHITE)
-                                text4 = get_regular_font(25).render('and receive powerful items!', True, WHITE)
-                                text5 = get_bold_font(30).render(f'x {consumable_item_.roulette_wheel_ticket.quantity}', True, WHITE)
-                                WIDTH = SCREEN_WIDTH / 5
-                                text1_rect = text1.get_rect(center=(WIDTH, 100))
-                                text2_rect = text2.get_rect(center=(WIDTH, 140))
-                                text3_rect = text3.get_rect(center=(WIDTH, 200))
-                                text4_rect = text4.get_rect(center=(WIDTH, 230))
-                                text5_rect = text5.get_rect(center=(WIDTH + 30, 300))
 
-                                SCREEN.blit(text1, text1_rect)
-                                SCREEN.blit(text2, text2_rect)
-                                SCREEN.blit(text3, text3_rect)
-                                SCREEN.blit(text4, text4_rect)
-                                SCREEN.blit(text5, text5_rect)
-                                SCREEN.blit(ROULETTE_WHEEL2_TICKET, (WIDTH - 60, 270))
-
-                                rotate_image = pygame.transform.rotate(ROULETTE_WHEEL2, angle)
-                                rect = rotate_image.get_rect()
-                                pos = (((SCREEN_WIDTH - rect.width) / 2 + 130), ((SCREEN_HEIGHT - rect.height) / 2))
-                                SCREEN.blit(rotate_image, pos)
-                                SCREEN.blit(ROULETTE_WHEEL2_ARROW, (SCREEN_WIDTH / 2 + 110, 55))
-                                pygame.display.flip()
-                                angle -= 10
-                                # setter = 720
-                                if setter == 720:
-                                    setter = 710
-                                elif setter == 360:
-                                    setter = 350
-                                if abs(angle) == setter:
-                                    roulette_index = math.floor((setter - 360) / slice)
-                                    print(f'slice = {slice}')
-                                    print(f'setter = {setter}')
-                                    print(f'setter - 360 = {setter - 360}')
-                                    print(f'index = {roulette_index}')
-                                    print(ROULETTE_WHEEL_LIST2[roulette_index])
-                                    counter = 0
-                                    save_load.save_state()
-                                    roll = False
-
-        if counter >= 1 and not roll:
-            roulette_outcome(ROULETTE_WHEEL_LIST2[roulette_index])
-
-        if roll is True:
-            for button in [SPIN, BACK]:
-                button.changeColor(HELP_MOUSE_POSITION)
-                button.update(SCREEN)
+        for button in [BACK, SOUL_SKILL_1, SOUL_SKILL_2, SOUL_SKILL_3]:
+            button.changeColor(HELP_MOUSE_POSITION)
+            button.update(SCREEN)
         pygame.display.update()
 
 

@@ -4,7 +4,7 @@ from assets.fonts.fonts import *
 from classes import battle
 from classes import character
 from classes import essences
-from classes.souls import souls
+from classes import souls
 from classes.monster import Monster
 from classes.human import Human
 from classes import player_

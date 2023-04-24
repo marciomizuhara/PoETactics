@@ -13,7 +13,7 @@ from classes import main_menu
 from classes import player_
 from classes import player_status_
 from classes import save_load
-from classes.souls import souls
+from classes import souls
 from assets.fonts.fonts import *
 from settings import *
 
