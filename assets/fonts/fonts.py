@@ -71,7 +71,7 @@ def draw_dialogue_box(screen, x, y, width, text):
     lines = []
     words = text.split(' ')
     current_line = ''
-    print('words', words)
+    # print('words', words)
     for word in words:
         if '\n' in word:
 
@@ -88,16 +88,16 @@ def draw_dialogue_box(screen, x, y, width, text):
 
 
             if current_line:
-                print(f'current line, {current_line}')
+                # print(f'current line, {current_line}')
                 lines.append(current_line)
             current_line = ''
 
         elif dialogue_font.size(current_line + ' ' + word)[0] <= width or not current_line:
-            print(f'elifou {word} ')
+            # print(f'elifou {word} ')
             current_line += ' ' + word.strip()
         else:
            # NEW LINE
-            print(f'elseou {word} ')
+            # print(f'elseou {word} ')
             lines.append(current_line)
             current_line = word
 
@@ -111,8 +111,7 @@ def draw_dialogue_box(screen, x, y, width, text):
 
     for line in lines:
         if line[0] == ' ':
-            print('dsauhudhasudhsads')
-            print(line)
+            pass
 
     for i, line in enumerate(lines):
         text_surface = dialogue_font.render(line, True, (255, 255, 255))
@@ -121,4 +120,4 @@ def draw_dialogue_box(screen, x, y, width, text):
         text_rect.topleft = text_pos
         screen.blit(text_surface, text_rect)
 
-    pygame.display.update()
+    # pygame.display.update()

@@ -31,6 +31,9 @@ DROP_HEIGHT = 210
 RIGHT_ARROW = pygame.transform.scale(pygame.image.load('assets/images/arrow_2.png'), (120, 90))
 SOULS_ICON = pygame.transform.scale(pygame.image.load('assets/images/souls_icon.png'), (40, 40))
 SOULS_ICON_COLORED = pygame.transform.scale(pygame.image.load('assets/images/souls_icon_colored.png'), (60, 60))
+GREEN_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/green_sphere.png'), (30, 30))
+RED_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/red_sphere.png'), (30, 30))
+GRAY_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/gray_sphere.png'), (30, 30))
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")

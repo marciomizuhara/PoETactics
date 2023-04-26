@@ -584,4 +584,4 @@ def show_confirmation_message(message, color, size, x, y):
     rect = text.get_rect()
     rect.center = (x, y)
     SCREEN.blit(text, rect)
-    pygame.display.update()
+    # pygame.display.update()
