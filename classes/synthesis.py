@@ -1,85 +1,133 @@
-import pygame
+import pygame, random
+from button import *
+from assets.fonts.fonts import *
+from settings import *
+from classes import extras
 
-# Define as cores que serão usadas no jogo
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+# Defina as dimensões da board
+num_cells_horizontal = 15
+num_cells_vertical = 8
+# cell_size = 64
 
-# Define as dimensões da tela do jogo
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+# Calcule o tamanho das células com base na resolução da tela
+# cell_size = min(SCREEN_WIDTH * 0.70 // num_cells_horizontal, SCREEN_HEIGHT * 0.70 // num_cells_vertical)
 
-# Inicializa o Pygame
-pygame.init()
+cell_width = SCREEN_WIDTH * 0.70 // num_cells_horizontal
+cell_height = SCREEN_HEIGHT * 0.70 // num_cells_vertical
 
-# Define a fonte que será usada para exibir o texto na tela
-font = pygame.font.SysFont('Arial', 30)
+# Crie uma matriz para representar a grade da board
+grid = []
+for row in range(num_cells_vertical):
+    # Cada linha representa uma célula
+    cell_row = []
+    for col in range(num_cells_horizontal):
+        # Crie uma célula vazia com as informações necessárias
+        cell = {
+            'type': 'empty',
+            'state': 'normal',
+            'content': None
+        }
+        cell_row.append(cell)
+    grid.append(cell_row)
 
-# Cria a janela do jogo
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Mecânica de síntese')
+# Exemplo de como acessar uma célula específica na grid
+row_index = 2
+col_index = 3
+cell = grid[row_index][col_index]
 
-# Cria a matriz de síntese
-synthesis_grid = [[None, None, None], [None, None, None], [None, None, None]]
+# Exemplo de como definir o tipo e o estado de uma célula específica
+cell['type'] = 'obstacle'
+cell['state'] = 'damaged'
 
-# Define os itens base
-sword_item = {'name': 'Espada', 'image': pygame.image.load('../assets/images/deft_fossil.png')}
-shield_item = {'name': 'Escudo', 'image': pygame.image.load('../assets/images/dense_fossil.png')}
-potion_item = {'name': 'Poção', 'image': pygame.image.load('../assets/images/pristine_fossil.png')}
-
-# Define as posições dos itens base na tela
-sword_position = (100, 100)
-shield_position = (300, 100)
-potion_position = (500, 100)
-
-# Define a energia disponível do jogador
-energy = 10
-
-# Define a posição da energia na tela
-energy_position = (SCREEN_WIDTH - 100, 50)
-
-# Define a posição da mensagem na tela
-message_position = (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 100)
-
-
-# Função que desenha um item na tela
-def draw_item(item, position):
-    screen.blit(item['image'], position)
+print(grid)
+grid[3][4]['type'] = 'obstacle'
 
 
-# Função que desenha a matriz de síntese na tela
-def draw_synthesis_grid():
-    for row_index, row in enumerate(synthesis_grid):
-        for column_index, column in enumerate(row):
-            if column is not None:
-                item_position = (50 + column_index * 100, 200 + row_index * 100)
-                draw_item(column, item_position)
-            pygame.draw.rect(screen, BLACK, (50 + column_index * 100, 200 + row_index * 100, 150, 150), 2)
+# Exemplo de como definir o conteúdo de uma célula específica
+content = {
+    'name': 'Treasure Chest',
+    'loot': ['gold', 'sword']
+}
+cell['content'] = content
 
 
-
-# Função que verifica se a matriz de síntese contém um padrão específico e retorna o resultado da síntese
-def perform_synthesis():
-    # Verifica se a matriz de síntese contém uma espada, um escudo e uma poção em uma linha horizontal
-    if synthesis_grid[1][0] == sword_item and synthesis_grid[1][1] == shield_item and synthesis_grid[1][2] == potion_item:
-        return {'name': 'Nova arma', 'image': pygame.image.load('new_weapon.png')}
-    # Verifica se a matriz de síntese contém um escudo, uma poção e uma espada em uma linha horizontal
-    elif synthesis_grid[1][0] == shield_item and synthesis_grid[1][1] == potion_item and synthesis_grid[1][2] == sword_item:
-        return {'name': 'Novo escudo', 'image': pygame.image.load('new_shield.png')}
-    # Retorna None se a matriz de síntese não contém um padrão válido
-    else:
-        return None
+def clean_screen():
+    SCREEN.blit(BG, (0, 0))
+    SCREEN.blit(BATTLE_BOX_LARGE, (60, 40))
+    # draw_dialogue_box(screen=SCREEN, x=110, y=50, width=800,
+    #                   text='Welcome to Synthesis. \n \n '
+    #                        'Here you can piece together the memories of Cavas to unlock loot and find the Memory Nexus.')
 
 
-# Loop principal do jogo
-running = True
-while running:
-    # Limpa a tela
-    screen.fill(WHITE)
+def create_grid():
+    grid = []
+    for row in range(num_cells_vertical):
+        row_cells = []
+        for col in range(num_cells_horizontal):
+            # Calcule a posição da célula na tela
+            cell_x = col * cell_width + 200
+            cell_y = row * cell_height + 50
+            # Salve as coordenadas da célula na lista
+            row_cells.append((cell_x, cell_y))
+        grid.append(row_cells)
+    return grid
 
-    # Desenha os itens
-    draw_synthesis_grid()
-    draw_item(sword_item, sword_position)
-    # perform_synthesis()
+
+board = []
+def roll_board():
+    roll = random.randint(3, 4)
+    temp_board = create_grid()
+    for i in range(0, roll):
+        row = random.randint(0, 7)
+        column = random.randint(0, 14)
+        board.append(temp_board[row][column])
 
 
-    pygame.display.update()
+def draw_grid(grid):
+    while True:
+        SYNTHESIS_MOUSE_POSITION = pygame.mouse.get_pos()
+        clean_screen()
+        BACK = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(1110, 610),
+                      text_input="BACK", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+        SHUFFLE = Button(image=pygame.image.load("assets/images/Smallest Rect.png"), pos=(750, 610),
+                      text_input="SHUFFLE", font=get_bold_font(30), base_color="White", hovering_color=BLUE)
+
+        for row in range(num_cells_vertical):
+            for col in range(num_cells_horizontal):
+                cell_x, cell_y = grid[row][col]
+                pygame.draw.rect(SCREEN, (0, 0, 0), (cell_x, cell_y, cell_width, cell_height), 1)
+                # Determine a cor do retângulo com base nas coordenadas
+                # if (row + col) % 2 == 0:
+                #     color = (255, 255, 255)  # Cor para células pares
+                # else:
+                #     color = (0, 0, 0)  # Cor para células ímpares
+
+                # Renderize a célula como um retângulo
+                # pygame.draw.rect(SCREEN, color, (cell_x, cell_y, cell_size, cell_size))
+
+
+            # SCREEN.blit(FOUR_SIDE_TILE, tile)
+        # SCREEN.blit(FOUR_SIDE_TILE, grid[2][2])
+        # SCREEN.blit(FOUR_SIDE_TILE, grid[4][4])
+        #
+        # print(grid[2][2])
+        # print(grid[4][4])
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if BACK.checkForInput(SYNTHESIS_MOUSE_POSITION):
+                    extras.extras()
+                if SHUFFLE.checkForInput(SYNTHESIS_MOUSE_POSITION):
+                    board.clear()
+                    roll_board()
+                    # grid = roll_grid()
+                    # draw_grid(grid)
+
+        for i in board:
+            SCREEN.blit(FOUR_SIDE_TILE, i)
+        for button in [BACK, SHUFFLE]:
+            button.changeColor(SYNTHESIS_MOUSE_POSITION)
+            button.update(SCREEN)
+        pygame.display.update()

@@ -31,9 +31,11 @@ DROP_HEIGHT = 210
 RIGHT_ARROW = pygame.transform.scale(pygame.image.load('assets/images/arrow_2.png'), (120, 90))
 SOULS_ICON = pygame.transform.scale(pygame.image.load('assets/images/souls_icon.png'), (40, 40))
 SOULS_ICON_COLORED = pygame.transform.scale(pygame.image.load('assets/images/souls_icon_colored.png'), (60, 60))
+SYNTHESIS_ICON_COLORED = pygame.transform.scale(pygame.image.load('assets/images/synthesis_icon_colored.png'), (60, 60))
 GREEN_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/green_sphere.png'), (30, 30))
 RED_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/red_sphere.png'), (30, 30))
 GRAY_SPHERE = pygame.transform.scale(pygame.image.load('assets/images/gray_sphere.png'), (30, 30))
+
 
 #colors
 DARK_GREY = pygame.Color("#2B2D2F")
@@ -115,10 +117,17 @@ G_PRISTINE_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_pr
 G_DEFT_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_deft_fossil.png'), (60, 60))
 G_FRACTURED_FOSSIL = pygame.transform.scale(pygame.image.load('assets/images/g_fractured_fossil.png'), (60, 60))
 
+# SYNTHESIS
+FOUR_SIDE_TILE = pygame.image.load('assets/images/synthesis/four_side_tile.png')
+
+
 # SOUL SKILLS
-SOUL_REAPER_1 = pygame.transform.scale(pygame.image.load('assets/images/soul_reaper_1.png'), (45, 45))
-ONE_WITH_THE_NATURE = pygame.transform.scale(pygame.image.load('assets/images/one_with_the_nature.png'), (45, 45))
-ASSASSINATION = pygame.transform.scale(pygame.image.load('assets/images/assassination.png'), (45, 45))
+SOUL_REAPER_1 = pygame.image.load('assets/images/soul_reaper_1.png')
+ONE_WITH_THE_NATURE = pygame.image.load('assets/images/one_with_the_nature.png')
+ASSASSINATION = pygame.image.load('assets/images/assassination.png')
+SOUL_OF_STEEL = pygame.image.load('assets/images/soul_of_steel.png')
+MERCILESS_BLOW = pygame.image.load('assets/images/merciless_blow.png')
+DEADLY_PRECISION = pygame.image.load('assets/images/deadly_precision.png')
 
 # Cards
 SQUIRE = pygame.transform.scale(pygame.image.load('assets/images/characters/cards/squire.png'), (100, 133))

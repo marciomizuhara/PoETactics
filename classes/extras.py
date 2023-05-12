@@ -6,6 +6,7 @@ from classes import main_menu
 from classes import roulette_wheel
 from classes import card
 from classes import souls
+from classes import synthesis
 
 
 def extras():
@@ -17,6 +18,7 @@ def extras():
     SCREEN.blit(CARDS, (150, 100))
     SCREEN.blit(ROULETTE_WHEEL2_TICKET, (250, 100))
     SCREEN.blit(SOULS_ICON_COLORED, (350, 100))
+    SCREEN.blit(SYNTHESIS_ICON_COLORED, (450, 100))
 
     # Icon Texts
     cards_text = get_bold_font(20).render('CARDS', True, WHITE)
@@ -31,10 +33,15 @@ def extras():
     souls_text_rect = souls_text.get_rect(center=(380, 180))
     SCREEN.blit(souls_text, souls_text_rect)
 
+    souls_text = get_bold_font(20).render('SYNTHESIS', True, WHITE)
+    souls_text_rect = souls_text.get_rect(center=(480, 180))
+    SCREEN.blit(souls_text, souls_text_rect)
+
     # Collision Points
     cards_rect = ICON_FRAME.get_rect(center=(180, 140))
     roulette_rect = ICON_FRAME.get_rect(center=(280, 140))
     souls_rect = ICON_FRAME.get_rect(center=(380, 140))
+    synthesis_rect = ICON_FRAME.get_rect(center=(480, 140))
 
     while True:
         EXTRAS_MOUSE_POSITION = pygame.mouse.get_pos()
@@ -59,6 +66,9 @@ def extras():
                     roulette_wheel.roulette()
                 if souls_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                     souls.souls_menu()
+                if synthesis_rect.collidepoint(EXTRAS_MOUSE_POSITION):
+                    grid = synthesis.create_grid()
+                    synthesis.draw_grid(grid)
             if cards_rect.collidepoint(EXTRAS_MOUSE_POSITION):
                 print('cards')
             if roulette_rect.collidepoint(EXTRAS_MOUSE_POSITION):
